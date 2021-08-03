@@ -39,33 +39,33 @@ namespace PatientChecking.Services.ServiceModels
             {
                 entity.ToTable("Address");
 
-                entity.Property(e => e.AddressId).HasColumnName("Address_ID");
+                entity.Property(e => e.AddressId).HasColumnName("AddressID");
 
                 entity.Property(e => e.Address1)
                     .IsRequired()
                     .HasMaxLength(150)
                     .HasColumnName("Address");
 
-                entity.Property(e => e.ContactId).HasColumnName("Contact_ID");
+                entity.Property(e => e.ContactId).HasColumnName("ContactID");
 
                 entity.HasOne(d => d.Contact)
                     .WithMany(p => p.Addresses)
                     .HasForeignKey(d => d.ContactId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Address__Contact__2C3393D0");
+                    .HasConstraintName("FK__Address__Contact__398D8EEE");
             });
 
             modelBuilder.Entity<Appointment>(entity =>
             {
                 entity.ToTable("Appointment");
 
-                entity.Property(e => e.AppointmentId).HasColumnName("Appointment_ID");
+                entity.Property(e => e.AppointmentId).HasColumnName("AppointmentID");
 
                 entity.Property(e => e.CheckInDate).HasColumnType("datetime");
 
                 entity.Property(e => e.MedicalConcerns).HasMaxLength(100);
 
-                entity.Property(e => e.PatientId).HasColumnName("Patient_ID");
+                entity.Property(e => e.PatientId).HasColumnName("PatientID");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
@@ -76,20 +76,20 @@ namespace PatientChecking.Services.ServiceModels
                     .WithMany(p => p.Appointments)
                     .HasForeignKey(d => d.PatientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Appointme__Patie__267ABA7A");
+                    .HasConstraintName("FK__Appointme__Patie__33D4B598");
             });
 
             modelBuilder.Entity<Contact>(entity =>
             {
                 entity.ToTable("Contact");
 
-                entity.Property(e => e.ContactId).HasColumnName("Contact_ID");
+                entity.Property(e => e.ContactId).HasColumnName("ContactID");
 
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(e => e.PatientId).HasColumnName("Patient_ID");
+                entity.Property(e => e.PatientId).HasColumnName("PatientID");
 
                 entity.Property(e => e.PhoneNumber)
                     .IsRequired()
@@ -100,19 +100,19 @@ namespace PatientChecking.Services.ServiceModels
                     .WithMany(p => p.Contacts)
                     .HasForeignKey(d => d.PatientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Contact__Patient__29572725");
+                    .HasConstraintName("FK__Contact__Patient__36B12243");
             });
 
             modelBuilder.Entity<EmergencyContact>(entity =>
             {
                 entity.HasKey(e => e.EmergencyId)
-                    .HasName("PK__Emergenc__41242F0657707FB6");
+                    .HasName("PK__Emergenc__7B5544337DE6E6BE");
 
                 entity.ToTable("EmergencyContact");
 
-                entity.Property(e => e.EmergencyId).HasColumnName("Emergency_ID");
+                entity.Property(e => e.EmergencyId).HasColumnName("EmergencyID");
 
-                entity.Property(e => e.ContactId).HasColumnName("Contact_ID");
+                entity.Property(e => e.ContactId).HasColumnName("ContactID");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -132,14 +132,14 @@ namespace PatientChecking.Services.ServiceModels
                     .WithMany(p => p.EmergencyContacts)
                     .HasForeignKey(d => d.ContactId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Emergency__Conta__2F10007B");
+                    .HasConstraintName("FK__Emergency__Conta__3C69FB99");
             });
 
             modelBuilder.Entity<Patient>(entity =>
             {
                 entity.ToTable("Patient");
 
-                entity.Property(e => e.PatientId).HasColumnName("Patient_ID");
+                entity.Property(e => e.PatientId).HasColumnName("PatientID");
 
                 entity.Property(e => e.BirthplaceCity).HasMaxLength(50);
 

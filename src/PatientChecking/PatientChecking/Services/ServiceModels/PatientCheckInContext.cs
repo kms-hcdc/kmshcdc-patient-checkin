@@ -27,7 +27,7 @@ namespace PatientChecking.Services.ServiceModels
         {
             if (!optionsBuilder.IsConfigured)
             {
-               optionsBuilder.UseSqlServer("Data Source=5CD1199VTK;Initial Catalog=PatientCheckIn;Integrated Security=True");
+               optionsBuilder.UseSqlServer("Data Source=5CD1199VDQ;Initial Catalog=PatientCheckIn;Integrated Security=True");
             }
         }
 

@@ -44,7 +44,7 @@ namespace PatientChecking.Controllers
         // PUT: api/Addresses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAddress(int id, Address address)
+        public async Task<IActionResult> UpdateAddress(int id, Address address)
         {
             if (id != address.AddressId)
             {
@@ -59,7 +59,7 @@ namespace PatientChecking.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AddressExists(id))
+                if (!IsAddressExists(id))
                 {
                     return NotFound();
                 }
@@ -75,7 +75,7 @@ namespace PatientChecking.Controllers
         // POST: api/Addresses
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Address>> PostAddress(Address address)
+        public async Task<ActionResult<Address>> CreateAddress(Address address)
         {
             _context.Addresses.Add(address);
             await _context.SaveChangesAsync();
@@ -99,7 +99,7 @@ namespace PatientChecking.Controllers
             return NoContent();
         }
 
-        private bool AddressExists(int id)
+        private bool IsAddressExists(int id)
         {
             return _context.Addresses.Any(e => e.AddressId == id);
         }

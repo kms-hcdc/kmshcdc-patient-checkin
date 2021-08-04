@@ -44,7 +44,7 @@ namespace PatientChecking.Controllers
         // PUT: api/Patients/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPatient(int id, Patient patient)
+        public async Task<IActionResult> UpdatePatient(int id, Patient patient)
         {
             if (id != patient.PatientId)
             {
@@ -59,7 +59,7 @@ namespace PatientChecking.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PatientExists(id))
+                if (!IsPatientExists(id))
                 {
                     return NotFound();
                 }
@@ -75,7 +75,7 @@ namespace PatientChecking.Controllers
         // POST: api/Patients
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Patient>> PostPatient(Patient patient)
+        public async Task<ActionResult<Patient>> CreatePatient(Patient patient)
         {
             _context.Patients.Add(patient);
             await _context.SaveChangesAsync();
@@ -99,7 +99,7 @@ namespace PatientChecking.Controllers
             return NoContent();
         }
 
-        private bool PatientExists(int id)
+        private bool IsPatientExists(int id)
         {
             return _context.Patients.Any(e => e.PatientId == id);
         }

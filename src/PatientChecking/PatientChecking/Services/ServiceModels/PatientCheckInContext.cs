@@ -25,10 +25,7 @@ namespace PatientChecking.Services.ServiceModels
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-               optionsBuilder.UseSqlServer("Data Source=5CD1199VTK;Initial Catalog=PatientCheckIn;Integrated Security=True");
-            }
+            optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

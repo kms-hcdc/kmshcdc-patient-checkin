@@ -31,7 +31,7 @@ namespace PatientChecking.Services
 
         public async Task<int> GetNumberOfAppointmentsInToday()
         {
-            var result = await patientCheckInContext.Appointments.Where(x => x.CheckInDate.Date.Day == DateTime.Now.Day).ToListAsync();
+            var result = await patientCheckInContext.Appointments.Where(x => x.CheckInDate.Date.Day == DateTime.Now.Day && x.Status == "CheckIn").ToListAsync();
             return result.Count;
         }
     }

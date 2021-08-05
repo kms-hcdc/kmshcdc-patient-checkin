@@ -24,7 +24,7 @@ namespace PatientChecking.Controllers
         {
             return View();
         }
-        [HttpGet("getDashBoard")]
+        [HttpGet("[controller]/getDashBoard")]
         public async Task<IActionResult> GetDashBoardData()
         {
             int numOfPatients = await _patientService.GetNumberOfPatients();

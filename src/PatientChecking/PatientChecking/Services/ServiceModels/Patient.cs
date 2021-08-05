@@ -30,6 +30,7 @@ namespace PatientChecking.Services.ServiceModels
         public DateTime? IssuedDate { get; set; }
         public string IssuedPlace { get; set; }
         public string InsuranceNo { get; set; }
+        public string AvatarLink { get; set; }
 
         public virtual ICollection<Appointment> Appointments { get; set; }
         public virtual ICollection<Contact> Contacts { get; set; }

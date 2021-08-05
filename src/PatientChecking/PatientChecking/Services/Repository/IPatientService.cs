@@ -7,6 +7,7 @@ namespace PatientChecking.Services.Repository
 {
     public interface IPatientService
     {
-        
+        Task<int> GetNumberOfPatients();
+        Task<int> GetNumberOfPatientsInCurrentMonth();
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PatientChecking.Services.ServiceModels;
+using PatientChecking.Views.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,5 +11,6 @@ namespace PatientChecking.Services.Repository
     {
         Task<int> GetNumberOfPatients();
         Task<int> GetNumberOfPatientsInCurrentMonth();
+        Task<PagedResult<Patient>> GetListPatientPaging(PagingRequest request);
     }
 }

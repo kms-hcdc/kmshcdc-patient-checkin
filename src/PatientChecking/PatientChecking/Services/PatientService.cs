@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PatientChecking.Services.Repository;
 using PatientChecking.Services.ServiceModels;
+using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,16 @@ namespace PatientChecking.Services
         public PatientService(PatientCheckInContext patientCheckInContext)
         {
             this.patientCheckInContext = patientCheckInContext;
+        }
+
+        public Task<PagedResult<Patient>> GetListPatientPaging(PagingRequest request)
+        {
+            var query = from patient in patientCheckInContext.Patients
+                        join contact in patientCheckInContext.Contacts on patient.PatientId equals contact.PatientId
+                        select new { patient, contact };
+            int totalRow = query.Count();
+
+            return null;
         }
 
         public async Task<int> GetNumberOfPatients()

@@ -25,7 +25,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation"
       },
-      "launchUrl": "https://localhost:5001/Home"
+      "launchUrl": "https://localhost:5001/Dashboard/Home"
     }
   }
 }

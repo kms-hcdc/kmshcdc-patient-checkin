@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,7 +28,8 @@ namespace PatientChecking
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<PatientCheckInContext>();
+            services.AddDbContext<PatientCheckInContext>(options =>
+                                                        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
             //add Patient Dependency
@@ -60,7 +62,7 @@ namespace PatientChecking
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                //c.RoutePrefix = string.Empty;
+                c.RoutePrefix = string.Empty;
             });
             app.UseRouting();
 

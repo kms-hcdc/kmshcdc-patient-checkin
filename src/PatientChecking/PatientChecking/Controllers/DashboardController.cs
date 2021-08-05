@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace PatientChecking.Controllers
 {
-    public class HomeController : Controller
+    public class DashboardController : BaseController
     {
-        public IActionResult Index()
+        public IActionResult Home()
         {
             return View();
         }
     }
+
 }

@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>@ViewData["Title"] | PatientChecking</title>
     <link rel="stylesheet" href="~/css/site.css" />
-    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
     <link rel="stylesheet"
@@ -17,29 +17,35 @@
                 <img src="~/Image/logo.png" alt="" />
             </div>
             <ul>
-                <li class="active">
-                    <a href="#">
+                <li class="@((ViewBag.Action == "Home" && @ViewBag.Controller == "Dashboard") ? "active" : "")">
+                    <a asp-controller="Dashboard" asp-action="Home">
                         <i class="fas fa-home" style="margin: 10px"></i>
                         Dashboard
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="patient-btn">
+                    <a class="patient-btn">
                         <i class="fas fa-hospital-user" style="margin: 10px"></i>
                         Patients
-                        <span class="fas fa-caret-down first"></span>
+                        <span class="fas fa-caret-down first" ></span>
                     </a>
-                    <ul class="patient-show">
-                        <li class="detail">
-                            <a href="#">
+                    <ul class="@(@ViewBag.Controller == "Patient" ? "patient-show show" : "patient-show")" >
+                        <li class="detail @((ViewBag.Action == "Index" && @ViewBag.Controller == "Patient") ? "active" : "")">
+                            <a asp-controller="Patient" asp-action="Index">
+                                <i class="fas fa-list" style="margin: 10px"></i>
+                                List Information
+                            </a>
+                        </li>
+                        <li class="detail @((ViewBag.Action == "Detail" && @ViewBag.Controller == "Patient") ? "active" : "")">
+                            <a asp-controller="Patient" asp-action="Detail">
                                 <i class="fas fa-info-circle" style="margin: 10px"></i>
                                 Detail Information
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#">
+                <li class="@((ViewBag.Action == "Index" && @ViewBag.Controller == "Appointment") ? "active" : "")">
+                    <a asp-controller="Appointment" asp-action="Index">
                         <i class="far fa-calendar-alt" style="margin: 10px"></i>
                         Appointments
                     </a>
@@ -48,7 +54,7 @@
         </nav>
         <div class="content">
             <div class="header">
-                <div class="page-name"><i class="fas fa-bars"></i>Dashboard</div>
+                <div class="page-name"><i class="fas fa-bars"></i>@ViewData["Page"]</div>
                 <div><img src="~/Image/avatar.jpg" alt="Avatar" class="admin-avatar" /></div>
                 <div>Hi, Administrator</div>
             </div>
@@ -62,14 +68,6 @@
         $(".patient-btn").click(function () {
             $("nav ul .patient-show").toggleClass("show");
             $("nav ul .first").toggleClass("rotate");
-        });
-        $("nav ul li").click(function () {
-            $(this).addClass("active").siblings().removeClass("active");
-            $(".detail").removeClass("active");
-        });
-        $(".detail").click(function () {
-            $(".detail").addClass("active");
-            $("nav ul li").siblings().removeClass("active");
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)

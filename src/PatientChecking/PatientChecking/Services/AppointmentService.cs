@@ -21,10 +21,9 @@ namespace PatientChecking.Services
 
         public async Task<AppointmentDashboard> GetAppointmentSummary()
         {
-            AppointmentStatus status = (AppointmentStatus)1;
             var numberOfAppointments = await _patientCheckInContext.Appointments.ToListAsync();
             var numberOfAppointmentsInMonth = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Date.Year == DateTime.Now.Year && x.CheckInDate.Date.Month == DateTime.Now.Month ).ToListAsync();
-            var numberOfAppointmentsInToday = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Date == DateTime.Today && x.Status == status.ToString()).ToListAsync();
+            var numberOfAppointmentsInToday = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Date == DateTime.Today && x.Status == AppointmentStatus.CheckIn.ToString()).ToListAsync();
             return new AppointmentDashboard()
             {
                 NumOfAppointments = numberOfAppointments.Count(),

@@ -138,6 +138,8 @@ namespace PatientChecking.Services.ServiceModels
 
                 entity.Property(e => e.PatientId).HasColumnName("PatientID");
 
+                entity.Property(e => e.AvatarLink).HasMaxLength(100);
+
                 entity.Property(e => e.BirthplaceCity).HasMaxLength(50);
 
                 entity.Property(e => e.DoB).HasColumnType("date");

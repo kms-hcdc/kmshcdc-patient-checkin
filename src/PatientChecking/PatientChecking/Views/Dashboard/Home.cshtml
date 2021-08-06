@@ -20,9 +20,7 @@
                 $(".appointment-intoday").text(data.appointment.numOfAppointmentsInToday + " new appointments/today");
                 $('.loader').hide();
                 $(".grid-wide").show();
-            }, error: function (jqXHR, textStatus, errorThrown) {
-                console.log('AJAX call failed.');
-                console.log(textStatus + ': ' + errorThrown);
+            }, error: function () {
                 alert("Reload the page and try again");
             }
         })

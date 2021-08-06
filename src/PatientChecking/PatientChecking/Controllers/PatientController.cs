@@ -18,9 +18,30 @@ namespace PatientChecking.Controllers
             _patientService = patientService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            PagingRequest request = new PagingRequest()
+            {
+                PageIndex = 1,
+                PageSize = 10,
+                SortSelection = 0
+            };
+            ViewData["SortHistory"] = "0";
+            PagedResult<PatientListViewModel> pagedResult = await _patientService.GetListPatientPaging(request);
+            return View(pagedResult);
+        }
+
+        public async Task<IActionResult> Sort(int option)
+        {
+            PagingRequest request = new PagingRequest()
+            {
+                PageIndex = 1,
+                PageSize = 10,
+                SortSelection = option
+            };
+            ViewData["SortHistory"] = option.ToString();
+            PagedResult<PatientListViewModel> pagedResult = await _patientService.GetListPatientPaging(request);
+            return View("Index",pagedResult);
         }
 
         public IActionResult Detail()
@@ -28,7 +49,7 @@ namespace PatientChecking.Controllers
             return View();
         }
 
-        [HttpGet("GetListPatient")]
+        [HttpGet("[controller]/GetListPatient")]
         public async Task<IActionResult> GetListPatientPaging([FromQuery] PagingRequest request)
         {
             var pagedResult = await _patientService.GetListPatientPaging(request);

@@ -1,0 +1,75 @@
+﻿.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    width: 100%;
+    margin: 10px;
+    padding: 10px;
+    font-size: 16px !important;
+}
+
+.search-area {
+    width: 30%;
+}
+
+.sort-area {
+    width: 20%;
+    margin-left: 10px;
+}
+
+.list-patient-container {
+    margin: 10px 20px;
+    font-size: 2rem;
+    justify-content: center;
+    background-color: white;
+}
+
+.row {
+    border: 1px solid #eff0f2;
+    padding: 15px;
+}
+
+.patient-item1 {
+    display: flex;
+}
+
+.patient-name {
+    margin-left: 10px;
+}
+
+.patient-item2 {
+    display: flex;
+    flex-direction: column;
+}
+
+.patient-item3 {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-evenly;
+}
+
+    .patient-item3 > div {
+        display: flex;
+        flex-direction: row;
+    }
+
+.contact-info {
+    margin-left: 10px;
+    margin-bottom: 0px;
+    align-items: center;
+    display: flex;
+}
+
+.contact-icon {
+    width: 30px;
+    height: 30px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+.pagination-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+}

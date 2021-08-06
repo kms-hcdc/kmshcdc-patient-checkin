@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PatientChecking.Services.Repository;
 using PatientChecking.Services.ServiceModels;
+using PatientChecking.Services.ServiceModels.Enum;
 using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static PatientChecking.Services.ServiceModels.Enum;
 
 namespace PatientChecking.Services
 {
@@ -21,7 +21,7 @@ namespace PatientChecking.Services
 
         public async Task<AppointmentDashboard> GetAppointmentSummary()
         {
-            StatusAppointment status = (StatusAppointment)1;
+            AppointmentStatus status = (AppointmentStatus)1;
             var numberOfAppointments = await _patientCheckInContext.Appointments.ToListAsync();
             var numberOfAppointmentsInMonth = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Date.Year == DateTime.Now.Year && x.CheckInDate.Date.Month == DateTime.Now.Month ).ToListAsync();
             var numberOfAppointmentsInToday = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Date == DateTime.Today && x.Status == status.ToString()).ToListAsync();

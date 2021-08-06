@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PatientChecking.Services.Repository;
 using PatientChecking.Services.ServiceModels;
+using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,25 +11,24 @@ namespace PatientChecking.Services
 {
     public class PatientService : IPatientService
     {
-        private readonly PatientCheckInContext patientCheckInContext;
+        private readonly PatientCheckInContext _patientCheckInContext;
 
         public PatientService(PatientCheckInContext patientCheckInContext)
         {
-            this.patientCheckInContext = patientCheckInContext;
+            _patientCheckInContext = patientCheckInContext;
         }
 
-        public async Task<int> GetNumberOfPatients()
+        public async Task<PatientDashboard> GetPatientsSummary()
         {
-            var result = await patientCheckInContext.Patients.ToListAsync();
-            return result.Count;
-        }
-
-        public async Task<int> GetNumberOfPatientsInCurrentMonth()
-        {
-            var result = await patientCheckInContext.Appointments.Where(x => x.CheckInDate.Month == DateTime.Now.Month)
+            var numberOfPatients = await _patientCheckInContext.Patients.ToListAsync();
+            var numberOfPatientsInMonth = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Year == DateTime.Now.Year && x.CheckInDate.Month == DateTime.Now.Month)
                                                                  .GroupBy(p => p.PatientId)
-                                                                 .Select(g => new { g.Key, count = g.Count()}).ToListAsync();
-            return result.Count;
+                                                                 .Select(g => new { g.Key, count = g.Count() }).ToListAsync();
+            return new PatientDashboard()
+            {
+                NumOfPatients = numberOfPatients.Count(),
+                NumOfPatientsInMonth = numberOfPatientsInMonth.Count()
+            };
         }
     }
 }

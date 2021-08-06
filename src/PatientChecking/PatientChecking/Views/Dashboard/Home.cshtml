@@ -4,31 +4,32 @@
 }
 @section css {
     <link href="@Url.Content("~/css/Dashboard.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/Loading.css")" rel="stylesheet" type="text/css" />
 }
+
 <script>
     (function () {
-        $('#loading-div-background').show();
-        
         $.ajax({
             type: 'GET',
-            url: 'https://localhost:5001/Dashboard/getDashBoard',
+            url: '@Url.Action("getDashBoard", "Dashboard")',
             success: function (data) {
-                $(".total-patient").text(data.numOfPatients);
-                $(".patient-inmonth").text(data.numOfPatientsInMonth + " new paitents/this month");
-                $(".total-appointment").text(data.numOfAppointments);
-                $(".appointment-inmonth").text(data.numOfAppointmentsInMonth + " new appointments/this month");
-                $(".appointment-intoday").text(data.numOfAppointmentsInToday + " new appointments/today");
-                $('#loading-div-background').hide();
+                $(".total-patient").text(data.patient.numOfPatients);
+                $(".patient-inmonth").text(data.patient.numOfPatientsInMonth + " new paitents/this month");
+                $(".total-appointment").text(data.appointment.numOfAppointments);
+                $(".appointment-inmonth").text(data.appointment.numOfAppointmentsInMonth + " new appointments/this month");
+                $(".appointment-intoday").text(data.appointment.numOfAppointmentsInToday + " new appointments/today");
+                $('.loader').hide();
                 $(".grid-wide").show();
+            }, error: function (jqXHR, textStatus, errorThrown) {
+                console.log('AJAX call failed.');
+                console.log(textStatus + ': ' + errorThrown);
+                alert("Reload the page and try again");
             }
         })
     })();
 </script>
-<div id="loading-div-background" style="position: fixed; top: 50%; left: 60%;">
-    <div id="loading-div" class="ui-corner-all">
-        <div id="loadingbar"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
-        <h2 style="color:gray;font-weight:normal;">Please wait....</h2>
-    </div>
+<div class="loader">
+    <Loading />
 </div>
 <div class="grid-wide">
     <div class="row">
@@ -36,10 +37,11 @@
             <div class="item-patient">
                 <div class="left-item-patient">
                     <h3>
-                        Total patients:</h2>
-                        <div class="img-patient">
-                            <img src="~/Image/patienticon.png" alt="" class="icon-patient">
-                        </div>
+                        Total patients:
+                    </h3>
+                    <div class="img-patient">
+                        <img src="~/Image/patienticon.png" alt="" class="icon-patient">
+                    </div>
                 </div>
                 <div class="right-item-patient">
                     <p class="total-patient"></p>
@@ -51,7 +53,8 @@
             <div class="item-appointment">
                 <div class="left-item-patient">
                     <h3>
-                        Total Appointment:</h2>
+                        Total Appointment:
+                    </h3>
                         <div class="img-patient">
                             <img src="~/Image/appointmenticon.jpg" alt="" class="icon-patient">
                         </div>

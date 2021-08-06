@@ -5,13 +5,9 @@ using System.Threading.Tasks;
 
 namespace PatientChecking.Views.ViewModels
 {
-    public class DashboardViewModel
+    public class PatientDashboard
     {
         public int NumOfPatients { get; set; }
         public int NumOfPatientsInMonth { get; set; }
-        public int NumOfAppointments { get; set; }
-        public int NumOfAppointmentsInMonth { get; set; }
-        public int NumOfAppointmentsInToday { get; set; }
-
     }
 }

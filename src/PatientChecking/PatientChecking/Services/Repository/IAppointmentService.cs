@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace PatientChecking.Services.Repository
 {
-    public interface IPatientService
+    public interface IAppointmentService
     {
-        Task<PatientDashboard> GetPatientsSummary();
+        Task<AppointmentDashboard> GetAppointmentSummary();
     }
 }

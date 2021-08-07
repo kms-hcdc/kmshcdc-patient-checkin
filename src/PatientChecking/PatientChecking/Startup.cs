@@ -34,6 +34,8 @@ namespace PatientChecking
             services.AddSwaggerGen();
             //add Patient Dependency
             services.AddScoped<IPatientService, PatientService>();
+            //add Appointment Dependency
+            services.AddScoped<IAppointmentService, AppointmentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

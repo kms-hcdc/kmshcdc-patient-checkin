@@ -45,8 +45,8 @@ namespace PatientChecking.Services
                 {
                     PatientIdentifier = x.patient.PatientIdentifier,
                     FullName = x.patient.FullName,
-                    DoB = x.patient.DoB,
-                    Gender = x.patient.Gender,
+                    DoB = x.patient.DoB.ToString("dd-MM-yyyy"),
+                    Gender = x.patient.Gender == 0 ? "Male" : x.patient.Gender == 1 ? "Female" : "Others",
                     Address = x.address != null ? x.address.Address1 : "",
                     PhoneNumber = x.contact != null ? x.contact.PhoneNumber : "",
                     Email = x.contact != null ? x.contact.Email : "",

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PatientChecking.Services.Repository;
 using PatientChecking.Services.ServiceModels;
+using PatientChecking.Services.ServiceModels.Enum;
+using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,29 +12,24 @@ namespace PatientChecking.Services
 {
     public class AppointmentService : IAppointmentService
     {
-        private readonly PatientCheckInContext patientCheckInContext;
+        private readonly PatientCheckInContext _patientCheckInContext;
 
         public AppointmentService(PatientCheckInContext patientCheckInContext)
         {
-            this.patientCheckInContext = patientCheckInContext;
+            _patientCheckInContext = patientCheckInContext;
         }
 
-        public async Task<int> GetNumberOfAppointments()
+        public async Task<AppointmentDashboard> GetAppointmentSummary()
         {
-            var result = await patientCheckInContext.Appointments.ToListAsync();
-            return result.Count;
-        }
-
-        public async Task<int> GetNumberOfAppointmentsInCurrentMonth()
-        {
-            var result = await patientCheckInContext.Appointments.Where(x => x.CheckInDate.Month == DateTime.Now.Month).ToListAsync();
-            return result.Count;
-        }
-
-        public async Task<int> GetNumberOfAppointmentsInToday()
-        {
-            var result = await patientCheckInContext.Appointments.Where(x => x.CheckInDate.Date.Day == DateTime.Now.Day).ToListAsync();
-            return result.Count;
+            var numberOfAppointments = await _patientCheckInContext.Appointments.ToListAsync();
+            var numberOfAppointmentsInMonth = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Date.Year == DateTime.Now.Year && x.CheckInDate.Date.Month == DateTime.Now.Month ).ToListAsync();
+            var numberOfAppointmentsInToday = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Date == DateTime.Today && x.Status == AppointmentStatus.CheckIn.ToString()).ToListAsync();
+            return new AppointmentDashboard()
+            {
+                NumOfAppointments = numberOfAppointments.Count(),
+                NumOfAppointmentsInMonth = numberOfAppointmentsInMonth.Count(),
+                NumOfAppointmentsInToday = numberOfAppointmentsInToday.Count(),
+            };
         }
     }
 }

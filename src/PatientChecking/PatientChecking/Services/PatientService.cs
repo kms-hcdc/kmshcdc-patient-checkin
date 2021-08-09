@@ -11,18 +11,18 @@ namespace PatientChecking.Services
 {
     public class PatientService : IPatientService
     {
-        private readonly PatientCheckInContext patientCheckInContext;
+        private readonly PatientCheckInContext _patientCheckInContext;
 
         public PatientService(PatientCheckInContext patientCheckInContext)
         {
-            this.patientCheckInContext = patientCheckInContext;
+            _patientCheckInContext = patientCheckInContext;
         }
 
         public async Task<PagedResult<PatientListViewModel>> GetListPatientPaging(PagingRequest request)
         {
-            var query = from patient in patientCheckInContext.Patients
-                        join contact in patientCheckInContext.Contacts on patient.PatientId equals contact.PatientId
-                        join address in patientCheckInContext.Addresses on contact.ContactId equals address.ContactId
+            var query = from patient in _patientCheckInContext.Patients
+                        join contact in _patientCheckInContext.Contacts on patient.PatientId equals contact.PatientId
+                        join address in _patientCheckInContext.Addresses on contact.ContactId equals address.ContactId
                         where address.IsPrimary == true
                         select new { patient, contact, address };
 
@@ -64,18 +64,17 @@ namespace PatientChecking.Services
             return pagedResult;
         }
 
-        public async Task<int> GetNumberOfPatients()
+        public async Task<PatientDashboard> GetPatientsSummary()
         {
-            var result = await patientCheckInContext.Patients.ToListAsync();
-            return result.Count;
-        }
-
-        public async Task<int> GetNumberOfPatientsInCurrentMonth()
-        {
-            var result = await patientCheckInContext.Appointments.Where(x => x.CheckInDate.Month == DateTime.Now.Month)
+            var numberOfPatients = await _patientCheckInContext.Patients.ToListAsync();
+            var numberOfPatientsInMonth = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Year == DateTime.Now.Year && x.CheckInDate.Month == DateTime.Now.Month)
                                                                  .GroupBy(p => p.PatientId)
-                                                                 .Select(g => new { g.Key, count = g.Count()}).ToListAsync();
-            return result.Count;
+                                                                 .Select(g => new { g.Key, count = g.Count() }).ToListAsync();
+            return new PatientDashboard()
+            {
+                NumOfPatients = numberOfPatients.Count(),
+                NumOfPatientsInMonth = numberOfPatientsInMonth.Count()
+            };
         }
     }
 }

@@ -24,23 +24,13 @@ namespace PatientChecking.Controllers
         {
             return View();
         }
-        [HttpGet("getDashBoard")]
+
+        [HttpGet("[controller]/getDashBoard")]
         public async Task<IActionResult> GetDashBoardData()
         {
-            int numOfPatients = await _patientService.GetNumberOfPatients();
-            int numOfPatientsInMonth = await _patientService.GetNumberOfPatientsInCurrentMonth();
-            int numOfAppointment = await _appointmentService.GetNumberOfAppointments();
-            int numOfAppointmentInMonth = await _appointmentService.GetNumberOfAppointmentsInCurrentMonth();
-            int numOfAppointmentInToday = await _appointmentService.GetNumberOfAppointmentsInToday();
-            DashboardViewModel dashboard = new()
-            {
-                NumOfPatients = numOfPatients,
-                NumOfPatientsInMonth = numOfPatientsInMonth,
-                NumOfAppointments = numOfAppointment,
-                NumOfAppointmentsInMonth = numOfAppointmentInMonth,
-                NumOfAppointmentsInToday = numOfAppointmentInToday,
-            };
-            return new JsonResult(dashboard);
+            AppointmentDashboard appointmentDashboard = await _appointmentService.GetAppointmentSummary();
+            PatientDashboard patientDashboard = await _patientService.GetPatientsSummary();
+            return  new JsonResult(new {appointment = appointmentDashboard , patient = patientDashboard });
         }
     }
 

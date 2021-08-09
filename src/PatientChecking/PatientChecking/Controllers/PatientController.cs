@@ -3,6 +3,7 @@ using PatientChecking.Services.Repository;
 using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,22 +27,26 @@ namespace PatientChecking.Controllers
                 PageSize = 10,
                 SortSelection = 0
             };
-            ViewData["SortHistory"] = "0";
             PagedResult<PatientListViewModel> pagedResult = await _patientService.GetListPatientPaging(request);
-            return View(pagedResult);
+            dynamic mymodel = new ExpandoObject();
+            mymodel.PagedResult = pagedResult;
+            mymodel.PagingRequest = request;
+            return View(mymodel);
         }
 
-        public async Task<IActionResult> Sort(int option)
+        public async Task<IActionResult> SortAndPaging(int SortOption, int PagingOption, int CurrentPage)
         {
             PagingRequest request = new PagingRequest()
             {
-                PageIndex = 1,
-                PageSize = 10,
-                SortSelection = option
+                PageIndex = CurrentPage,
+                PageSize = PagingOption,
+                SortSelection = SortOption
             };
-            ViewData["SortHistory"] = option.ToString();
             PagedResult<PatientListViewModel> pagedResult = await _patientService.GetListPatientPaging(request);
-            return View("Index",pagedResult);
+            dynamic mymodel = new ExpandoObject();
+            mymodel.PagedResult = pagedResult;
+            mymodel.PagingRequest = request;
+            return View("Index", mymodel);
         }
 
         public IActionResult Detail()

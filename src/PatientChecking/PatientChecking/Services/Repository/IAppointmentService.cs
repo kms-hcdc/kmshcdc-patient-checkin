@@ -9,5 +9,6 @@ namespace PatientChecking.Services.Repository
     public interface IAppointmentService
     {
         Task<AppointmentDashboard> GetAppointmentSummary();
+        Task<PagedResult<AppointmentListViewModel>> GetListAppoinmentsPaging(PagingRequest request);
     }
 }

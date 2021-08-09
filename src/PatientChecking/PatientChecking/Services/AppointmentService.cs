@@ -31,5 +31,56 @@ namespace PatientChecking.Services
                 NumOfAppointmentsInToday = numberOfAppointmentsInToday.Count(),
             };
         }
+
+        public async Task<PagedResult<AppointmentListViewModel>> GetListAppoinmentsPaging(PagingRequest request)
+        {
+            var query = from appointment in _patientCheckInContext.Appointments
+                        join patient in _patientCheckInContext.Patients on appointment.PatientId equals patient.PatientId
+                        select new { appointment, patient };
+             if(request.SortSelection == 0)
+            {
+                query = query.OrderBy(i => i.patient.FullName);
+            }
+            else if(request.SortSelection == 1)
+            {
+                query = query.OrderBy(i => i.patient.PatientIdentifier); 
+            }
+            else if(request.SortSelection == 2)
+            {
+                query = query.OrderBy(i => i.patient.DoB);
+            }
+            else if (request.SortSelection == 3)
+            {
+                query = query.OrderByDescending(i => i.appointment.CheckInDate);
+            }
+            else
+            {
+                query = query.OrderBy(i => i.appointment.Status == AppointmentStatus.CheckIn.ToString() ? 1 
+                                         : i.appointment.Status == AppointmentStatus.Closed.ToString() ? 2
+                                         : 3
+                );
+            }
+            int totalRow = query.Count();
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize).Select(x => new AppointmentListViewModel()
+                {
+                    AppointmentId = x.appointment.AppointmentId,
+                    CheckInDate = x.appointment.CheckInDate.ToString("dd-MM-yyyy"),
+                    Status = x.appointment.Status,
+                    DoB = x.patient.DoB.ToString("dd-MM-yyyy"),
+                    FullName = x.patient.FullName,
+                    PatientIdentifier = x.patient.PatientIdentifier
+                }).ToListAsync();
+
+            var pagedResult = new PagedResult<AppointmentListViewModel>()
+            {
+                Items = data,
+                TotalCount = totalRow,
+                pageIndex = request.PageIndex,
+                pageSize = request.PageSize
+            };
+
+            return pagedResult;
+        }
     }
 }

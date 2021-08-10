@@ -73,3 +73,15 @@
     justify-content: flex-end;
     margin-right: 20px;
 }
+.total-row {
+    height: 38px;
+    line-height: 38px;
+    margin: 0 10px;
+}
+#paging-selection {
+    width: 7%;
+    height: 38px
+}
+.page-link {
+    color: black !important;
+}

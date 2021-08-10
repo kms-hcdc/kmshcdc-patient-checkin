@@ -13,6 +13,6 @@ namespace PatientChecking.Services.ServiceModels
         public string Status { get; set; }
         public int PatientId { get; set; }
 
-        public virtual Patient Patient { get; set; }
+        public virtual PatientDetails Patient { get; set; }
     }
 }

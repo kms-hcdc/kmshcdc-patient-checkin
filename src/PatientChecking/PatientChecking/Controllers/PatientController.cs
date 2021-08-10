@@ -37,7 +37,7 @@ namespace PatientChecking.Controllers
                 {
                     PatientIdentifier = p.PatientIdentifier,
                     FullName = p.FullName,
-                    Gender = p.Gender == 0 ? "Male" : "Female",
+                    Gender = p.Gender == 0 ? "Male" : p.Gender == 1 ? "Female" : "Other",
                     DoB = p.DoB.ToString("dd-MM-yyyy"),
                     AvatarLink = p.AvatarLink,
                     Address = p.PrimaryAddress?.Address1,

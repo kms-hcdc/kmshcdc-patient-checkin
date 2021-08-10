@@ -62,18 +62,17 @@ namespace PatientChecking.Services
             return result;
         }
 
-        public async Task<int> GetNumberOfPatients()
+        public async Task<PatientDashboard> GetPatientsSummary()
         {
-            var result = await _patientCheckInContext.Patients.ToListAsync();
-            return result.Count;
-        }
-
-        public async Task<int> GetNumberOfPatientsInCurrentMonth()
-        {
-            var result = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Month == DateTime.Now.Month)
+            var numberOfPatients = await _patientCheckInContext.Patients.ToListAsync();
+            var numberOfPatientsInMonth = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Year == DateTime.Now.Year && x.CheckInDate.Month == DateTime.Now.Month)
                                                                  .GroupBy(p => p.PatientId)
-                                                                 .Select(g => new { g.Key, count = g.Count()}).ToListAsync();
-            return result.Count;
+                                                                 .Select(g => new { g.Key, count = g.Count() }).ToListAsync();
+            return new PatientDashboard()
+            {
+                NumOfPatients = numberOfPatients.Count(),
+                NumOfPatientsInMonth = numberOfPatientsInMonth.Count()
+            };
         }
     }
 }

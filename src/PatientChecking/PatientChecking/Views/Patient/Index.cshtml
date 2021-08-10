@@ -18,7 +18,7 @@
                aria-label="Search" />
     </div>
     <div class="sort-area">
-        <select id="sort-selection" class="form-select" style="line-height: 1.5">
+        <select id="sort-selection" class="form-select">
             <option value="0">Sort By ID</option>
             <option value="1">Sort By Name</option>
             <option value="2">Sort By DoB</option>
@@ -32,11 +32,11 @@
             <div class="row">
                 <div class="col l-4">
                     <div class="item patient-item1">
-                        <div class="patient-img-box">
-                            <img src="~/Image/no-avatar.jpg" alt="Avatar" style="height: 135px" />
+                        <div>
+                            <img src="~/Image/no-avatar.jpg" alt="Avatar" class="patient-img" />
                         </div>
                         <div class="patient-name">
-                            <p style="font-weight: 600; font-size: 18px">@item.FullName</p>
+                            <p class="patient-name-bold">@item.FullName</p>
                             <p>@item.PatientIdentifier</p>
                         </div>
                     </div>
@@ -44,11 +44,11 @@
                 <div class="col l-4">
                     <div class="item patient-item2">
                         <div>
-                            <p style="font-weight: 700">DoB</p>
+                            <p class="dob-bold">DoB</p>
                             <p>@item.DoB</p>
                         </div>
                         <div>
-                            <p style="font-weight: 700">Gender</p>
+                            <p class="dob-bold">Gender</p>
                             <p>@item.Gender</p>
                         </div>
                     </div>
@@ -57,19 +57,19 @@
                     <div class="item patient-item3">
                         <div>
                             <div class="contact-icon">
-                                <i class="fas fa-phone" style="font-size: 16px"></i>
+                                <i class="fas fa-phone"></i>
                             </div>
                             <p class="contact-info">@item.PhoneNumber</p>
                         </div>
                         <div>
                             <div class="contact-icon">
-                                <i class="fas fa-envelope" style="font-size: 16px"></i>
+                                <i class="fas fa-envelope"></i>
                             </div>
                             <p class="contact-info">@item.Email</p>
                         </div>
                         <div>
                             <div class="contact-icon">
-                                <i class="fas fa-map-marker-alt" style="font-size: 16px"></i>
+                                <i class="fas fa-map-marker-alt"></i>
                             </div>
                             <p class="contact-info">@item.Address</p>
                         </div>
@@ -100,13 +100,17 @@
         @{
             Decimal total = Decimal.Divide(totalCount, pageSize);
             int totalPage = (int)Math.Ceiling(total);
+
             int pageLeft = 1, pageRight = 1;//Number of pages before and after current page
+
             var fromPage = Math.Max(1, pageIndex - pageLeft);
             var toPage = Math.Min(totalPage, pageIndex + pageRight);
+
             if (totalPage - toPage == 1)
             {
                 toPage = totalPage;
             }
+
             if (fromPage > 1)
             {
                 <li class="page-item @(pageIndex == 1 ? "active" : "")">
@@ -120,12 +124,14 @@
                     </li>
                 }
             }
+
             for (int i = fromPage; i <= toPage; i++)
             {
                 <li class="page-item @(pageIndex == i ? "active" : "")">
                     <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = i})">@i</a>
                 </li>
             }
+
             if (toPage < totalPage)
             {
                 int middleNumber = (int)Math.Ceiling((double)(totalPage - toPage) / 2) + toPage;

@@ -41,6 +41,7 @@ namespace PatientChecking.Services
             }
 
             int totalRow = query.Count();
+
             var data = query
                 .Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize).Select(x => new Patient()
@@ -54,20 +55,24 @@ namespace PatientChecking.Services
                     PrimaryAddress = x.address,
                     PrimaryContact = x.contact,
                 }).ToList();
+
             PatientList result = new PatientList()
             {
                 Patients = data,
                 TotalCount = totalRow
             };
+
             return result;
         }
 
         public async Task<PatientDashboard> GetPatientsSummary()
         {
             var numberOfPatients = await _patientCheckInContext.Patients.ToListAsync();
+
             var numberOfPatientsInMonth = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Year == DateTime.Now.Year && x.CheckInDate.Month == DateTime.Now.Month)
                                                                  .GroupBy(p => p.PatientId)
                                                                  .Select(g => new { g.Key, count = g.Count() }).ToListAsync();
+
             return new PatientDashboard()
             {
                 NumOfPatients = numberOfPatients.Count(),

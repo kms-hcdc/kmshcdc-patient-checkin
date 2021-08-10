@@ -7,9 +7,9 @@ namespace PatientChecking.Views.ViewModels
 {
     interface IPagination
     {
-        public int PageIndex { get; set; }
-        public int PageSize { get; set; }
-        public int TotalCount { get; set; }
-        public int SortSelection { get; set; }
+        int PageIndex { get; set; }
+        int PageSize { get; set; }
+        int TotalCount { get; set; }
+        int SortSelection { get; set; }
     }
 }

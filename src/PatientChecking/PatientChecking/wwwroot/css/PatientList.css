@@ -88,3 +88,19 @@
 .disabled {
     opacity: 0.4;
 }
+.patient-name-bold {
+    font-weight: 600 !important;
+    font-size: 18px !important;
+}
+.patient-img {
+    height: 135px;
+}
+#sort-selection {
+    line-height: 1.5 !important;
+}
+.contact-icon > i {
+    font-size: 16px !important;
+}
+.dob-bold {
+    font-weight: 700 !important;
+}

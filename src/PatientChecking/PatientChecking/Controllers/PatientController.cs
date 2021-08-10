@@ -29,15 +29,18 @@ namespace PatientChecking.Controllers
                 PageSize = pagingOption,
                 SortSelection = sortOption
             };
+
             PatientList result = _patientService.GetListPatientPaging(request);
+
             List<PatientViewModel> patientsVm = new List<PatientViewModel>();
+
             foreach (Patient p in result.Patients)
             {
                 patientsVm.Add(new PatientViewModel()
                 {
                     PatientIdentifier = p.PatientIdentifier,
                     FullName = p.FullName,
-                    Gender = p.Gender == 0 ? "Male" : p.Gender == 1 ? "Female" : "Other",
+                    Gender = p.Gender == 0 ? PatientGender.Male.ToString() : p.Gender == 1 ? PatientGender.Female.ToString() : PatientGender.Other.ToString(),
                     DoB = p.DoB.ToString("dd-MM-yyyy"),
                     AvatarLink = p.AvatarLink,
                     Address = p.PrimaryAddress?.Address1,
@@ -45,6 +48,7 @@ namespace PatientChecking.Controllers
                     PhoneNumber = p.PrimaryContact?.PhoneNumber
                 });
             }
+
             PatientListViewModel model = new PatientListViewModel()
             {
                 Patients = patientsVm,
@@ -53,6 +57,7 @@ namespace PatientChecking.Controllers
                 PageSize = request.PageSize,
                 TotalCount = result.TotalCount
             };
+
             return View(model);
         }
 

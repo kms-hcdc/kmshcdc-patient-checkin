@@ -11,6 +11,6 @@ namespace PatientChecking.Services.Repository
     {
         Task<int> GetNumberOfPatients();
         Task<int> GetNumberOfPatientsInCurrentMonth();
-        Task<PagedResult<PatientListViewModel>> GetListPatientPaging(PagingRequest request);
+        PatientList GetListPatientPaging(PagingRequest request);
     }
 }

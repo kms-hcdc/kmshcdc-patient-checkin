@@ -85,3 +85,6 @@
 .page-link {
     color: black !important;
 }
+.disabled {
+    opacity: 0.4;
+}

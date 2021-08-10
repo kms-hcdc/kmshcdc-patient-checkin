@@ -9,10 +9,6 @@ namespace PatientChecking.Services.ServiceModels
 {
     public partial class Patient
     {
-        public Patient()
-        {
-            
-        }
         public int PatientId { get; set; }
         public string PatientIdentifier { get; set; } 
         public string FullName { get; set; }

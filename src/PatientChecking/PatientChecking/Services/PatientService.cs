@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PatientCheckIn.DataAccess.Models;
 using PatientChecking.Services.Repository;
 using PatientChecking.Services.ServiceModels;
 using PatientChecking.Views.ViewModels;
@@ -67,13 +68,13 @@ namespace PatientChecking.Services
         public async Task<PatientDashboard> GetPatientsSummary()
         {
             var numberOfPatients = await _patientCheckInContext.Patients.ToListAsync();
-            var numberOfPatientsInMonth = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Year == DateTime.Now.Year && x.CheckInDate.Month == DateTime.Now.Month)
-                                                                 .GroupBy(p => p.PatientId)
-                                                                 .Select(g => new { g.Key, count = g.Count() }).ToListAsync();
+            //var numberOfPatientsInMonth = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Year == DateTime.Now.Year && x.CheckInDate.Month == DateTime.Now.Month)
+            //                                                     .GroupBy(p => p.PatientId)
+            //                                                     .Select(g => new { g.Key, count = g.Count() }).ToListAsync();
             return new PatientDashboard()
             {
                 NumOfPatients = numberOfPatients.Count(),
-                NumOfPatientsInMonth = numberOfPatientsInMonth.Count()
+                //NumOfPatientsInMonth = numberOfPatientsInMonth.Count()
             };
         }
     }

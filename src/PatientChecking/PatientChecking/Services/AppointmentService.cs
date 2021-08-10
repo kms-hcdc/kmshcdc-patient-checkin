@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PatientCheckIn.DataAccess.Models;
 using PatientChecking.Services.Repository;
 using PatientChecking.Services.ServiceModels;
 using PatientChecking.Services.ServiceModels.Enum;
@@ -35,7 +36,7 @@ namespace PatientChecking.Services
         public async Task<AppointmentList> GetListAppoinmentsPaging(PagingRequest request)
         {
             var query = from appointment in _patientCheckInContext.Appointments
-                        join patient in _patientCheckInContext.Patients on appointment.PatientId equals patient.PatientId
+                        join patient in _patientCheckInContext.Patients on appointment.Patient.PatientId equals patient.PatientId
                         select new { appointment, patient };
              if(request.SortSelection == 0)
             {
@@ -62,12 +63,12 @@ namespace PatientChecking.Services
             }
             int totalRow = query.Count();
             var data = query.Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize).Select(x => new Appointment()
+                .Take(request.PageSize).Select(x => new ServiceModels.Appointment()
                 {
                     AppointmentId = x.appointment.AppointmentId,
                     CheckInDate = x.appointment.CheckInDate,
                     Status = x.appointment.Status,
-                    Patient = new Patient()
+                    Patient = new ServiceModels.Patient()
                     {
                         AvatarLink = x.patient.AvatarLink,
                         DoB = x.patient.DoB,

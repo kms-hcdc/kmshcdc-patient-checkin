@@ -1,4 +1,5 @@
-﻿using PatientChecking.Views.ViewModels;
+﻿using PatientChecking.Services.ServiceModels;
+using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace PatientChecking.Services.Repository
     public interface IAppointmentService
     {
         Task<AppointmentDashboard> GetAppointmentSummary();
-        Task<PagedResult<AppointmentListViewModel>> GetListAppoinmentsPaging(PagingRequest request);
+        Task<AppointmentList> GetListAppoinmentsPaging(PagingRequest request);
     }
 }

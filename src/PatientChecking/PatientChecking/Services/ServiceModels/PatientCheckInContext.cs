@@ -69,13 +69,13 @@ namespace PatientChecking.Services.ServiceModels
                     .IsRequired()
                     .HasMaxLength(10)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.Patient)
+                entity.HasOne(d => d.PatientDetails)
                     .WithMany(p => p.Appointments)
                     .HasForeignKey(d => d.PatientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Appointme__Patie__33D4B598");
             });
+
 
             modelBuilder.Entity<Contact>(entity =>
             {

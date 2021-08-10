@@ -32,7 +32,7 @@ namespace PatientChecking.Services
             };
         }
 
-        public async Task<PagedResult<AppointmentListViewModel>> GetListAppoinmentsPaging(PagingRequest request)
+        public async Task<AppointmentList> GetListAppoinmentsPaging(PagingRequest request)
         {
             var query = from appointment in _patientCheckInContext.Appointments
                         join patient in _patientCheckInContext.Patients on appointment.PatientId equals patient.PatientId
@@ -61,26 +61,26 @@ namespace PatientChecking.Services
                 );
             }
             int totalRow = query.Count();
-            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize).Select(x => new AppointmentListViewModel()
+            var data = query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize).Select(x => new Appointment()
                 {
                     AppointmentId = x.appointment.AppointmentId,
-                    CheckInDate = x.appointment.CheckInDate.ToString("dd-MM-yyyy"),
+                    CheckInDate = x.appointment.CheckInDate,
                     Status = x.appointment.Status,
-                    DoB = x.patient.DoB.ToString("dd-MM-yyyy"),
-                    FullName = x.patient.FullName,
-                    PatientIdentifier = x.patient.PatientIdentifier
-                }).ToListAsync();
-
-            var pagedResult = new PagedResult<AppointmentListViewModel>()
+                    Patient = new Patient()
+                    {
+                        AvatarLink = x.patient.AvatarLink,
+                        DoB = x.patient.DoB,
+                        FullName = x.patient.FullName,
+                        PatientIdentifier = x.patient.PatientIdentifier
+                    }
+                }).ToList();
+            AppointmentList appointmentList = new AppointmentList()
             {
-                Items = data,
                 TotalCount = totalRow,
-                pageIndex = request.PageIndex,
-                pageSize = request.PageSize
+                Appointments = data
             };
-
-            return pagedResult;
+            return appointmentList;
         }
     }
 }

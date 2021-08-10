@@ -5,7 +5,7 @@
 @section css {
     <link href="@Url.Content("~/css/AppointmentList.css")" rel="stylesheet" type="text/css" />
 }
-@model dynamic
+@model PatientChecking.Views.ViewModels.AppointmentListViewModel
 @using PatientChecking.Services.ServiceModels.Enum
 <div class="header-appointment">
     <div class="sort-appointment">
@@ -40,7 +40,7 @@
             <p class="title">Action </p>
         </div>
     </div>
-    @foreach (var item in Model.PagedResult.Items)
+    @foreach (var item in Model.AppointmentViewModels)
     {
         <div class="row-value">
             <div class="col-3 col-md-3" id="name-value">
@@ -94,7 +94,7 @@
         <option value="20">1-20</option>
         <option value="50">1-50</option>
     </select>
-    <span class="total-row">Of @Model.PagedResult.TotalCount</span>
+    <span class="total-row">Of @Model.TotalCount</span>
     <ul class="pagination">
         <li class="page-item">
             <a class="page-link" href="#" aria-label="Previous">
@@ -103,10 +103,10 @@
             </a>
         </li>
         @{
-            int pagingOption = Model.PagingRequest.PageSize;
-            int currentPage = Model.PagingRequest.PageIndex;
-            int sortOption = Model.PagingRequest.SortSelection;
-            var pageCount = (int)Math.Ceiling(decimal.Divide(Model.PagedResult.TotalCount, pagingOption));
+            int pagingOption = Model.PageSize;
+            int currentPage = Model.PageIndex;
+            int sortOption = Model.SortSelection;
+            var pageCount = (int)Math.Ceiling(decimal.Divide(Model.TotalCount, pagingOption));
 
             // How many pages views right or left of currentPage
             const int PageLeft = 1;
@@ -125,33 +125,33 @@
             if (fromPage > 1)
             {
                 <li class="page-item @(currentPage ==  1 ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("SortingAndPaging", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = 1})">1</a>
+                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = 1})">1</a>
                 </li>
                 if (fromPage > 2)
                 {
                     var middleNumber = (int)Math.Ceiling((double)(fromPage - 2) / 2) + 1;
                     <li class="page-item @(currentPage ==  middleNumber ? "active" : "")">
-                        <a class="page-link" href="@Url.Action("SortingAndPaging", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = middleNumber})">...</a>
+                        <a class="page-link" href="@Url.Action("Index", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = middleNumber})">...</a>
                     </li>
                 }
             }
             for (int i = fromPage; i <= toPage; i++)
             {
                 <li class="page-item @(currentPage ==  i ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("SortingAndPaging", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = i})">@i</a>
+                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = i})">@i</a>
                 </li>
             }
             if (toPage < pageCount)
             {
                 int middleNumber = (int)Math.Ceiling((double)(pageCount - toPage) / 2) + toPage;
                 <li class="page-item @(currentPage ==  middleNumber ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("SortingAndPaging", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = middleNumber})">...</a>
+                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = middleNumber})">...</a>
                 </li>
                 // view last page
                 if (toPage < pageCount - 1)
                 {
                     <li class="page-item @(currentPage ==  pageCount ? "active" : "")">
-                        <a class="page-link" href="@Url.Action("SortingAndPaging", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = pageCount})">@pageCount</a>
+                        <a class="page-link" href="@Url.Action("Index", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = pageCount})">@pageCount</a>
                     </li>
                 }
 
@@ -168,16 +168,16 @@
 </div>
 <script>
     $(document).ready(function(){
-        var pagingHistory = @Model.PagingRequest.PageSize;
-        var sortHistory = @Model.PagingRequest.SortSelection;
+        var pagingHistory = @Model.PageSize;
+        var sortHistory = @Model.SortSelection;
         $("#paging-selection option[value='" + pagingHistory + "']").attr("selected", "selected");
         $("#elected-value option[value='" + sortHistory + "']").attr("selected", "selected");
     });
     $('#selected-value, #paging-selection').on("change", function (e) {
         var selectedSortValue = $('#selected-value').children("option:selected").val();
         var selectedPagingValue = $('#paging-selection').children("option:selected").val();
-        var pageIndex = @Model.PagingRequest.PageIndex;
-        var url = '@Html.Raw(@Url.Action("SortingAndPaging", "Appointment", new { Option = "option", PageSize = "pageSize", PageIndex = "pageIndex" }))';
+        var pageIndex = @Model.PageIndex;
+        var url = '@Html.Raw(@Url.Action("Index", "Appointment", new { Option = "option", PageSize = "pageSize", PageIndex = "pageIndex" }))';
         url = url.replace("option", selectedSortValue).replace("pageSize", selectedPagingValue).replace("pageIndex", 1);
         window.location.href = url;
     });

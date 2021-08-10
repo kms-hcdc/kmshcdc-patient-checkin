@@ -18,7 +18,7 @@ namespace PatientChecking.Services.ServiceModels
         public string Email { get; set; }
         public int PatientId { get; set; }
 
-        public virtual Patient Patient { get; set; }
+        public virtual PatientDetails Patient { get; set; }
         public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<EmergencyContact> EmergencyContacts { get; set; }
     }

@@ -22,6 +22,7 @@ namespace PatientChecking.Services.ServiceModels
         public virtual DbSet<Contact> Contacts { get; set; }
         public virtual DbSet<EmergencyContact> EmergencyContacts { get; set; }
         public virtual DbSet<Patient> Patients { get; set; }
+        public virtual DbSet<PatientDetails> PatientDetails { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -132,7 +133,7 @@ namespace PatientChecking.Services.ServiceModels
                     .HasConstraintName("FK__Emergency__Conta__3C69FB99");
             });
 
-            modelBuilder.Entity<Patient>(entity =>
+            modelBuilder.Entity<PatientDetails>(entity =>
             {
                 entity.ToTable("Patient");
 
@@ -178,6 +179,25 @@ namespace PatientChecking.Services.ServiceModels
                 entity.Property(e => e.Nationality)
                     .IsRequired()
                     .HasMaxLength(100);
+
+                entity.Property(e => e.PatientIdentifier)
+                    .IsRequired()
+                    .HasMaxLength(8);
+            });
+
+            modelBuilder.Entity<Patient>(entity =>
+            {
+                entity.ToTable("Patient");
+
+                entity.Property(e => e.PatientId).HasColumnName("PatientID");
+
+                entity.Property(e => e.AvatarLink).HasMaxLength(100);
+
+                entity.Property(e => e.DoB).HasColumnType("date");
+
+                entity.Property(e => e.FullName)
+                    .IsRequired()
+                    .HasMaxLength(150);
 
                 entity.Property(e => e.PatientIdentifier)
                     .IsRequired()

@@ -7,8 +7,8 @@ namespace PatientChecking.Services.ServiceModels.Enum
 {
     public enum PatientGender
     {
-        Male,
-        Female,
-        Other
+        Male = 0,
+        Female = 1,
+        None = 2
     }
 }

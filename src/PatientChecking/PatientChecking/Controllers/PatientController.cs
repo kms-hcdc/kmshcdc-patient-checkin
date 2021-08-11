@@ -23,16 +23,16 @@ namespace PatientChecking.Controllers
 
         public IActionResult Index(int sortOption = (int)PatientSortSelection.ID, int pagingOption = 10, int currentPage = 1)
         {
-            PagingRequest request = new PagingRequest()
+            var request = new PagingRequest()
             {
                 PageIndex = currentPage,
                 PageSize = pagingOption,
                 SortSelection = sortOption
             };
 
-            PatientList result = _patientService.GetListPatientPaging(request);
+            var result = _patientService.GetListPatientPaging(request);
 
-            List<PatientViewModel> patientsVm = new List<PatientViewModel>();
+            var patientsVm = new List<PatientViewModel>();
 
             foreach (Patient p in result.Patients)
             {
@@ -49,7 +49,7 @@ namespace PatientChecking.Controllers
                 });
             }
 
-            PatientListViewModel model = new PatientListViewModel()
+            var model = new PatientListViewModel()
             {
                 Patients = patientsVm,
                 SortSelection = request.SortSelection,

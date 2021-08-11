@@ -41,7 +41,7 @@ namespace PatientChecking.Services
                 query = query.OrderBy(i => i.patient.DoB);
             }
 
-            int totalRow = query.Count();
+            var totalRow = query.Count();
 
             var data = query
                 .Skip((request.PageIndex - 1) * request.PageSize)
@@ -51,13 +51,20 @@ namespace PatientChecking.Services
                     PatientIdentifier = x.patient.PatientIdentifier,
                     FullName = x.patient.FullName,
                     DoB = x.patient.DoB,
-                    //Gender =x.patient.Gender,
+                    Gender = (PatientGender) x.patient.Gender,
                     AvatarLink = x.patient.AvatarLink != null ? x.patient.AvatarLink : "",
-                    //PrimaryAddress = x.address,
-                    //PrimaryContact = x.contact,
+                    PrimaryAddress = new ServiceModels.Address() 
+                    { 
+                        StreetLine = x.address.StreetLine
+                    },
+                    PrimaryContact = new ServiceModels.Contact()
+                    { 
+                        Email = x.contact.Email,
+                        PhoneNumber = x.contact.PhoneNumber
+                    },
                 }).ToList();
 
-            PatientList result = new PatientList()
+            var result = new PatientList()
             {
                 Patients = data,
                 TotalCount = totalRow

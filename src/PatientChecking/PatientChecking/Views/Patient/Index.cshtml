@@ -98,8 +98,7 @@
             </a>
         </li>
         @{
-            Decimal total = Decimal.Divide(totalCount, pageSize);
-            int totalPage = (int)Math.Ceiling(total);
+            var totalPage = (totalCount + pageSize - 1)/pageSize;
 
             int pageLeft = 1, pageRight = 1;//Number of pages before and after current page
 

@@ -1,5 +1,169 @@
-﻿@{
+﻿@model PatientChecking.Views.ViewModels.PatientListViewModel
+@{
     ViewData["Title"] = "Patient";
     ViewData["Page"] = "List Patient";
+    int sortOption = Model.SortSelection;
+    int pageSize = Model.PageSize;
+    int pageIndex = Model.PageIndex;
+    int totalCount = Model.TotalCount;
 }
-<p>This is list patient view</p>
+@section css {
+    <link href="@Url.Content("~/css/PatientList.css")" rel="stylesheet" type="text/css" />
+}
+<div class="search-container">
+    <div class="search-area">
+        <input class="form-control"
+               type="text"
+               placeholder="Search"
+               aria-label="Search" />
+    </div>
+    <div class="sort-area">
+        <select id="sort-selection" class="form-select">
+            <option value="0">Sort By ID</option>
+            <option value="1">Sort By Name</option>
+            <option value="2">Sort By DoB</option>
+        </select>
+    </div>
+</div>
+<div class="list-patient-container">
+    <div class="grid wide">
+        @foreach (var item in Model.Patients)
+        {
+            <div class="row">
+                <div class="col l-4">
+                    <div class="item patient-item1">
+                        <div>
+                            <img src="~/Image/no-avatar.jpg" alt="Avatar" class="patient-img" />
+                        </div>
+                        <div class="patient-name">
+                            <p class="patient-name-bold">@item.FullName</p>
+                            <p>@item.PatientIdentifier</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col l-4">
+                    <div class="item patient-item2">
+                        <div>
+                            <p class="dob-bold">DoB</p>
+                            <p>@item.DoB</p>
+                        </div>
+                        <div>
+                            <p class="dob-bold">Gender</p>
+                            <p>@item.Gender</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col l-4">
+                    <div class="item patient-item3">
+                        <div>
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <p class="contact-info">@item.PhoneNumber</p>
+                        </div>
+                        <div>
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <p class="contact-info">@item.Email</p>
+                        </div>
+                        <div>
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <p class="contact-info">@item.Address</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div class="pagination-container">
+    <select id="paging-selection" class="form-select">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+    </select>
+    @{
+        int from = ((pageIndex - 1) * pageSize) + 1;
+        int to = pageSize * pageIndex > totalCount ? totalCount : pageIndex * pageSize;
+    }
+    <span class="total-row"> @from - @to of @totalCount</span>
+    <ul class="pagination">
+        <li class="page-item @(pageIndex == 1 ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, PagingOption = pageSize, currentPage = pageIndex-1})" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+        @{
+            Decimal total = Decimal.Divide(totalCount, pageSize);
+            int totalPage = (int)Math.Ceiling(total);
+
+            int pageLeft = 1, pageRight = 1;//Number of pages before and after current page
+
+            var fromPage = Math.Max(1, pageIndex - pageLeft);
+            var toPage = Math.Min(totalPage, pageIndex + pageRight);
+
+            if (totalPage - toPage == 1)
+            {
+                toPage = totalPage;
+            }
+
+            if (fromPage > 1)
+            {
+                <li class="page-item @(pageIndex == 1 ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = 1})">1</a>
+                </li>
+                if (fromPage > 2)
+                {
+                    var middleNumber = (int)Math.Ceiling((double)(fromPage - 2) / 2) + 1;
+                    <li class="page-item @(pageIndex == middleNumber ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = middleNumber})">...</a>
+                    </li>
+                }
+            }
+
+            for (int i = fromPage; i <= toPage; i++)
+            {
+                <li class="page-item @(pageIndex == i ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = i})">@i</a>
+                </li>
+            }
+
+            if (toPage < totalPage)
+            {
+                int middleNumber = (int)Math.Ceiling((double)(totalPage - toPage) / 2) + toPage;
+                <li class="page-item @(pageIndex == totalPage ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = middleNumber})">...</a>
+                </li>
+                if (toPage < totalPage - 1)
+                {
+                    <li class="page-item @(pageIndex == totalPage ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = totalPage})">@totalPage</a>
+                    </li>
+                }
+            }
+        }
+        <li class="page-item @(pageIndex == totalPage ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = pageIndex+1})" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<script>
+    $(document).ready(function(){
+        $("#paging-selection option[value='" + @pageSize + "']").attr("selected", "selected");
+        $("#sort-selection option[value='" + @sortOption + "']").attr("selected", "selected");
+    });
+    $('#sort-selection, #paging-selection').on('change', function (e) {
+        var selectedSort = $('#sort-selection').children("option:selected").val();
+        var selectedPaging = $('#paging-selection').children("option:selected").val();
+        var url = '@Html.Raw(@Url.Action("Index", "Patient", new { sortOption = "selectedSort", pagingOption = "selectedPaging", currentPage = 1}))';
+        url = url.replace("selectedSort", selectedSort).replace("selectedPaging", selectedPaging);
+        window.location.href = url;
+    });
+</script>

@@ -6,8 +6,7 @@
     <link rel="stylesheet" href="~/css/site.css" />
     @RenderSection("css", false)
     <script src="~/lib/jquery/dist/jquery.js"></script>
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" >
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 </head>
@@ -17,7 +16,7 @@
             <div class="img-box">
                 <img src="~/Image/logo.png" alt="" />
             </div>
-            <ul>
+            <ul style="padding-left:0px">
                 <li class="@((ViewBag.Action == "Home" && @ViewBag.Controller == "Dashboard") ? "active" : "")">
                     <a asp-controller="Dashboard" asp-action="Home">
                         <i class="fas fa-home" style="margin: 10px"></i>
@@ -30,7 +29,7 @@
                         Patients
                         <span class="fas fa-caret-down first" ></span>
                     </a>
-                    <ul class="@(@ViewBag.Controller == "Patient" ? "patient-show show" : "patient-show")" >
+                    <ul class="@(@ViewBag.Controller == "Patient" ? "patient-show show" : "patient-show")" style="padding-left:0px">
                         <li class="detail @((ViewBag.Action == "Index" && @ViewBag.Controller == "Patient") ? "active" : "")">
                             <a asp-controller="Patient" asp-action="Index">
                                 <i class="fas fa-list" style="margin: 10px"></i>
@@ -59,7 +58,6 @@
                 <div><img src="~/Image/avatar.jpg" alt="Avatar" class="admin-avatar" /></div>
                 <div>Hi, Administrator</div>
             </div>
-            <hr style="margin-top: 0px" />
             <div class="main-body">
                 @RenderBody()
             </div>

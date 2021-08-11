@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace PatientChecking.Services.ServiceModels
+namespace PatientCheckIn.DataAccess.Models
 {
     public partial class Contact
     {
@@ -17,7 +17,8 @@ namespace PatientChecking.Services.ServiceModels
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public int PatientId { get; set; }
-        public virtual PatientDetails Patient { get; set; }
+
+        public virtual Patient Patient { get; set; }
         public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<EmergencyContact> EmergencyContacts { get; set; }
     }

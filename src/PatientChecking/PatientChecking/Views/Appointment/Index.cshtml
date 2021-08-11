@@ -2,4 +2,154 @@
     ViewData["Title"] = "Appointment";
     ViewData["Page"] = "Appointment";
 }
-<p>This is Appointment View</p>
+@section css {
+    <link href="@Url.Content("~/css/AppointmentList.css")" rel="stylesheet" type="text/css" />
+}
+@model PatientChecking.Views.ViewModels.AppointmentListViewModel
+<div class="header-appointment">
+    <div class="sort-appointment">
+        <span>Sort by:</span>
+        <select id="selected-value" class="option-sort">
+            <option value="0">Name</option>
+            <option value="1">ID</option>
+            <option value="2">DOB</option>
+            <option value="3">Check-In Date</option>
+            <option value="4">Status</option>
+        </select>
+    </div>
+    <div class="btn-new-appointment">
+        <button>Make New Appointment</button>
+    </div>
+</div>
+<div class="grid-container">
+    <div class="row-title">
+        <div class="col-3 col-md-3">
+            <p class="title">Name </p>
+        </div>
+        <div class="col-3 col-md-3">
+            <p class="title">DOB </p>
+        </div>
+        <div class="col-3 col-md-3">
+            <p class="title">Check-in Date </p>
+        </div>
+        <div class="col-2 col-md-2">
+            <p class="title">Status </p>
+        </div>
+        <div class="col-1 col-md-1">
+            <p class="title">Action </p>
+        </div>
+    </div>
+    @foreach (var item in Model.AppointmentViewModels)
+    {
+        <div class="row-value">
+            <div class="col-3 col-md-3" id="name-value">
+                <img src="~/Image/no-avatar.jpg" alt="Avatar" class="avatar-patient-inappointment">
+                <div class="patient-identity">
+                    <p class="patient-name">@item.FullName</p>
+                    <p>(@item.PatientIdentifier)</p>
+                </div>
+            </div>
+            <div class="col-3 col-md-3">
+                <p class="title">@item.DoB</p>
+            </div>
+            <div class="col-3 col-md-3">
+                <p class="title">@item.CheckInDate</p>
+            </div>
+            <div class="col-2 col-md-2">
+                <p class="title">@item.Status</p>
+            </div>
+            <div class="col-1 col-md-1">
+                <button class="btn-view-appointment">View</button>
+            </div>
+        </div>
+    }
+</div>
+<div class="pagination-container">
+    <select id="paging-selection" class="form-select">
+        <option value="10">1-10</option>
+        <option value="20">1-20</option>
+        <option value="50">1-50</option>
+    </select>
+    <span class="total-row">Of @Model.TotalCount</span>
+    <ul class="pagination">
+        @{
+            int pagingOption = Model.PageSize;
+            int currentPage = Model.PageIndex;
+            int sortOption = Model.SortSelection;
+            var pageCount = (int)Math.Ceiling(decimal.Divide(Model.TotalCount, pagingOption));
+
+            const int PageLeft = 1;
+            const int PagesRight = 1;
+
+            var fromPage = Math.Max(1, currentPage - PageLeft);
+            var toPage = Math.Min(pageCount, currentPage + PagesRight);
+
+            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = currentPage-1})" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            if (pageCount - toPage == 1)
+            {
+                toPage = pageCount;
+            }
+            if (fromPage > 1)
+            {
+                <li class="page-item @(currentPage ==  1 ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = 1})">1</a>
+                </li>
+                if (fromPage > 2)
+                {
+                    var middleNumber = (int)Math.Ceiling((double)(fromPage - 2) / 2) + 1;
+                    <li class="page-item @(currentPage ==  middleNumber ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = middleNumber})">...</a>
+                    </li>
+                }
+            }
+            for (int i = fromPage; i <= toPage; i++)
+            {
+                <li class="page-item @(currentPage ==  i ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = i})">@i</a>
+                </li>
+            }
+            if (toPage < pageCount)
+            {
+                int middleNumber = (int)Math.Ceiling((double)(pageCount - toPage) / 2) + toPage;
+                <li class="page-item @(currentPage ==  middleNumber ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = middleNumber})">...</a>
+                </li>
+                if (toPage < pageCount - 1)
+                {
+                    <li class="page-item @(currentPage ==  pageCount ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = pageCount})">@pageCount</a>
+                    </li>
+                }
+
+            }
+                <li class="page-item @(currentPage == pageCount ? "disabled" : "")">
+                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = currentPage+1})" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+         }
+
+    </ul>
+</div>
+<script>
+    $(document).ready(function(){
+        var pagingHistory = @Model.PageSize;
+        var sortHistory = @Model.SortSelection;
+        $("#paging-selection option[value='" + pagingHistory + "']").attr("selected", "selected");
+        $("#selected-value option[value='" + sortHistory + "']").attr("selected", "selected");
+    });
+    $('#selected-value, #paging-selection').on("change", function (e) {
+        var selectedSortValue = $('#selected-value').children("option:selected").val();
+        var selectedPagingValue = $('#paging-selection').children("option:selected").val();
+        var pageIndex = @Model.PageIndex;
+        var url = '@Html.Raw(@Url.Action("Index", "Appointment", new { option = "optionSort", pageSize = "pagingOption", pageIndex = "currentPage" }))';
+        url = url.replace("optionSort", selectedSortValue).replace("pagingOption", selectedPagingValue).replace("currentPage", 1);
+        window.location.href = url;
+    });
+</script>

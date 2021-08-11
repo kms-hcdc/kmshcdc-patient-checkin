@@ -1,5 +1,6 @@
-﻿.grid-wide{
+﻿.grid-wide {
     display: none;
+    height: 97vh !important;
 }
 .row {
     display: flex;
@@ -49,14 +50,16 @@
     text-align: center;
     color: orange;
 }
-
+.col {
+    flex: 0 0% !important;
+}
 .item-appointment {
     margin-top: 16px;
     font-size: 40px;
     color: rgb(0, 0, 0);
     min-height: 250px;
     line-height: 250px;
-    width: 507px;
+    width: 568px;
     background-color: rgb(255, 255, 255);
     margin-left: 50px;
     display: flex;

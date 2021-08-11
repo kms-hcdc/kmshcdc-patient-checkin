@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PatientCheckIn.DataAccess.Models;
 using PatientChecking.Services;
 using PatientChecking.Services.Repository;
 using PatientChecking.Services.ServiceModels;
@@ -53,19 +54,14 @@ namespace PatientChecking
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger(c =>
             {
                 c.SerializeAsV2 = true;
             });
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                c.RoutePrefix = string.Empty;
-            });
+            
             app.UseRouting();
 
             app.UseAuthorization();
@@ -74,7 +70,15 @@ namespace PatientChecking
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Dashboard}/{action=Home}");
+            });
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = "swagger";
             });
         }
     }

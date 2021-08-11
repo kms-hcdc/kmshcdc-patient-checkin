@@ -29,7 +29,7 @@
                         Patients
                         <span class="fas fa-caret-down first" ></span>
                     </a>
-                    <ul class="@(@ViewBag.Controller == "Patient" ? "patient-show show" : "patient-show") ps-0">
+                    <ul class="@(@ViewBag.Controller == "Patient" ? "patient-show show" : "patient-show") ps-0" >
                         <li class="detail @((ViewBag.Action == "Index" && @ViewBag.Controller == "Patient") ? "active" : "")">
                             <a asp-controller="Patient" asp-action="Index">
                                 <i class="fas fa-list m-1"></i>
@@ -56,7 +56,7 @@
             <div class="header">
                 <div class="page-name"><i class="fas fa-bars"></i>@ViewData["Page"]</div>
                 <div><img src="~/Image/avatar.jpg" alt="Avatar" class="admin-avatar" /></div>
-                <div>Hi, Administrator</div>
+                <div class="h5">Hi, Administrator</div>
             </div>
             <div class="main-body">
                 @RenderBody()

@@ -43,7 +43,7 @@ namespace PatientChecking.Controllers
                     Gender = p.Gender.ToString(),
                     DoB = p.DoB.ToString("dd-MM-yyyy"),
                     AvatarLink = p.AvatarLink,
-                    Address = p.PrimaryAddress?.Address1,
+                    Address = p.PrimaryAddress?.StreetLine,
                     Email = p.PrimaryContact?.Email,
                     PhoneNumber = p.PrimaryContact?.PhoneNumber
                 });

@@ -29,7 +29,7 @@ namespace PatientChecking.Controllers
         public async Task<IActionResult> GetDashBoardData()
         {
             AppointmentDashboard appointmentDashboard = await _appointmentService.GetAppointmentSummary();
-            PatientDashboard patientDashboard = await _patientService.GetPatientsSummary();
+            int patientDashboard = await _patientService.GetPatientsSummary();
             return  new JsonResult(new {appointment = appointmentDashboard , patient = patientDashboard });
         }
     }

@@ -6,7 +6,7 @@ namespace PatientChecking.Services.Repository
 {
     public interface IPatientService
     {
-        Task<PatientDashboard> GetPatientsSummary();
+        Task<int> GetPatientsSummary();
         PatientList GetListPatientPaging(PagingRequest request);
     }
 }

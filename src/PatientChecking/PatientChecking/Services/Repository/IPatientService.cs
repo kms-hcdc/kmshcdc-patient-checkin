@@ -11,7 +11,7 @@ namespace PatientChecking.Services.Repository
 
         Task<PagedResult<PatientListViewModel>> GetListPatientPaging(PagingRequest request);
 
-        Task<PatientDashboard> GetPatientsSummary();
+        Task<int> GetPatientsSummary();
 
     }
 }

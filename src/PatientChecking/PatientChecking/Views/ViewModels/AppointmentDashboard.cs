@@ -10,5 +10,6 @@ namespace PatientChecking.Views.ViewModels
         public int NumOfAppointments { get; set; }
         public int NumOfAppointmentsInMonth { get; set; }
         public int NumOfAppointmentsInToday { get; set; }
+        public int NumOfPatientsInMonth { get; set; }
     }
 }

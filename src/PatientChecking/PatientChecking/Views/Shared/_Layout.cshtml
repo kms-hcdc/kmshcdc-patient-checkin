@@ -17,29 +17,29 @@
             <div class="img-box">
                 <img src="~/Image/logo.png" alt="" />
             </div>
-            <ul style="padding-left:0px">
+            <ul class="ps-0">
                 <li class="@((ViewBag.Action == "Home" && @ViewBag.Controller == "Dashboard") ? "active" : "")">
                     <a asp-controller="Dashboard" asp-action="Home">
-                        <i class="fas fa-home" style="margin: 10px"></i>
+                        <i class="fas fa-home m-1"></i>
                         Dashboard
                     </a>
                 </li>
                 <li>
                     <a class="patient-btn">
-                        <i class="fas fa-hospital-user" style="margin: 10px"></i>
+                        <i class="fas fa-hospital-user m-1"></i>
                         Patients
                         <span class="fas fa-caret-down first" ></span>
                     </a>
-                    <ul class="@(@ViewBag.Controller == "Patient" ? "patient-show show" : "patient-show")" style="padding-left:0px">
+                    <ul class="@(@ViewBag.Controller == "Patient" ? "patient-show show" : "patient-show") ps-0">
                         <li class="detail @((ViewBag.Action == "Index" && @ViewBag.Controller == "Patient") ? "active" : "")">
                             <a asp-controller="Patient" asp-action="Index">
-                                <i class="fas fa-list" style="margin: 10px"></i>
+                                <i class="fas fa-list m-1"></i>
                                 List Information
                             </a>
                         </li>
                         <li class="detail @((ViewBag.Action == "Detail" && @ViewBag.Controller == "Patient") ? "active" : "")">
                             <a asp-controller="Patient" asp-action="Detail">
-                                <i class="fas fa-info-circle" style="margin: 10px"></i>
+                                <i class="fas fa-info-circle m-1"></i>
                                 Detail Information
                             </a>
                         </li>
@@ -47,7 +47,7 @@
                 </li>
                 <li class="@((ViewBag.Action == "Index" && @ViewBag.Controller == "Appointment") ? "active" : "")">
                     <a asp-controller="Appointment" asp-action="Index">
-                        <i class="far fa-calendar-alt" style="margin: 10px"></i>
+                        <i class="far fa-calendar-alt m-1"></i>
                         Appointments
                     </a>
                 </li>

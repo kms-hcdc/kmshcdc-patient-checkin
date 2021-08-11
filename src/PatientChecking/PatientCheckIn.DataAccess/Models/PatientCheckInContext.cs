@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace PatientChecking.Services.ServiceModels
+namespace PatientCheckIn.DataAccess.Models
 {
     public partial class PatientCheckInContext : DbContext
     {
@@ -27,7 +27,7 @@ namespace PatientChecking.Services.ServiceModels
         {
             if (!optionsBuilder.IsConfigured)
             {
-               optionsBuilder.UseSqlServer("Data Source=5CD1199VTK;Initial Catalog=PatientCheckIn;Integrated Security=True");
+                optionsBuilder.UseSqlServer("Server=localhost;Database=PatientCheckIn;Trusted_Connection=True;");
             }
         }
 
@@ -41,7 +41,7 @@ namespace PatientChecking.Services.ServiceModels
 
                 entity.Property(e => e.AddressId).HasColumnName("AddressID");
 
-                entity.Property(e => e.Address1)
+                entity.Property(e => e.StreetLine)
                     .IsRequired()
                     .HasMaxLength(150)
                     .HasColumnName("Address");
@@ -52,7 +52,7 @@ namespace PatientChecking.Services.ServiceModels
                     .WithMany(p => p.Addresses)
                     .HasForeignKey(d => d.ContactId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Address__Contact__398D8EEE");
+                    .HasConstraintName("FK__Address__Contact__2C3393D0");
             });
 
             modelBuilder.Entity<Appointment>(entity =>
@@ -76,7 +76,7 @@ namespace PatientChecking.Services.ServiceModels
                     .WithMany(p => p.Appointments)
                     .HasForeignKey(d => d.PatientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Appointme__Patie__33D4B598");
+                    .HasConstraintName("FK__Appointme__Patie__267ABA7A");
             });
 
             modelBuilder.Entity<Contact>(entity =>
@@ -100,13 +100,13 @@ namespace PatientChecking.Services.ServiceModels
                     .WithMany(p => p.Contacts)
                     .HasForeignKey(d => d.PatientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Contact__Patient__36B12243");
+                    .HasConstraintName("FK__Contact__Patient__29572725");
             });
 
             modelBuilder.Entity<EmergencyContact>(entity =>
             {
                 entity.HasKey(e => e.EmergencyId)
-                    .HasName("PK__Emergenc__7B5544337DE6E6BE");
+                    .HasName("PK__Emergenc__7B554433FA244A96");
 
                 entity.ToTable("EmergencyContact");
 
@@ -132,7 +132,7 @@ namespace PatientChecking.Services.ServiceModels
                     .WithMany(p => p.EmergencyContacts)
                     .HasForeignKey(d => d.ContactId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Emergency__Conta__3C69FB99");
+                    .HasConstraintName("FK__Emergency__Conta__2F10007B");
             });
 
             modelBuilder.Entity<Patient>(entity =>
@@ -140,6 +140,8 @@ namespace PatientChecking.Services.ServiceModels
                 entity.ToTable("Patient");
 
                 entity.Property(e => e.PatientId).HasColumnName("PatientID");
+
+                entity.Property(e => e.AvatarLink).HasMaxLength(100);
 
                 entity.Property(e => e.BirthplaceCity).HasMaxLength(50);
 

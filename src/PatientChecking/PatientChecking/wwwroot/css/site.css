@@ -1,71 +1,183 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
 
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
-}
-
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.sidebar {
+    min-width: 180px;
+    width: 180px;
+    position: fixed;
+    height: 100%;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    .sidebar.show {
+        left: 0px;
+        background: #2a3557;
+    }
+
+    .sidebar .text {
+        color: white;
+        font-size: 25px;
+        font-weight: 600;
+        line-height: 65px;
+        text-align: center;
+        background: #2a3557;
+        letter-spacing: 1px;
+    }
+
+nav ul {
+    background: #2a3557;
+    height: 100%;
+    width: 100%;
+    list-style: none;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    nav ul li {
+        line-height: 37px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+        nav ul li:last-child {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        nav ul li a {
+            position: relative;
+            color: white;
+            text-decoration: none !important;
+            font-size: 0.75rem;
+            padding-left: 20px;
+            display: block;
+            width: 100%;
+            border-left: 3px solid transparent;
+        }
+
+        nav ul li.active a {
+            color: white;
+            background: #14b1e7;
+            border-left-color: cyan;
+            font-weight: 500;
+        }
+
+        nav ul li a:hover {
+            background: #14b1e7;
+            color: white;
+            font-weight: 500;
+        }
+
+    nav ul ul {
+        position: static;
+        display: none;
+    }
+
+    nav ul .patient-show.show {
+        display: block;
+    }
+
+    nav ul .serv-show.show1 {
+        display: block;
+    }
+
+    nav ul ul li {
+        line-height: 37px;
+        border-top: none;
+    }
+
+        nav ul ul li a {
+            font-size: 0.75rem;
+            color: #e6e6e6;
+            padding-left: 15%;
+        }
+
+    nav ul li.active ul li a {
+        color: #e6e6e6;
+        background: #2a3557;
+        border-left-color: transparent;
+    }
+
+    nav ul ul li a:hover {
+        color: white !important;
+        background: #14b1e7 !important;
+    }
+
+    nav ul li a span {
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        font-size: 22px;
+        transition: transform 0.4s;
+    }
+
+        nav ul li a span.rotate {
+            transform: translateY(-50%) rotate(-180deg);
+        }
+
+.main-container {
+    display: flex;
+    overflow-x: clip;
 }
 
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+.content {
+    margin-left: 185px;
+    max-width: 90%;
+    width: 100%;
 }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    .content .header {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        border-bottom: 1px solid #c9ccce;
+    }
+
+    .content p {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 0px;
+    }
+
+.img-box {
+    height: 43px;
+    background: rgba(42, 53, 87, 0.35);
+    margin-left: 10px;
+    align-items: center;
+    display: flex;
+}
+.img-box > img {
+    width: 65%;
+}
+.header {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
+.page-name {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
 }
 
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    .page-name > i {
+        margin-right: 15px;
+    }
+
+.admin-avatar {
+    vertical-align: middle;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
 }
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+
+.main-body {
+    margin-top: 5px;
+    background: #eef0f1;
 }

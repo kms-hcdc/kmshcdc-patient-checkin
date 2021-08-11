@@ -1,0 +1,96 @@
+﻿.grid-wide {
+    display: none;
+    height: 97vh !important;
+}
+.row {
+    display: flex;
+}
+
+.item-patient {
+    margin-top: 16px;
+    font-size: 40px;
+    color: rgb(0, 0, 0);
+    min-height: 250px;
+    line-height: 250px;
+    width: 480px;
+    background-color: rgb(255, 255, 255);
+    margin-left: 50px;
+    display: flex;
+}
+
+.left-item-patient {
+    display: flex;
+    flex-direction: column;
+}
+
+.img-patient {
+    line-height: 116px !important;
+    align-items: center;
+    text-align: center;
+}
+
+.right-item-patient {
+    line-height: 85px !important;
+    margin-left: 35px;
+}
+
+.icon-patient {
+    width: 150px;
+}
+
+.total-patient {
+    text-align: center;
+    line-height: 242px;
+    height: 150px;
+    font-size: 70px !important;
+    color: #14b1e7;
+}
+
+.patient-inmonth {
+    text-align: center;
+    color: orange;
+}
+.col {
+    flex: 0 0% !important;
+}
+.item-appointment {
+    margin-top: 16px;
+    font-size: 40px;
+    color: rgb(0, 0, 0);
+    min-height: 250px;
+    line-height: 250px;
+    width: 568px;
+    background-color: rgb(255, 255, 255);
+    margin-left: 50px;
+    display: flex;
+}
+
+.right-item-appointment {
+    line-height: 38px !important;
+}
+
+.appointment-patient {
+    text-align: right !important;
+    color: orange;
+}
+
+.appointment-intoday {
+    text-align: right !important;
+    color: orange;
+}
+.appointment-inmonth {
+    text-align: right !important;
+    color: orange;
+}
+.left-item-patient h3 {
+    margin-left: 10px;
+}
+
+.total-appointment {
+    text-align: center;
+    line-height: 242px;
+    height: 150px;
+    font-size: 70px !important;
+    color: #14b1e7;
+}
+

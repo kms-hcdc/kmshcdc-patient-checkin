@@ -1,0 +1,122 @@
+﻿.row-title {
+    height: 50px;
+    background-color: white;
+    display: flex;
+}
+
+.row-title div {
+    border: solid 2px #eef0f1;
+}
+
+.title {
+    margin-top: 15px;
+}
+
+.grid-container {
+    background-color: white !important;
+    padding: 5px;
+    border: solid 3px #eef0f1;
+}
+
+.row-value {
+    height: 50px;
+    background-color: #eef0f1;
+    display: flex;
+}
+
+.row-value div {
+    border: solid 1px white;
+    height: 50px;
+}
+
+.avatar-patient-inappointment {
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.patient-identity {
+    border-style: none !important;
+    margin: 0 15px;
+}
+
+#name-value {
+    display: flex;
+    padding: 4px 15px;
+}
+
+.patient-identity p {
+    height: 10px;
+    margin-bottom: 10px !important;
+}
+
+.patient-name {
+    color: #14b1e7 !important;
+}
+
+.appointment-status {
+    margin-top: 10px;
+    width: 150px;
+    height: 25px;
+}
+
+.sort-appointment span {
+    margin-left: 10px;
+    display: inline-block;
+    height: 30px;
+}
+
+.option-sort {
+    margin-top: 10px;
+    width: 150px;
+    height: 35px;
+    border-style: none;
+}
+
+.btn-new-appointment button {
+    background-color: white;
+    color: #14b1e7;
+    border: 1px solid black;
+    height: 35px;
+    width: 210px;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+.header-appointment {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn-view-appointment {
+    margin: 5px 34px;
+    background-color: white;
+    color: #14b1e7;
+    border: 1px solid black;
+    height: 35px;
+    width: 60px;
+    border-radius: 5px;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+}
+
+.total-row {
+    height: 38px;
+    line-height: 38px;
+    margin: 0 10px;
+}
+
+#paging-selection {
+    width: 7%;
+    height: 38px
+}
+
+.pagination {
+    margin: 3px 0 !important;
+}

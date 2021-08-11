@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["Page"] = "Dashboard";
+}
+@section css {
+    <link href="@Url.Content("~/css/Dashboard.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/Loading.css")" rel="stylesheet" type="text/css" />
+}
+
+<script>
+    (function () {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("getDashBoard", "Dashboard")',
+            success: function (data) {
+                $(".total-patient").text(data.patient);
+                $(".patient-inmonth").text(data.appointment.numOfPatientsInMonth + " new paitents/this month");
+                $(".total-appointment").text(data.appointment.numOfAppointments);
+                $(".appointment-inmonth").text(data.appointment.numOfAppointmentsInMonth + " new appointments/this month");
+                $(".appointment-intoday").text(data.appointment.numOfAppointmentsInToday + " new appointments/today");
+                $('.loader').hide();
+                $(".grid-wide").show();
+            }, error: function () {
+                alert("Reload the page and try again");
+            }
+        })
+    })();
+</script>
+<div class="loader">
+    <Loading />
+</div>
+<div class="grid-wide">
+    <div class="row">
+        <div class="col">
+            <div class="item-patient">
+                <div class="left-item-patient">
+                    <h3>
+                        Total patients:
+                    </h3>
+                    <div class="img-patient">
+                        <img src="~/Image/patienticon.png" alt="" class="icon-patient">
+                    </div>
+                </div>
+                <div class="right-item-patient">
+                    <p class="total-patient"></p>
+                    <p class="patient-inmonth"></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="item-appointment">
+                <div class="left-item-patient">
+                    <h3>
+                        Total Appointment:
+                    </h3>
+                        <div class="img-patient">
+                            <img src="~/Image/appointmenticon.jpg" alt="" class="icon-patient">
+                        </div>
+                </div>
+                <div class="right-item-appointment">
+                    <p class="total-appointment"></p>
+                    <p class="appointment-inmonth"></p>
+                    <p class="appointment-intoday"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

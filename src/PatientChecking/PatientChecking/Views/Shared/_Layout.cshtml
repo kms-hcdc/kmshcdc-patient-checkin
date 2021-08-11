@@ -1,48 +1,74 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - PatientChecking</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <title>@ViewData["Title"] | PatientChecking</title>
     <link rel="stylesheet" href="~/css/site.css" />
+    @RenderSection("css", false)
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" >
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PatientChecking</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+    <div class="main-container">
+        <nav class="sidebar show">
+            <div class="img-box">
+                <img src="~/Image/logo.png" alt="" />
+            </div>
+            <ul class="ps-0">
+                <li class="@((ViewBag.Action == "Home" && @ViewBag.Controller == "Dashboard") ? "active" : "")">
+                    <a asp-controller="Dashboard" asp-action="Home">
+                        <i class="fas fa-home m-1"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a class="patient-btn">
+                        <i class="fas fa-hospital-user m-1"></i>
+                        Patients
+                        <span class="fas fa-caret-down first" ></span>
+                    </a>
+                    <ul class="@(@ViewBag.Controller == "Patient" ? "patient-show show" : "patient-show") ps-0" >
+                        <li class="detail @((ViewBag.Action == "Index" && @ViewBag.Controller == "Patient") ? "active" : "")">
+                            <a asp-controller="Patient" asp-action="Index">
+                                <i class="fas fa-list m-1"></i>
+                                List Information
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li class="detail @((ViewBag.Action == "Detail" && @ViewBag.Controller == "Patient") ? "active" : "")">
+                            <a asp-controller="Patient" asp-action="Detail">
+                                <i class="fas fa-info-circle m-1"></i>
+                                Detail Information
+                            </a>
                         </li>
                     </ul>
-                </div>
-            </div>
+                </li>
+                <li class="@((ViewBag.Action == "Index" && @ViewBag.Controller == "Appointment") ? "active" : "")">
+                    <a asp-controller="Appointment" asp-action="Index">
+                        <i class="far fa-calendar-alt m-1"></i>
+                        Appointments
+                    </a>
+                </li>
+            </ul>
         </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - PatientChecking - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="content">
+            <div class="header">
+                <div class="page-name"><i class="fas fa-bars"></i>@ViewData["Page"]</div>
+                <div><img src="~/Image/avatar.jpg" alt="Avatar" class="admin-avatar" /></div>
+                <div class="h5">Hi, Administrator</div>
+            </div>
+            <div class="main-body">
+                @RenderBody()
+            </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    </div>
+    <script>
+        $(".patient-btn").click(function () {
+            $("nav ul .patient-show").toggleClass("show");
+            $("nav ul .first").toggleClass("rotate");
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

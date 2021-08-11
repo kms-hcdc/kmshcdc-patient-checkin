@@ -51,10 +51,17 @@ namespace PatientChecking.Services
                     PatientIdentifier = x.patient.PatientIdentifier,
                     FullName = x.patient.FullName,
                     DoB = x.patient.DoB,
-                    //Gender =x.patient.Gender,
+                    Gender = (PatientGender) x.patient.Gender,
                     AvatarLink = x.patient.AvatarLink != null ? x.patient.AvatarLink : "",
-                    //PrimaryAddress = x.address,
-                    //PrimaryContact = x.contact,
+                    PrimaryAddress = new ServiceModels.Address() 
+                    { 
+                        StreetLine = x.address.StreetLine
+                    },
+                    PrimaryContact = new ServiceModels.Contact()
+                    { 
+                        Email = x.contact.Email,
+                        PhoneNumber = x.contact.PhoneNumber
+                    },
                 }).ToList();
 
             var result = new PatientList()

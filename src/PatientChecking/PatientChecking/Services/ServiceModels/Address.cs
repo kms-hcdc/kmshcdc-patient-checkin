@@ -11,7 +11,7 @@ namespace PatientChecking.Services.ServiceModels
         public int AddressId { get; set; }
         public int TypeAddress { get; set; }
         [Column("Address")]
-        public string Address1 { get; set; }
+        public string StreetLine { get; set; }
         public bool IsPrimary { get; set; }
         public int ContactId { get; set; }
 

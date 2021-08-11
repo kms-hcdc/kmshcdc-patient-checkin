@@ -20,16 +20,19 @@ namespace PatientChecking.Controllers
             _appointmentService = appointmentService;
         }
 
-        public async Task<IActionResult> Index(int Option = (int)AppointmentSortSelection.ID, int PageSize = 10, int PageIndex = 1)
+        public async Task<IActionResult> Index(int option = (int)AppointmentSortSelection.ID, int pageSize = 10, int pageIndex = 1)
         {
             PagingRequest request = new PagingRequest()
             {
-                PageIndex = PageIndex,
-                PageSize = PageSize,
-                SortSelection = Option
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                SortSelection = option
             };
+
             AppointmentList pagedResult = await _appointmentService.GetListAppoinmentsPaging(request);
+
             List<AppointmentViewModel> appointmentViewModels = new List<AppointmentViewModel>();
+
             foreach(Appointment appointment in pagedResult.Appointments)
             {
                 appointmentViewModels.Add(new AppointmentViewModel()
@@ -43,15 +46,15 @@ namespace PatientChecking.Controllers
                     AvatarLink = appointment.Patient?.AvatarLink
                 });
             }
-            AppointmentListViewModel mymodel = new AppointmentListViewModel()
+            AppointmentListViewModel myModel = new AppointmentListViewModel()
             {
                 AppointmentViewModels = appointmentViewModels,
-                PageIndex = PageIndex,
-                PageSize = PageSize,
-                SortSelection = Option,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                SortSelection = option,
                 TotalCount = pagedResult.TotalCount
             };
-            return View(mymodel);
+            return View(myModel);
         }
     }
 }

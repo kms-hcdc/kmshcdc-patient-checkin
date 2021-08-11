@@ -2,6 +2,7 @@
 using PatientCheckIn.DataAccess.Models;
 using PatientChecking.Services.Repository;
 using PatientChecking.Services.ServiceModels;
+using PatientChecking.Services.ServiceModels.Enum;
 using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace PatientChecking.Services
             _patientCheckInContext = patientCheckInContext;
         }
 
-        public async Task<PagedResult<PatientListViewModel>> GetListPatientPaging(PagingRequest request)
+        public PatientList GetListPatientPaging(PagingRequest request)
         {
             var query = from patient in _patientCheckInContext.Patients
                         join contact in _patientCheckInContext.Contacts on patient.PatientId equals contact.PatientId
@@ -27,11 +28,11 @@ namespace PatientChecking.Services
                         where address.IsPrimary == true
                         select new { patient, contact, address };
 
-            if(request.SortSelection == 0)
+            if (request.SortSelection == (int)PatientSortSelection.ID)
             {
                 query = query.OrderBy(i => i.patient.PatientIdentifier);
             }
-            else if(request.SortSelection == 1)
+            else if (request.SortSelection == (int)PatientSortSelection.Name)
             {
                 query = query.OrderBy(i => i.patient.FullName);
             }
@@ -41,28 +42,28 @@ namespace PatientChecking.Services
             }
 
             int totalRow = query.Count();
-            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize).Select(x => new PatientListViewModel()
+
+            var data = query
+                .Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize).Select(x => new ServiceModels.Patient()
                 {
+                    PatientId = x.patient.PatientId,
                     PatientIdentifier = x.patient.PatientIdentifier,
                     FullName = x.patient.FullName,
-                    DoB = x.patient.DoB.ToString("dd-MM-yyyy"),
-                    Gender = x.patient.Gender == 0 ? "Male" : x.patient.Gender == 1 ? "Female" : "Others",
-                    Address = x.address != null ? x.address.Address1 : "",
-                    PhoneNumber = x.contact != null ? x.contact.PhoneNumber : "",
-                    Email = x.contact != null ? x.contact.Email : "",
-                    AvatarLink = x.patient.AvatarLink != null ? x.patient.AvatarLink : ""
-                }).ToListAsync();
+                    DoB = x.patient.DoB,
+                    //Gender =x.patient.Gender,
+                    AvatarLink = x.patient.AvatarLink != null ? x.patient.AvatarLink : "",
+                    //PrimaryAddress = x.address,
+                    //PrimaryContact = x.contact,
+                }).ToList();
 
-            var pagedResult = new PagedResult<PatientListViewModel>()
+            PatientList result = new PatientList()
             {
-                Items = data,
-                TotalCount = totalRow,
-                pageIndex = request.PageIndex,
-                pageSize = request.PageSize
+                Patients = data,
+                TotalCount = totalRow
             };
 
-            return pagedResult;
+            return result;
         }
 
         public async Task<int> GetPatientsSummary()

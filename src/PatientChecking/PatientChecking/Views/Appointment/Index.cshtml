@@ -77,13 +77,15 @@
             int currentPage = Model.PageIndex;
             int sortOption = Model.SortSelection;
             var pageCount = (int)Math.Ceiling(decimal.Divide(Model.TotalCount, pagingOption));
+
             const int PageLeft = 1;
             const int PagesRight = 1;
+
             var fromPage = Math.Max(1, currentPage - PageLeft);
             var toPage = Math.Min(pageCount, currentPage + PagesRight);
 
             <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-                <a class="page-link" href="@Url.Action("Index", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = currentPage-1})" aria-label="Previous">
+                <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = currentPage-1})" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                     <span class="sr-only">Previous</span>
                 </a>
@@ -95,38 +97,38 @@
             if (fromPage > 1)
             {
                 <li class="page-item @(currentPage ==  1 ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = 1})">1</a>
+                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = 1})">1</a>
                 </li>
                 if (fromPage > 2)
                 {
                     var middleNumber = (int)Math.Ceiling((double)(fromPage - 2) / 2) + 1;
                     <li class="page-item @(currentPage ==  middleNumber ? "active" : "")">
-                        <a class="page-link" href="@Url.Action("Index", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = middleNumber})">...</a>
+                        <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = middleNumber})">...</a>
                     </li>
                 }
             }
             for (int i = fromPage; i <= toPage; i++)
             {
                 <li class="page-item @(currentPage ==  i ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = i})">@i</a>
+                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = i})">@i</a>
                 </li>
             }
             if (toPage < pageCount)
             {
                 int middleNumber = (int)Math.Ceiling((double)(pageCount - toPage) / 2) + toPage;
                 <li class="page-item @(currentPage ==  middleNumber ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = middleNumber})">...</a>
+                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = middleNumber})">...</a>
                 </li>
                 if (toPage < pageCount - 1)
                 {
                     <li class="page-item @(currentPage ==  pageCount ? "active" : "")">
-                        <a class="page-link" href="@Url.Action("Index", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = pageCount})">@pageCount</a>
+                        <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = pageCount})">@pageCount</a>
                     </li>
                 }
 
             }
                 <li class="page-item @(currentPage == pageCount ? "disabled" : "")">
-                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {Option = sortOption, PageSize = pagingOption, PageIndex = currentPage+1})" aria-label="Next">
+                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = currentPage+1})" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                         <span class="sr-only">Next</span>
                     </a>
@@ -146,8 +148,8 @@
         var selectedSortValue = $('#selected-value').children("option:selected").val();
         var selectedPagingValue = $('#paging-selection').children("option:selected").val();
         var pageIndex = @Model.PageIndex;
-        var url = '@Html.Raw(@Url.Action("Index", "Appointment", new { Option = "option", PageSize = "pageSize", PageIndex = "pageIndex" }))';
-        url = url.replace("option", selectedSortValue).replace("pageSize", selectedPagingValue).replace("pageIndex", 1);
+        var url = '@Html.Raw(@Url.Action("Index", "Appointment", new { option = "optionSort", pageSize = "pagingOption", pageIndex = "currentPage" }))';
+        url = url.replace("optionSort", selectedSortValue).replace("pagingOption", selectedPagingValue).replace("currentPage", 1);
         window.location.href = url;
     });
 </script>

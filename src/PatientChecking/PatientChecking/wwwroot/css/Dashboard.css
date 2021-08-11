@@ -1,5 +1,6 @@
-﻿.grid-wide{
+﻿.grid-wide {
     display: none;
+    height: 97vh !important;
 }
 .row {
     display: flex;

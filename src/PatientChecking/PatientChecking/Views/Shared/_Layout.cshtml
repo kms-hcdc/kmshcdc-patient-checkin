@@ -30,7 +30,7 @@
                         <span class="fas fa-caret-down first" ></span>
                     </a>
                     <ul class="@(@ViewBag.Controller == "Patient" ? "patient-show show" : "patient-show")" style="padding-left:0px">
-                        <li class="detail @(((ViewBag.Action == "Index" || ViewBag.Action == "SortAndPaging") && @ViewBag.Controller == "Patient") ? "active" : "")">
+                        <li class="detail @((ViewBag.Action == "Index" && @ViewBag.Controller == "Patient") ? "active" : "")">
                             <a asp-controller="Patient" asp-action="Index">
                                 <i class="fas fa-list" style="margin: 10px"></i>
                                 List Information

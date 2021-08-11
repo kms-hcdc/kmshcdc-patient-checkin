@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PatientChecking.Services.Repository;
+using PatientChecking.Services.ServiceModels;
+using PatientChecking.Services.ServiceModels.Enum;
 using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -19,46 +21,49 @@ namespace PatientChecking.Controllers
             _patientService = patientService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int sortOption = (int)PatientSortSelection.ID, int pagingOption = 10, int currentPage = 1)
         {
             PagingRequest request = new PagingRequest()
             {
-                PageIndex = 1,
-                PageSize = 10,
-                SortSelection = 0
+                PageIndex = currentPage,
+                PageSize = pagingOption,
+                SortSelection = sortOption
             };
-            PagedResult<PatientListViewModel> pagedResult = await _patientService.GetListPatientPaging(request);
-            dynamic mymodel = new ExpandoObject();
-            mymodel.PagedResult = pagedResult;
-            mymodel.PagingRequest = request;
-            return View(mymodel);
-        }
 
-        public async Task<IActionResult> SortAndPaging(int SortOption, int PagingOption, int CurrentPage)
-        {
-            PagingRequest request = new PagingRequest()
+            PatientList result = _patientService.GetListPatientPaging(request);
+
+            List<PatientViewModel> patientsVm = new List<PatientViewModel>();
+
+            foreach (Patient p in result.Patients)
             {
-                PageIndex = CurrentPage,
-                PageSize = PagingOption,
-                SortSelection = SortOption
+                patientsVm.Add(new PatientViewModel()
+                {
+                    PatientIdentifier = p.PatientIdentifier,
+                    FullName = p.FullName,
+                    Gender = p.Gender.ToString(),
+                    DoB = p.DoB.ToString("dd-MM-yyyy"),
+                    AvatarLink = p.AvatarLink,
+                    Address = p.PrimaryAddress?.StreetLine,
+                    Email = p.PrimaryContact?.Email,
+                    PhoneNumber = p.PrimaryContact?.PhoneNumber
+                });
+            }
+
+            PatientListViewModel model = new PatientListViewModel()
+            {
+                Patients = patientsVm,
+                SortSelection = request.SortSelection,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                TotalCount = result.TotalCount
             };
-            PagedResult<PatientListViewModel> pagedResult = await _patientService.GetListPatientPaging(request);
-            dynamic mymodel = new ExpandoObject();
-            mymodel.PagedResult = pagedResult;
-            mymodel.PagingRequest = request;
-            return View("Index", mymodel);
+
+            return View(model);
         }
 
         public IActionResult Detail()
         {
             return View();
-        }
-
-        [HttpGet("[controller]/GetListPatient")]
-        public async Task<IActionResult> GetListPatientPaging([FromQuery] PagingRequest request)
-        {
-            var pagedResult = await _patientService.GetListPatientPaging(request);
-            return new JsonResult(pagedResult);
         }
     }
 }

@@ -80,7 +80,7 @@ namespace PatientChecking.Services
                         PatientIdentifier = x.patient.PatientIdentifier
                     }
                 }).ToList();
-            AppointmentList appointmentList = new()
+            AppointmentList appointmentList = new AppointmentList() 
             {
                 TotalCount = totalRow,
                 Appointments = data

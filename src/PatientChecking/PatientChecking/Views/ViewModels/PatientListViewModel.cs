@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace PatientChecking.Views.ViewModels
 {
-    public class PatientListViewModel
+    public class PatientListViewModel : IPagination
+    {
+        public int PageIndex { get; set; }
+        public int PageSize { get; set; }
+        public int TotalCount { get; set; }
+        public int SortSelection { get; set; }
+        public List<PatientViewModel> Patients { get; set; }
+    }
+
+    public class PatientViewModel
     {
         public string PatientIdentifier { get; set; }
         public string FullName { get; set; }

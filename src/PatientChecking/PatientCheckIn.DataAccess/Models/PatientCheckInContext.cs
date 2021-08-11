@@ -27,7 +27,6 @@ namespace PatientCheckIn.DataAccess.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=localhost;Database=PatientCheckIn;Trusted_Connection=True;");
             }
         }
@@ -42,7 +41,7 @@ namespace PatientCheckIn.DataAccess.Models
 
                 entity.Property(e => e.AddressId).HasColumnName("AddressID");
 
-                entity.Property(e => e.Address1)
+                entity.Property(e => e.StreetLine)
                     .IsRequired()
                     .HasMaxLength(150)
                     .HasColumnName("Address");

@@ -9,7 +9,7 @@ namespace PatientCheckIn.DataAccess.Models
     {
         public int AddressId { get; set; }
         public int TypeAddress { get; set; }
-        public string Address1 { get; set; }
+        public string StreetLine { get; set; }
         public bool IsPrimary { get; set; }
         public int ContactId { get; set; }
 

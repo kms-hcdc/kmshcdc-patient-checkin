@@ -40,7 +40,7 @@ namespace PatientChecking.Services
                 query = query.OrderBy(i => i.patient.DoB);
             }
 
-            int totalRow = query.Count();
+            var totalRow = query.Count();
 
             var data = query
                 .Skip((request.PageIndex - 1) * request.PageSize)
@@ -56,7 +56,7 @@ namespace PatientChecking.Services
                     PrimaryContact = x.contact,
                 }).ToList();
 
-            PatientList result = new PatientList()
+            var result = new PatientList()
             {
                 Patients = data,
                 TotalCount = totalRow

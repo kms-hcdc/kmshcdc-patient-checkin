@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PatientCheckIn.DataAccess.Models;
 using PatientChecking.Services;
-using PatientChecking.Services.Repository;
+using PatientChecking.Services.Abstractions;
 using PatientChecking.Services.ServiceModels;
 using System;
 using System.Collections.Generic;
@@ -33,9 +33,8 @@ namespace PatientChecking
                                                         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
-            //add Patient Dependency
+
             services.AddScoped<IPatientService, PatientService>();
-            //add Appointment Dependency
             services.AddScoped<IAppointmentService, AppointmentService>();
         }
 
@@ -66,11 +65,13 @@ namespace PatientChecking
 
             app.UseAuthorization();
 
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Dashboard}/{action=Home}");
+                    pattern: "{controller=Dashboard}/{action=Home}/{id?}");
             });
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),

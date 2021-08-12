@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PatientCheckIn.DataAccess.Models;
-using PatientChecking.Services.Repository;
+using PatientChecking.Services.Abstractions;
 using PatientChecking.Services.ServiceModels;
 using PatientChecking.Services.ServiceModels.Enum;
 using PatientChecking.Views.ViewModels;

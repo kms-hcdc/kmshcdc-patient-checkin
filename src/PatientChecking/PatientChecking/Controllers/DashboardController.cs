@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using PatientChecking.Services.Repository;
+using PatientChecking.Services.Abstractions;
 using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;

@@ -2,7 +2,7 @@ using PatientChecking.Services.ServiceModels;
 using PatientChecking.Views.ViewModels;
 using System.Threading.Tasks;
 
-namespace PatientChecking.Services.Repository
+namespace PatientChecking.Services.Abstractions
 {
     public interface IPatientService
     {

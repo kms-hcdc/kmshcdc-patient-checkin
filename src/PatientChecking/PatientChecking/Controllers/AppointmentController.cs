@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PatientChecking.Services.Repository;
+using PatientChecking.Services.Abstractions;
 using PatientChecking.Services.ServiceModels;
 using PatientChecking.Services.ServiceModels.Enum;
 using PatientChecking.Views.ViewModels;

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PatientChecking.Services.Repository
+namespace PatientChecking.Services.Abstractions
 {
     public interface IAppointmentService
     {

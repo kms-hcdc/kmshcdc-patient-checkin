@@ -1,9 +1,4 @@
-﻿@font-face {
-    font-family: "Poppins";
-    src: url("../Font/poppins-v15-latin-regular.woff");
-}
-
-* {
+﻿* {
     margin: 0;
     padding: 0;
     user-select: none;

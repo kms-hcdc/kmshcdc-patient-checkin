@@ -25,18 +25,19 @@ namespace PatientChecking.Controllers
             return await Index((int)AppointmentSortSelection.ID, 10, 1).ConfigureAwait(false);
         }
        
-        [Route("Index/{option}")]
+        [Route("[Controller]/Index/{option}")]
         public async Task<IActionResult> Index(int option)
         {
             return await Index(option, 10, 1).ConfigureAwait(false);
         }
 
-        [Route("Index/{option}-{pageSize}")]
+        [Route("[Controller]/Index/{option}-{pageSize}")]
         public async Task<IActionResult> Index(int option, int pageSize)
         {
             return await Index(option, pageSize, 1).ConfigureAwait(false);
         }
-        [Route("Index/{option}-{pageSize}/{pageIndex}")]
+
+        [Route("[Controller]/Index/{option}-{pageSize}/{pageIndex}")]
         public async Task<IActionResult> Index(int option, int pageSize, int pageIndex)
         {
             var request = new PagingRequest()

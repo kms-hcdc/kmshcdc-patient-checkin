@@ -22,19 +22,19 @@ namespace PatientChecking.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return await Index((int)AppointmentSortSelection.ID, 10, 1);
+            return await Index((int)AppointmentSortSelection.ID, 10, 1).ConfigureAwait(false);
         }
        
         [Route("Index/{option}")]
         public async Task<IActionResult> Index(int option)
         {
-            return await Index(option, 10, 1);
+            return await Index(option, 10, 1).ConfigureAwait(false);
         }
 
         [Route("Index/{option}-{pageSize}")]
         public async Task<IActionResult> Index(int option, int pageSize)
         {
-            return await Index(option, pageSize, 1);
+            return await Index(option, pageSize, 1).ConfigureAwait(false);
         }
         [Route("Index/{option}-{pageSize}/{pageIndex}")]
         public async Task<IActionResult> Index(int option, int pageSize, int pageIndex)

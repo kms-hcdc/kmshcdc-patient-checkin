@@ -1,15 +1,11 @@
 ﻿.row-title {
-    height: 50px;
+    height: 42px;
     background-color: white;
     display: flex;
 }
 
 .row-title div {
     border: solid 2px #eef0f1;
-}
-
-.title {
-    margin: 12px;
 }
 
 .grid-container {
@@ -19,7 +15,7 @@
 }
 
 .row-value {
-    height: 50px;
+    height: 60px;
     background-color: #eef0f1;
     display: flex;
 }

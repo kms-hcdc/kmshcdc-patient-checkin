@@ -1,11 +1,7 @@
 ﻿@font-face {
-    font-family: "Poppins";
-    src: url('../Font/poppins-v15-latin-regular.eot');
-    src: url('webfont.eot?#iefix') format('embedded-opentype'),
-    url('../Font/poppins-v15-latin-regular.woff2') format('woff2'),
-    url('../Font/poppins-v15-latin-regular.woff') format('woff'),
-    url('../Font/poppins-v15-latin-regular.ttf') format('truetype'),
-    url('../Font/poppins-v15-latin-regular.svg') format('svg');
+  font-family: "Poppins";
+  src: url("../Font/poppins-v15-latin-regular.woff2") format("woff2"),
+       url("../Font/poppins-v15-latin-regular.woff") format("woff");
 }
 * {
     margin: 0;

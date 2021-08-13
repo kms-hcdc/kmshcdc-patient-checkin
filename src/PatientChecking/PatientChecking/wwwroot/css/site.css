@@ -134,6 +134,7 @@ nav ul {
         top: 0;
         background-color: white;
         border-bottom: 1px solid #c9ccce;
+        z-index: 6;
     }
 
     .content p {

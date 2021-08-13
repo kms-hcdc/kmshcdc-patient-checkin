@@ -14,7 +14,7 @@
             url: '@Url.Action("getDashBoard", "Dashboard")',
             success: function (data) {
                 $(".total-patient").text(data.patient);
-                $(".patient-inmonth").text(data.appointment.numOfPatientsInMonth + " new paitent(s)/this month");
+                $(".patient-inmonth").text(data.appointment.numOfPatientsInMonth + " new patient(s)/this month");
                 $(".total-appointment").text(data.appointment.numOfAppointments);
                 $(".appointment-inmonth").text(data.appointment.numOfAppointmentsInMonth + " new appointment(s)/this month");
                 $(".appointment-intoday").text(data.appointment.numOfAppointmentsInToday + " new appointment(s)/today");

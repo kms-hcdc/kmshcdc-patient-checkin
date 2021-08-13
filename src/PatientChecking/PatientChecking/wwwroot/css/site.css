@@ -1,5 +1,4 @@
-﻿
-@font-face {
+﻿@font-face {
     font-family: "Poppins";
     src: url('../Font/poppins-v15-latin-regular.eot');
     src: url('webfont.eot?#iefix') format('embedded-opentype'),
@@ -128,7 +127,6 @@ nav ul li a span.rotate {
 
 .main-container {
     display: flex;
-    overflow-x: clip;
 }
 
 .content {

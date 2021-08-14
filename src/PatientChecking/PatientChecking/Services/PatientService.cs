@@ -23,10 +23,14 @@ namespace PatientChecking.Services
         public PatientList GetListPatientPaging(PagingRequest request)
         {
             var query = from patient in _patientCheckInContext.Patients
-                        join contact in _patientCheckInContext.Contacts on patient.PatientId equals contact.PatientId
-                        join address in _patientCheckInContext.Addresses on contact.ContactId equals address.ContactId
-                        where address.IsPrimary == true
-                        select new { patient, contact, address };
+                        join contact in _patientCheckInContext.Contacts on patient.PatientId equals contact.PatientId into pc
+                        from patientContact in pc.DefaultIfEmpty()
+
+                        join address in _patientCheckInContext.Addresses on patientContact.ContactId equals address.ContactId into pa
+                        from patientAddress in pa.DefaultIfEmpty()
+                        where patientAddress == null || patientAddress.IsPrimary == true
+
+                        select new { patient, patientContact, patientAddress };
 
             if (request.SortSelection == (int)PatientSortSelection.ID)
             {
@@ -54,13 +58,13 @@ namespace PatientChecking.Services
                     Gender = (PatientGender) x.patient.Gender,
                     AvatarLink = x.patient.AvatarLink != null ? x.patient.AvatarLink : "",
                     PrimaryAddress = new ServiceModels.Address() 
-                    { 
-                        StreetLine = x.address.StreetLine
+                    {
+                        StreetLine = x.patientAddress.StreetLine
                     },
                     PrimaryContact = new ServiceModels.Contact()
-                    { 
-                        Email = x.contact.Email,
-                        PhoneNumber = x.contact.PhoneNumber
+                    {
+                        Email = x.patientContact.Email,
+                        PhoneNumber = x.patientContact.PhoneNumber
                     },
                 }).ToList();
 

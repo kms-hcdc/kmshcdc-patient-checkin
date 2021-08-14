@@ -70,7 +70,7 @@ namespace PatientChecking
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Dashboard}/{action=Home}");
+                    pattern: "{controller=Dashboard}/{action=Home}/{Id?}");
             });
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),

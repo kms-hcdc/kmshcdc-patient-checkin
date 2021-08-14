@@ -37,7 +37,7 @@
                 <div class="col l-4">
                     <div class="item patient-item1">
                         <div>
-                            @if (item.AvatarLink == "")
+                            @if (string.IsNullOrEmpty(item.AvatarLink))
                             {
                                 <img src="~/Image/no-avatar.jpg" alt="Avatar" class="patient-img" />
                             }
@@ -77,7 +77,7 @@
                                 <i class="fas fa-envelope"></i>
                             </div>
                             @{
-                                if (item.Email != null)
+                                if (!string.IsNullOrEmpty(item.Email))
                                 {
                                     string[] result = item.Email.Split("@");
                                     <p class="email-link">@result[0]</p>

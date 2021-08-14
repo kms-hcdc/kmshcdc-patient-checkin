@@ -6,6 +6,7 @@
 - Manage scheduling patients and their demographics.
 - Manage and schedule appointments.
 - Dashboard & reporting.
+- Patient portal: schedule appointments, request prescription refills
 
 ## Coding guidelines
 

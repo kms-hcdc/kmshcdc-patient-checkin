@@ -20,7 +20,25 @@ namespace PatientChecking.Controllers
             _appointmentService = appointmentService;
         }
 
-        public async Task<IActionResult> Index(int option = (int)AppointmentSortSelection.ID, int pageSize = 10, int pageIndex = 1)
+        public async Task<IActionResult> Index()
+        {
+            return await Index((int)AppointmentSortSelection.ID, 10, 1).ConfigureAwait(false);
+        }
+       
+        [Route("[Controller]/Index/{option}")]
+        public async Task<IActionResult> Index(int option)
+        {
+            return await Index(option, 10, 1).ConfigureAwait(false);
+        }
+
+        [Route("[Controller]/Index/{option}-{pageSize}")]
+        public async Task<IActionResult> Index(int option, int pageSize)
+        {
+            return await Index(option, pageSize, 1).ConfigureAwait(false);
+        }
+
+        [Route("[Controller]/Index/{option}-{pageSize}/{pageIndex}")]
+        public async Task<IActionResult> Index(int option, int pageSize, int pageIndex)
         {
             var request = new PagingRequest()
             {
@@ -56,5 +74,6 @@ namespace PatientChecking.Controllers
             };
             return View(myModel);
         }
+
     }
 }

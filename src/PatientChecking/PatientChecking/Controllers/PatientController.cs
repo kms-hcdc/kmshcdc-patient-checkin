@@ -21,7 +21,25 @@ namespace PatientChecking.Controllers
             _patientService = patientService;
         }
 
-        public IActionResult Index(int sortOption = (int)PatientSortSelection.ID, int pagingOption = 10, int currentPage = 1)
+        public IActionResult Index()
+        {
+            return Index((int)PatientSortSelection.ID, 10, 1);
+        }
+
+        [Route("[Controller]/Index/{sortOption}")]
+        public IActionResult Index(int sortOption)
+        {
+            return Index(sortOption, 10, 1);
+        }
+
+        [Route("[Controller]/Index/{sortOption}-{pagingOption}")]
+        public IActionResult Index(int sortOption, int pagingOption)
+        {
+            return Index(sortOption, pagingOption, 1);
+        }
+
+        [Route("[Controller]/Index/{sortOption}-{pagingOption}/{currentPage}")]
+        public IActionResult Index(int sortOption, int pagingOption, int currentPage)
         {
             var request = new PagingRequest()
             {

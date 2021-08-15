@@ -12,38 +12,47 @@
     color: rgb(0, 0, 0);
     min-height: 250px;
     line-height: 250px;
-    width: 480px;
+    width: 500px;
     background-color: rgb(255, 255, 255);
     margin-left: 50px;
+}
+
+.item-patient-content {
     display: flex;
+    justify-content: space-between;
 }
 
 .left-item-patient {
     display: flex;
     flex-direction: column;
+    padding: 3% 0;
 }
 
 .img-patient {
     line-height: 116px !important;
-    align-items: center;
-    text-align: center;
 }
 
 .right-item-patient {
     line-height: 85px !important;
-    margin-left: 35px;
+    margin-right: 3%;
 }
 
 .icon-patient {
     width: 150px;
 }
 
+.img-item-patient {
+    margin-left: 10px;
+    line-height: 116px !important;
+}
+
 .total-patient {
     text-align: center;
-    line-height: 242px;
-    height: 150px;
+    line-height: 155px;
+    height: 107px;
     font-size: 70px !important;
     color: #14b1e7;
+    margin-right: 30%;
 }
 
 .patient-inmonth {
@@ -59,14 +68,25 @@
     color: rgb(0, 0, 0);
     min-height: 250px;
     line-height: 250px;
-    width: 568px;
+    width: 500px;
     background-color: rgb(255, 255, 255);
     margin-left: 50px;
+}
+
+.item-appointment-content {
     display: flex;
+    justify-content: space-between;
+}
+
+.item-appointment h3 {
+    margin-left: 10px;
+    font-weight: bolder;
+    padding-top: 2%;
 }
 
 .right-item-appointment {
     line-height: 38px !important;
+    margin-right: 1%;
 }
 
 .appointment-patient {
@@ -82,15 +102,18 @@
     text-align: right !important;
     color: orange;
 }
-.left-item-patient h3 {
+.item-patient h3 {
     margin-left: 10px;
+    font-weight: bolder;
+    padding-top: 2%;
 }
 
 .total-appointment {
     text-align: center;
-    line-height: 242px;
-    height: 150px;
+    line-height: 145px;
+    height: 120px;
     font-size: 70px !important;
     color: #14b1e7;
+    margin-right: 30%;
 }
 

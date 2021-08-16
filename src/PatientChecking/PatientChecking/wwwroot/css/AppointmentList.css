@@ -1,15 +1,11 @@
 ﻿.row-title {
-    height: 50px;
+    height: 42px;
     background-color: white;
     display: flex;
 }
 
 .row-title div {
     border: solid 2px #eef0f1;
-}
-
-.title {
-    margin-top: 15px;
 }
 
 .grid-container {
@@ -19,14 +15,14 @@
 }
 
 .row-value {
-    height: 50px;
+    height: 60px;
     background-color: #eef0f1;
     display: flex;
 }
 
 .row-value div {
-    border: solid 1px white;
-    height: 50px;
+    border-top: solid 4px white;
+    border-left: solid 1px #d8d9da;
 }
 
 .avatar-patient-inappointment {
@@ -48,7 +44,12 @@
 
 .patient-identity p {
     height: 10px;
-    margin-bottom: 10px !important;
+    margin-bottom: 10px;
+}
+
+.patient-identifier {
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .patient-name {
@@ -77,7 +78,7 @@
 .btn-new-appointment button {
     background-color: white;
     color: #14b1e7;
-    border: 1px solid black;
+    border: 1px solid #14b1e7;
     height: 35px;
     width: 210px;
     margin-right: 10px;
@@ -89,12 +90,14 @@
     align-items: center;
     justify-content: space-between;
 }
-
+.row-value p{
+    font-weight: 400;
+}
 .btn-view-appointment {
     margin: 5px 34px;
     background-color: white;
     color: #14b1e7;
-    border: 1px solid black;
+    border: 1px solid #14b1e7;
     height: 35px;
     width: 60px;
     border-radius: 5px;

@@ -23,10 +23,9 @@ namespace PatientChecking.Services
         public PatientList GetListPatientPaging(PagingRequest request)
         {
             var query = from patient in _patientCheckInContext.Patients
-                        join contact in _patientCheckInContext.Contacts on patient.PatientId equals contact.PatientId
-                        join address in _patientCheckInContext.Addresses on contact.ContactId equals address.ContactId
+                        join address in _patientCheckInContext.Addresses on patient.PatientId equals address.PatientId
                         where address.IsPrimary == true
-                        select new { patient, contact, address };
+                        select new { patient, address };
 
             if (request.SortSelection == (int)PatientSortSelection.ID)
             {
@@ -53,15 +52,12 @@ namespace PatientChecking.Services
                     DoB = x.patient.DoB,
                     Gender = (PatientGender) x.patient.Gender,
                     AvatarLink = x.patient.AvatarLink != null ? x.patient.AvatarLink : "",
+                    Email = x.patient.Email,
+                    PhoneNumber = x.patient.PhoneNumber,
                     PrimaryAddress = new ServiceModels.Address() 
                     { 
                         StreetLine = x.address.StreetLine
-                    },
-                    PrimaryContact = new ServiceModels.Contact()
-                    { 
-                        Email = x.contact.Email,
-                        PhoneNumber = x.contact.PhoneNumber
-                    },
+                    }
                 }).ToList();
 
             var result = new PatientList()

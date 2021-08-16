@@ -40,7 +40,7 @@ namespace PatientChecking.Controllers
         [Route("[Controller]/Index/{option}-{pageSize}/{pageIndex}")]
         public async Task<IActionResult> Index(int option, int pageSize, int pageIndex)
         {
-            var request = new PagingRequest()
+            var request = new PagingRequest
             {
                 PageIndex = pageIndex,
                 PageSize = pageSize,
@@ -53,7 +53,7 @@ namespace PatientChecking.Controllers
 
             foreach(Appointment appointment in pagedResult.Appointments)
             {
-                appointmentViewModels.Add(new AppointmentViewModel()
+                appointmentViewModels.Add(new AppointmentViewModel
                 {
                     AppointmentId = appointment.AppointmentId,
                     CheckInDate = appointment.CheckInDate.ToString("dd-MM-yyyy"),

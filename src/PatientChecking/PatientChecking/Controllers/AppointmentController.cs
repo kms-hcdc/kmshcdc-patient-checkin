@@ -64,7 +64,7 @@ namespace PatientChecking.Controllers
                     AvatarLink = appointment.Patient?.AvatarLink
                 });
             }
-            var myModel = new AppointmentListViewModel()
+            var myModel = new AppointmentListViewModel
             {
                 AppointmentViewModels = appointmentViewModels,
                 PageIndex = pageIndex,

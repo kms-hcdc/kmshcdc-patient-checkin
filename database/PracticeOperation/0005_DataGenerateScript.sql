@@ -1,4 +1,4 @@
-Use [PatientCheckIn];
+USE [PatientCheckIn];
 
 SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 SET QUOTED_IDENTIFIER ON;
@@ -10,22 +10,22 @@ GO
 --
 INSERT INTO dbo.Patient (PatientIdentifier, FirstName, MiddleName, LastName, FullName, DoB, 
 					Gender, PhoneNumber, Email, MaritalStatus, Nationality, EthnicRace) 
-					values
+					VALUES
 					('KMS.0001', 'Phien','Minh', 'Le','Phien Minh Le', '1994-05-25',
 					0,'0905512324', 'phienle@kms-technology.com', 0,'Vietnamese', 'Kinh');
 INSERT INTO dbo.Patient (PatientIdentifier, FirstName, MiddleName, LastName, FullName, DoB, 
 					Gender, PhoneNumber, Email, MaritalStatus, Nationality, EthnicRace) 
-					values
+					VALUES
 					('KMS.0002', 'Viet','Hoang', 'Vo','Viet Hoang Vo', '1996-10-08',
 					0,'0905879425', 'vietvo@kms-technology.com', 0,'Vietnamese', 'Kinh');
 INSERT INTO dbo.Patient (PatientIdentifier, FirstName, MiddleName, LastName, FullName, DoB, 
 					Gender, PhoneNumber, Email, MaritalStatus, Nationality, EthnicRace) 
-					values
+					VALUES
 					('KMS.0003', 'Long','Thanh', 'Do','Long Thanh Do', '1999-11-09',
 					0,'0934221311', 'longtdo@kms-technology.com', 0,'Vietnamese', 'Kinh');
 INSERT INTO dbo.Patient (PatientIdentifier, FirstName, MiddleName, LastName, FullName, DoB, 
 					Gender, PhoneNumber, Email, MaritalStatus, Nationality, EthnicRace) 
-					values
+					VALUES
 					('KMS.0004', 'Duc','Van', 'Tran','Duc Van Tran', '1999-05-10',
 					0,'0905879425', 'ducvant@kms-technology.com', 0,'Vietnamese', 'Kinh');
 -- 

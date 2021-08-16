@@ -7,7 +7,7 @@ namespace PatientChecking.Services.ServiceModels
 {
     public class PatientDetails : Patient
     {
-        public PatientDetails() : base()
+        public PatientDetails()
         {
             Appointments = new HashSet<Appointment>();
             Contacts = new HashSet<Contact>();

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PatientChecking.Services.ServiceModels
 {
-    public partial class Appointment
+    public class Appointment
     {
         public int AppointmentId { get; set; }
         public DateTime CheckInDate { get; set; }

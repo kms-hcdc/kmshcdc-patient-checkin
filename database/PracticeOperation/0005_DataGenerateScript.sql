@@ -1,12 +1,8 @@
 USE [PatientCheckIn];
-
-SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 SET QUOTED_IDENTIFIER ON;
 SET NOCOUNT ON;
 SET ANSI_NULLS ON;
-
 GO
-
 INSERT INTO dbo.Patient (PatientIdentifier, FirstName, MiddleName, LastName, FullName, DoB, 
 					Gender, PhoneNumber, Email, MaritalStatus, Nationality, EthnicRace) 
 					VALUES
@@ -27,9 +23,7 @@ INSERT INTO dbo.Patient (PatientIdentifier, FirstName, MiddleName, LastName, Ful
 					VALUES
 					('KMS.0004', 'Duc','Van', 'Tran','Duc Van Tran', '1999-05-10',
 					0,'0905879425', 'ducvant@kms-technology.com', 0,'Vietnamese', 'Kinh');
-
 GO
-
 INSERT INTO dbo.Appointment (CheckInDate, MedicalConcerns, Status, PatientID) 
 						VALUES 
 						(GETDATE(), 'Headache', 'CheckIn', 1);
@@ -42,9 +36,7 @@ INSERT INTO dbo.Appointment (CheckInDate, MedicalConcerns, Status, PatientID)
 INSERT INTO dbo.Appointment (CheckInDate, MedicalConcerns, Status, PatientID) 
 						VALUES 
 						(GETDATE(), 'Metal', 'Cancel', 4);
-
 GO
-
 INSERT INTO dbo.Address (TypeAddress, Address, IsPrimary, PatientID)
 					VALUES
 					(0, '34 Bui Vien, Quan Cam, Thanh Pho Ho Chi Minh', 1, 1);
@@ -57,9 +49,7 @@ INSERT INTO dbo.Address (TypeAddress, Address, IsPrimary, PatientID)
 INSERT INTO dbo.Address (TypeAddress, Address, IsPrimary, PatientID)
 					VALUES
 					(0, 'To 2, Hoa Lien, Hoa Vang, Da Nang', 1, 4);
-
 GO
-
 INSERT INTO dbo.EmergencyContact (Relationship, Name, PhoneNumber,PatientID)
 							VALUES 
 							('Father', 'Do Dinh Dao', '0905225121', 3);

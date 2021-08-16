@@ -67,7 +67,7 @@ namespace PatientChecking.Controllers
                 });
             }
 
-            var model = new PatientListViewModel()
+            var model = new PatientListViewModel
             {
                 Patients = patientsVm,
                 SortSelection = request.SortSelection,

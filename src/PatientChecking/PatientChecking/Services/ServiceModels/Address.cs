@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PatientChecking.Services.ServiceModels
 {
-    public partial class Address
+    public class Address
     {
         public int AddressId { get; set; }
         public int TypeAddress { get; set; }

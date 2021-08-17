@@ -54,7 +54,7 @@ namespace PatientChecking.Services
                     AvatarLink = x.patient.AvatarLink != null ? x.patient.AvatarLink : "",
                     Email = x.patient.Email,
                     PhoneNumber = x.patient.PhoneNumber,
-                    PrimaryAddress = new ServiceModels.Address() 
+                    PrimaryAddress = new ServiceModels.Address
                     { 
                         StreetLine = x.address.StreetLine
                     }

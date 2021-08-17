@@ -70,6 +70,37 @@ namespace PatientChecking.Services
             return result;
         }
 
+        public PatientDetails GetPatientInDetail(int patientId)
+        {
+            var patient = _patientCheckInContext.Patients.Find(patientId);
+
+            var patientDetail = new ServiceModels.PatientDetails
+            {
+                PatientId = patient.PatientId,
+                PatientIdentifier = patient.PatientIdentifier,
+                FirstName = patient.FirstName,
+                LastName = patient.LastName,
+                MiddleName = patient.MiddleName,
+                FullName = patient.FullName,
+                Nationality = patient.Nationality,
+                DoB = patient.DoB,
+                MaritalStatus = patient.MaritalStatus,
+                Gender = (PatientGender) patient.Gender,
+                AvatarLink = patient.AvatarLink,
+                Email = patient.Email,
+                PhoneNumber = patient.PhoneNumber,
+                EthnicRace = patient.EthnicRace,
+                HomeTown = patient.HomeTown,
+                BirthplaceCity = patient.BirthplaceCity,
+                IdcardNo = patient.IdcardNo,
+                IssuedDate = patient.IssuedDate,
+                IssuedPlace = patient.IssuedPlace,
+                InsuranceNo = patient.InsuranceNo
+            };
+
+            return patientDetail;
+        }
+
         public async Task<int> GetPatientsSummary()
         {
             var NumberOfPatients = await _patientCheckInContext.Patients.ToListAsync();

@@ -1,5 +1,292 @@
-﻿@{
+﻿@model PatientChecking.Views.ViewModels.PatientDetailViewModel
+@{
     ViewData["Title"] = "Patient";
     ViewData["Page"] = "Patient information";
+    var nationality = Model.Nationality;
 }
-<p>This is detail patient view</p>
+@section css {
+    <link href="@Url.Content("~/css/PatientDetail.css")" rel="stylesheet" type="text/css" />
+}
+<div class="detail-patient-container">
+    <div class="search-area">
+        <i class="fas fa-search search-icon"></i>
+        <input class="form-control"
+               type="text"
+               placeholder="ID, name, dob, gender, phone, email"
+               aria-label="Search"
+               id="search-input" />
+        <i class="fas fa-times delete-icon"></i>
+    </div>
+    <div class="search-result-container">
+        <ul class="ps-0 mb-0">
+            <li>
+                <a href="#1">
+                    <div class="column-avatar">
+                        <img src="~/Image/avatar.jpg" alt="Avatar" class="icon-patient-avatar" />
+                    </div>
+                    <div class="column-name">
+                        <span>0001 - Do Thanh Long</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#2">
+                    <div class="column-avatar">
+                        <img src="~/Image/avatar.jpg" alt="Avatar" class="icon-patient-avatar" />
+                    </div>
+                    <div class="column-name">
+                        <span>0002 - Tran Van Duc</span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="edit-patient-info-container">
+        <div class="patient-box-info">
+            <div>
+                <div>
+                    <img src="@(string.IsNullOrEmpty(Model.AvatarLink) ? "/Image/no-avatar.jpg" : Model.AvatarLink)" class="patient-avatar" />
+                </div>
+                <div class="patient-name-detail">
+                    <span>@Model.FullName</span>
+                    <span>ID. @(string.IsNullOrEmpty(Model.PatientIdentifier) ? "" : Model.PatientIdentifier.Split(".")[1] )</span>
+                </div>
+            </div>
+            <div class="section-gap">
+                <span>Personal</span>
+                <hr />
+            </div>
+            <div class="option-detail">
+                <a href="#">Personal detail</a>
+                <a href="#">Contact detail</a>
+            </div>
+        </div>
+        <div class="patient-box-detail">
+            <form>
+                <div class="detail-header-container">
+                    <span class="h5">Personal detail</span>
+                    <a class="btn btn-primary" role="button" id="btn-edit">Edit</a>
+                    <div class="edit-mode">
+                        <a class="btn btn-primary" role="button" id="btn-cancel">Cancel</a>
+                        <a class="btn btn-primary" role="button" id="btn-save">Save</a>
+                    </div>
+                </div>
+                <div class="section-gap">
+                    <span>Basic info</span>
+                    <hr />
+                </div>
+                <div class="grid wide">
+                    <div class="row mb-3">
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="firstName">First name</label>
+                                    <span class="text-error">*</span>
+                                    <input type="text" class="form-control" value="@Model.FirstName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="lastName">Last name</label>
+                                    <span class="text-error">*</span>
+                                    <input type="text" class="form-control" value="@Model.LastName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="middleName">Middle name</label>
+                                    <input type="text" class="form-control" value="@Model.MiddleName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="fullName">Full name</label>
+                                    <input type="text" class="form-control" value="@Model.FullName">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="nationality">Nationality</label>
+                                    <span class="text-error">*</span>
+                                    <select class="form-select" id="nationalitySelect">
+                                        <option value="Vietnamese">Vietnamese</option>
+                                        <option value="American">American</option>
+                                        <option value="British">British</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="DoB">Date of birth</label>
+                                    <span class="text-error">*</span>
+                                    <input type="date" class="form-control" value=@Model.DoB>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="maritalStatus">Marital status</label>
+                                    <span class="text-error">*</span>
+                                    <select class="form-select" id="maritalSelect">
+                                        <option value="0">Unmarried</option>
+                                        <option value="1">Married</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="gender">Gender</label>
+                                    <span class="text-error">*</span>
+                                    <select class="form-select" id="genderSelect">
+                                        <option value="0">Male</option>
+                                        <option value="1">Female</option>
+                                        <option value="2">None</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="ethnic">Ethnic race</label>
+                                    <select class="form-select" id="ethnicSelect">
+                                        <option selected>Please select</option>
+                                        <option value="Kinh">Kinh</option>
+                                        <option value="Hmong">Hmong</option>
+                                        <option value="Tay">Tay</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="homeTown">Home town</label>
+                                    @(nationality == "Vietnamese"
+                                    ? @Html.DropDownList("hometownSelect", new SelectList(Model.InitData.VNCity.Select(x => new { value = x, text = x }), "value", "text"), "Please select", new { @class = "form-select" })
+                                    : @Html.DropDownList("hometownSelect", new SelectList(Model.InitData.USCity.Select(x => new { value = x, text = x }), "value", "text"), "Please select", new { @class = "form-select" })
+                                    )
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="birthcity">Birthplace city</label>
+                                    @(nationality == "Vietnamese"
+                                    ? @Html.DropDownList("birthplaceSelect", new SelectList(Model.InitData.VNCity.Select(x => new { value = x, text = x }), "value", "text"), "Please select", new { @class = "form-select" })
+                                    : @Html.DropDownList("birthplaceSelect", new SelectList(Model.InitData.USCity.Select(x => new { value = x, text = x }), "value", "text"), "Please select", new { @class = "form-select" })
+                                    )
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="gender">Insurance No.</label>
+                                    <input type="text" class="form-control" value="@Model.InsuranceNo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="idCardNo">ID card No.</label>
+                                    <input type="text" class="form-control" value="@Model.IdcardNo">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="issuedDate">Issued date</label>
+                                    <input type="date" class="form-control" value=@Model.IssuedDate>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col l-3">
+                            <div class="item">
+                                <div class="form-group">
+                                    <label for="maritalStatus">Issued place</label>
+                                    @(nationality == "Vietnamese"
+                                    ? @Html.DropDownList("issuedplaceSelect", new SelectList(Model.InitData.VNCity.Select(x => new { value = x, text = x }), "value", "text"), "Please select", new { @class = "form-select" })
+                                    : @Html.DropDownList("issuedplaceSelect", new SelectList(Model.InitData.USCity.Select(x => new { value = x, text = x }), "value", "text"), "Please select", new { @class = "form-select" })
+                                    )
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col l-3">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var hometown = '@Html.Raw(Model.HomeTown)';
+        var ethnic = '@Html.Raw(Model.EthnicRace)';
+        var nationality = '@Html.Raw(Model.Nationality)';
+        var birthplace = '@Html.Raw(Model.BirthplaceCity)';
+        var issuedplace = '@Html.Raw(Model.IssuedPlace)';
+        var emptyMode = '@Html.Raw(Model.PatientId)';
+
+        if (emptyMode < 0) {
+            $("#btn-edit").hide();
+        }
+
+        $("#nationalitySelect option[value='" + nationality + "']").attr("selected", "selected");
+        $("#genderSelect option[value='" + @(Model.Gender) + "']").attr("selected", "selected");
+        $("#maritalSelect option[value='" + @(Model.MaritalStatus) + "']").attr("selected", "selected");
+        $("#ethnicSelect option[value='" + ethnic + "']").attr("selected", "selected");
+        $("#hometownSelect option[value='" + hometown + "']").attr("selected", "selected");
+        $("#birthplaceSelect option[value='" + birthplace + "']").attr("selected", "selected");
+        $("#issuedplaceSelect option[value='" + issuedplace + "']").attr("selected", "selected");
+        $(".patient-box-detail :input").prop("disabled", true);
+    });
+    $("#search-input").focus(function () {
+        $(".search-result-container").css("display", "flex");
+    });
+    $(".search-result-container ul li a").click(function () {
+        $(".search-result-container").css("display", "none");
+    });
+    $("#search-input").change(function () {
+        var query = $(this).val();
+    });
+    $("#hometownSelect").change(function () {
+        var option = $(this).val();
+        console.log("hehe", option);
+    });
+
+    $("#btn-edit").click(function () {
+        $("#btn-edit").css("display", "none");
+        $(".edit-mode").css("display", "flex");
+        $(".patient-box-detail :input").prop("disabled", false);
+    });
+
+    $("#btn-cancel").click(function () {
+        $("#btn-edit").css("display", "inherit");
+        $(".edit-mode").css("display", "none");
+        $(".patient-box-detail :input").prop("disabled", true);
+    });
+</script>

@@ -72,7 +72,7 @@ namespace PatientChecking.Services
 
         public PatientDetails GetPatientInDetail(int patientId)
         {
-            var patient = _patientCheckInContext.Patients.Find(patientId);
+            var patient = _patientCheckInContext.Patients.SingleOrDefault(x => x.PatientId == patientId);
 
             var patientDetail = new ServiceModels.PatientDetails
             {

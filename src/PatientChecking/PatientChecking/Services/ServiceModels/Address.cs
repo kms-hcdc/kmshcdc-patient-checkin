@@ -13,8 +13,8 @@ namespace PatientChecking.Services.ServiceModels
         [Column("Address")]
         public string StreetLine { get; set; }
         public bool IsPrimary { get; set; }
-        public int ContactId { get; set; }
+        public int PatientId { get; set; }
 
-        public virtual Contact Contact { get; set; }
+        public virtual Patient Patient { get; set; }
     }
 }

@@ -41,7 +41,7 @@ namespace PatientChecking.Controllers
         [Route("[Controller]/Index/{sortOption}-{pagingOption}/{currentPage}")]
         public IActionResult Index(int sortOption, int pagingOption, int currentPage)
         {
-            var request = new PagingRequest()
+            var request = new PagingRequest
             {
                 PageIndex = currentPage,
                 PageSize = pagingOption,
@@ -54,7 +54,7 @@ namespace PatientChecking.Controllers
 
             foreach (Patient p in result.Patients)
             {
-                patientsVm.Add(new PatientViewModel()
+                patientsVm.Add(new PatientViewModel
                 {
                     PatientIdentifier = p.PatientIdentifier,
                     FullName = p.FullName,
@@ -67,7 +67,7 @@ namespace PatientChecking.Controllers
                 });
             }
 
-            var model = new PatientListViewModel()
+            var model = new PatientListViewModel
             {
                 Patients = patientsVm,
                 SortSelection = request.SortSelection,

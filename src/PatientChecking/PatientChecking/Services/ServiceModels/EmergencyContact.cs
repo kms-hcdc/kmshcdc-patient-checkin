@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace PatientChecking.Services.ServiceModels
 {
-    public partial class EmergencyContact
+    public class EmergencyContact
     {
         public int EmergencyId { get; set; }
         public string Relationship { get; set; }

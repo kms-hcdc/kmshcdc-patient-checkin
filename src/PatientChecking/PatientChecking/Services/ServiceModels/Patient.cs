@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PatientChecking.Services.ServiceModels
 {
-    public partial class Patient
+    public class Patient
     {
         public int PatientId { get; set; }
         public string PatientIdentifier { get; set; } 

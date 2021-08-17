@@ -49,7 +49,7 @@ namespace PatientChecking.Services
 
             var data = query
                 .Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize).Select(x => new ServiceModels.Patient()
+                .Take(request.PageSize).Select(x => new ServiceModels.Patient
                 {
                     PatientId = x.patient.PatientId,
                     PatientIdentifier = x.patient.PatientIdentifier,
@@ -57,18 +57,18 @@ namespace PatientChecking.Services
                     DoB = x.patient.DoB,
                     Gender = (PatientGender) x.patient.Gender,
                     AvatarLink = x.patient.AvatarLink != null ? x.patient.AvatarLink : "",
-                    PrimaryAddress = new ServiceModels.Address() 
-                    {
-                        StreetLine = x.patientAddress.StreetLine
+                    PrimaryAddress = new ServiceModels.Address
+                    { 
+                        StreetLine = x.address.StreetLine
                     },
-                    PrimaryContact = new ServiceModels.Contact()
-                    {
-                        Email = x.patientContact.Email,
-                        PhoneNumber = x.patientContact.PhoneNumber
+                    PrimaryContact = new ServiceModels.Contact
+                    { 
+                        Email = x.contact.Email,
+                        PhoneNumber = x.contact.PhoneNumber
                     },
                 }).ToList();
 
-            var result = new PatientList()
+            var result = new PatientList
             {
                 Patients = data,
                 TotalCount = totalRow

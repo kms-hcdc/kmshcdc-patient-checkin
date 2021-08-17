@@ -19,7 +19,6 @@ namespace PatientCheckIn.DataAccess.Models
 
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Appointment> Appointments { get; set; }
-        public virtual DbSet<Contact> Contacts { get; set; }
         public virtual DbSet<EmergencyContact> EmergencyContacts { get; set; }
         public virtual DbSet<Patient> Patients { get; set; }
 
@@ -46,13 +45,13 @@ namespace PatientCheckIn.DataAccess.Models
                     .HasMaxLength(150)
                     .HasColumnName("Address");
 
-                entity.Property(e => e.ContactId).HasColumnName("ContactID");
+                entity.Property(e => e.PatientId).HasColumnName("PatientID");
 
-                entity.HasOne(d => d.Contact)
+                entity.HasOne(d => d.Patient)
                     .WithMany(p => p.Addresses)
-                    .HasForeignKey(d => d.ContactId)
+                    .HasForeignKey(d => d.PatientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Address__Contact__2C3393D0");
+                    .HasConstraintName("FK__Address__Patient__29572725");
             });
 
             modelBuilder.Entity<Appointment>(entity =>
@@ -79,44 +78,20 @@ namespace PatientCheckIn.DataAccess.Models
                     .HasConstraintName("FK__Appointme__Patie__267ABA7A");
             });
 
-            modelBuilder.Entity<Contact>(entity =>
-            {
-                entity.ToTable("Contact");
-
-                entity.Property(e => e.ContactId).HasColumnName("ContactID");
-
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.PatientId).HasColumnName("PatientID");
-
-                entity.Property(e => e.PhoneNumber)
-                    .IsRequired()
-                    .HasMaxLength(15)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Patient)
-                    .WithMany(p => p.Contacts)
-                    .HasForeignKey(d => d.PatientId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Contact__Patient__29572725");
-            });
-
             modelBuilder.Entity<EmergencyContact>(entity =>
             {
                 entity.HasKey(e => e.EmergencyId)
-                    .HasName("PK__Emergenc__7B554433FA244A96");
+                    .HasName("PK__Emergenc__7B5544331181EFB5");
 
                 entity.ToTable("EmergencyContact");
 
                 entity.Property(e => e.EmergencyId).HasColumnName("EmergencyID");
 
-                entity.Property(e => e.ContactId).HasColumnName("ContactID");
-
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(150);
+
+                entity.Property(e => e.PatientId).HasColumnName("PatientID");
 
                 entity.Property(e => e.PhoneNumber)
                     .IsRequired()
@@ -128,11 +103,11 @@ namespace PatientCheckIn.DataAccess.Models
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.Contact)
+                entity.HasOne(d => d.Patient)
                     .WithMany(p => p.EmergencyContacts)
-                    .HasForeignKey(d => d.ContactId)
+                    .HasForeignKey(d => d.PatientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Emergency__Conta__2F10007B");
+                    .HasConstraintName("FK__Emergency__Patie__2C3393D0");
             });
 
             modelBuilder.Entity<Patient>(entity =>
@@ -146,6 +121,10 @@ namespace PatientCheckIn.DataAccess.Models
                 entity.Property(e => e.BirthplaceCity).HasMaxLength(50);
 
                 entity.Property(e => e.DoB).HasColumnType("date");
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.EthnicRace).HasMaxLength(50);
 
@@ -185,6 +164,11 @@ namespace PatientCheckIn.DataAccess.Models
                 entity.Property(e => e.PatientIdentifier)
                     .IsRequired()
                     .HasMaxLength(8);
+
+                entity.Property(e => e.PhoneNumber)
+                    .IsRequired()
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

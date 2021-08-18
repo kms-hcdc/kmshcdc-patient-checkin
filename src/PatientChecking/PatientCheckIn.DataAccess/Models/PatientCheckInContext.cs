@@ -21,6 +21,7 @@ namespace PatientCheckIn.DataAccess.Models
         public virtual DbSet<Appointment> Appointments { get; set; }
         public virtual DbSet<EmergencyContact> EmergencyContacts { get; set; }
         public virtual DbSet<Patient> Patients { get; set; }
+        public virtual DbSet<ProvinceCity> ProvinceCities { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -169,6 +170,17 @@ namespace PatientCheckIn.DataAccess.Models
                     .IsRequired()
                     .HasMaxLength(15)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ProvinceCity>(entity =>
+            {
+                entity.ToTable("ProvinceCity");
+
+                entity.Property(e => e.ProvinceCityId).HasColumnName("ProvinceCityID");
+
+                entity.Property(e => e.ProvinceCityName)
+                    .IsRequired()
+                    .HasMaxLength(100);
             });
 
             OnModelCreatingPartial(modelBuilder);

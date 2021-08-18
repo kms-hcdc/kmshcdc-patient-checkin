@@ -37,7 +37,7 @@
                             </a>
                         </li>
                         <li class="detail @((ViewBag.Action == "Detail" && @ViewBag.Controller == "Patient") ? "active" : "")">
-                            <a asp-controller="Patient" asp-action="Detail">
+                            <a asp-controller="Patient" asp-action="Detail" asp-route-patientId="-1">
                                 <i class="fas fa-info-circle m-1"></i>
                                 Detail Information
                             </a>

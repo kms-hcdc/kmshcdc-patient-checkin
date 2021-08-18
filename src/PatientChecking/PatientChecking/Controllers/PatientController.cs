@@ -15,10 +15,12 @@ namespace PatientChecking.Controllers
     {
 
         private readonly IPatientService _patientService;
+        private readonly IAppConfigurationService _provinceCityService;
 
-        public PatientController(IPatientService patientService)
+        public PatientController(IPatientService patientService, IAppConfigurationService provinceCityService)
         {
             _patientService = patientService;
+            _provinceCityService = provinceCityService;
         }
 
         public IActionResult Index()
@@ -56,10 +58,11 @@ namespace PatientChecking.Controllers
             {
                 patientsVm.Add(new PatientViewModel
                 {
+                    PatientId = p.PatientId,
                     PatientIdentifier = p.PatientIdentifier,
                     FullName = p.FullName,
                     Gender = p.Gender.ToString(),
-                    DoB = p.DoB.ToString("dd-MM-yyyy"),
+                    DoB = p.DoB.ToString("MM-dd-yyyy"),
                     AvatarLink = p.AvatarLink,
                     Address = p.PrimaryAddress?.StreetLine,
                     Email = p.Email,
@@ -79,9 +82,55 @@ namespace PatientChecking.Controllers
             return View(model);
         }
 
-        public IActionResult Detail()
+        public IActionResult Detail(int patientId)
         {
-            return View();
+            var cityResult = _provinceCityService.GetProvinceCities();
+            var cityList = new List<string>();
+                
+            foreach(ProvinceCity p in cityResult)
+            {
+                cityList.Add(p.ProvinceCityName);
+            }
+
+            if(patientId < 0){
+                var emptyModel = new PatientDetailViewModel
+                {
+                    PatientId = -1,
+                    PatientIdentifier = "",
+                    Nationality = "Vietnamese",
+                    ProvinceCities = cityList
+                };
+                return View(emptyModel);
+            }
+
+            var result = _patientService.GetPatientInDetail(patientId);
+
+            var model = new PatientDetailViewModel
+            {
+                PatientId = result.PatientId,
+                PatientIdentifier = result.PatientIdentifier,
+                FirstName = result.FirstName,
+                LastName = result.LastName,
+                MiddleName = result.MiddleName,
+                FullName = result.FullName,
+                Nationality = result.Nationality,
+                DoB = result.DoB.ToString("yyyy-MM-dd"),
+                MaritalStatus = (int)(result.MaritalStatus == true ? PatientMaritalStatus.Married : PatientMaritalStatus.Unmarried),
+                Gender = (int) result.Gender,
+                AvatarLink = result.AvatarLink,
+                Email = result.Email,
+                PhoneNumber = result.PhoneNumber,
+                EthnicRace = result.EthnicRace,
+                HomeTown = result.HomeTown,
+                BirthplaceCity = result.BirthplaceCity,
+                IdcardNo = result.IdcardNo,
+                IssuedDate = result.IssuedDate?.ToString("yyyy-MM-dd"),
+                IssuedPlace = result.IssuedPlace,
+                InsuranceNo = result.InsuranceNo,
+                ProvinceCities = cityList
+            };
+
+            return View(model);
         }
     }
 }

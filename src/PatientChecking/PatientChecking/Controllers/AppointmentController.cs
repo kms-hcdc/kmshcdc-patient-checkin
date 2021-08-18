@@ -61,7 +61,7 @@ namespace PatientChecking.Controllers
                     FullName = appointment.Patient?.FullName,
                     PatientIdentifier = appointment.Patient?.PatientIdentifier,
                     Status = appointment.Status,
-                    AvatarLink = appointment.Patient?.AvatarLink
+                    AvatarLink = appointment.Patient?.AvatarLink,
                 });
             }
             var myModel = new AppointmentListViewModel
@@ -74,6 +74,18 @@ namespace PatientChecking.Controllers
             };
             return View(myModel);
         }
-
+        public async Task<IActionResult> Detail(int appointmentId)
+        {
+            var appointment = await _appointmentService.GetAppointmentById(appointmentId);
+            var appointmentDetailViewModel = new AppointmentDetailViewModel
+            {
+                AppointmentId = appointmentId,
+                CheckInDate = appointment.CheckInDate.ToString("yyyy-MM-dd"),
+                MedicalConcerns = appointment.MedicalConcerns,
+                Status = appointment.Status,
+                PatientId = appointment.PatientId
+            };
+            return View(appointmentDetailViewModel);
+        }
     }
 }

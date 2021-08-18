@@ -11,41 +11,44 @@
 
     var currentFocus;
 
-    inp.oninput = function () {
-        var a, b, c, i, val = this.value;
+    if (inp) {
+        inp.oninput = function () {
+            var a, b, c, i, val = this.value;
 
-        closeAllLists();
-        if (!val) { return false; }
-        currentFocus = -1;
-
-        a = document.createElement("DIV");
-        a.setAttribute("id", this.id + "autocomplete-list");
-        a.setAttribute("class", "autocomplete-items");
-
-        this.parentNode.appendChild(a);
-
-        for (i = 0; i < arr.length; i++) {
-            if (arr[parseInt(i, 10)].substr(0, val.length).toUpperCase() === val.toUpperCase()) {
-                b = document.createElement("DIV");
-                b.innerHTML = "<strong>" + arr[parseInt(i, 10)].substr(0, val.length) + "</strong>";
-                b.innerHTML += arr[parseInt(i, 10)].substr(val.length);
-                b.innerHTML += "<input type='hidden' value='" + arr[parseInt(i, 10)] + "'>";
-                b.onclick = function () {
-                    inp.value = this.getElementsByTagName("input")[0].value;
-                    closeAllLists();
-                };
-                a.appendChild(b);
-            }
-        }
-        c = document.createElement("DIV");
-        c.innerHTML = "<strong>" + "Other" + "</strong>";
-        c.innerHTML += "<input type='hidden' value='Other'>";
-        c.onclick = function () {
-            inp.value = this.getElementsByTagName("input")[0].value;
             closeAllLists();
+            if (!val) { return false; }
+            currentFocus = -1;
+
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+
+            this.parentNode.appendChild(a);
+
+            for (i = 0; i < arr.length; i++) {
+                if (arr[parseInt(i, 10)].substr(0, val.length).toUpperCase() === val.toUpperCase()) {
+                    b = document.createElement("DIV");
+                    var emphasize = "<strong>" + arr[parseInt(i, 10)].substr(0, val.length) + "</strong>";
+                    emphasize += arr[parseInt(i, 10)].substr(val.length);
+                    emphasize += "<input type='hidden' value='" + arr[parseInt(i, 10)] + "'>";
+                    b.innerHTML = emphasize;
+                    b.onclick = function () {
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        closeAllLists();
+                    };
+                    a.appendChild(b);
+                }
+            }
+            c = document.createElement("DIV");
+            c.innerHTML = "<strong>" + "Other" + "</strong>";
+            c.innerHTML += "<input type='hidden' value='Other'>";
+            c.onclick = function () {
+                inp.value = this.getElementsByTagName("input")[0].value;
+                closeAllLists();
+            };
+            a.appendChild(c);
         };
-        a.appendChild(c);
-    };
+    }
 
     function removeActive(x) {
         for (var i = 0; i < x.length; i++) {
@@ -61,22 +64,24 @@
         x[parseInt(currentFocus, 10)].classList.add("autocomplete-active");
     }
 
-    inp.onkeydown = function (e) {
-        var x = document.getElementById(this.id + "autocomplete-list");
-        if (x) { x = x.getElementsByTagName("div"); }
-        if (e.keyCode === 40) {
-            currentFocus++;
-            addActive(x);
-        } else if (e.keyCode === 38) {
-            currentFocus--;
-            addActive(x);
-        } else if (e.keyCode === 13) {
-            e.preventDefault();
-            if (currentFocus > -1) {
-                if (x) { x[parseInt(currentFocus, 10)].click(); }
+    if (inp) {
+        inp.onkeydown = function (e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) { x = x.getElementsByTagName("div"); }
+            if (e.keyCode === 40) {
+                currentFocus++;
+                addActive(x);
+            } else if (e.keyCode === 38) {
+                currentFocus--;
+                addActive(x);
+            } else if (e.keyCode === 13) {
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    if (x) { x[parseInt(currentFocus, 10)].click(); }
+                }
             }
-        }
-    };
+        };
+    }
 
     document.onclick = function (e) {
         closeAllLists(e.target);

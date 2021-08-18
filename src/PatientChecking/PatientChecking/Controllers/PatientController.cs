@@ -90,7 +90,7 @@ namespace PatientChecking.Controllers
             foreach(PatientCheckIn.DataAccess.Models.ProvinceCity p in cityResult)
             {
                 cityList.Add(p.ProvinceCityName);
-            };
+            }
 
             if(patientId < 0){
                 var emptyModel = new PatientDetailViewModel

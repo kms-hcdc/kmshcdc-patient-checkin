@@ -12,6 +12,7 @@ namespace PatientChecking.Services.ServiceModels
         public DateTime CheckInDate { get; set; }
         public string MedicalConcerns { get; set; }
         public string Status { get; set; }
+        public int PatientId { get; set; }
         public virtual Patient Patient { get; set; }
     }
     public class AppointmentList

@@ -2,10 +2,10 @@
 @{
     ViewData["Title"] = "Patient";
     ViewData["Page"] = "Patient information";
-    var nationality = Model.Nationality;
 }
 @section css {
     <link href="@Url.Content("~/css/PatientDetail.css")" rel="stylesheet" type="text/css" />
+    <script src="~/js/PatientDetail.js"></script>
 }
 <div class="detail-patient-container">
     <div class="search-area">
@@ -179,10 +179,9 @@
                             <div class="item">
                                 <div class="form-group">
                                     <label for="homeTown">Home town</label>
-                                    @(nationality == "Vietnamese"
-                                    ? @Html.DropDownList("hometownSelect", new SelectList(Model.InitData.VNCity.Select(x => new { value = x, text = x }), "value", "text"), "Please select", new { @class = "form-select" })
-                                    : @Html.DropDownList("hometownSelect", new SelectList(Model.InitData.USCity.Select(x => new { value = x, text = x }), "value", "text"), "Please select", new { @class = "form-select" })
-                                    )
+                                    <div class="autocomplete">
+                                        <input id="homeTown" type="text" name="myCountry" class="form-control" value="@Model.HomeTown">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -190,10 +189,9 @@
                             <div class="item">
                                 <div class="form-group">
                                     <label for="birthcity">Birthplace city</label>
-                                    @(nationality == "Vietnamese"
-                                    ? @Html.DropDownList("birthplaceSelect", new SelectList(Model.InitData.VNCity.Select(x => new { value = x, text = x }), "value", "text"), "Please select", new { @class = "form-select" })
-                                    : @Html.DropDownList("birthplaceSelect", new SelectList(Model.InitData.USCity.Select(x => new { value = x, text = x }), "value", "text"), "Please select", new { @class = "form-select" })
-                                    )
+                                    <div class="autocomplete">
+                                        <input id="birthplace" type="text" name="myCountry" class="form-control" value="@Model.BirthplaceCity">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -226,11 +224,10 @@
                         <div class="col l-3">
                             <div class="item">
                                 <div class="form-group">
-                                    <label for="maritalStatus">Issued place</label>
-                                    @(nationality == "Vietnamese"
-                                    ? @Html.DropDownList("issuedplaceSelect", new SelectList(Model.InitData.VNCity.Select(x => new { value = x, text = x }), "value", "text"), "Please select", new { @class = "form-select" })
-                                    : @Html.DropDownList("issuedplaceSelect", new SelectList(Model.InitData.USCity.Select(x => new { value = x, text = x }), "value", "text"), "Please select", new { @class = "form-select" })
-                                    )
+                                    <label for="issuedPlace">Issued place</label>
+                                    <div class="autocomplete">
+                                        <input id="issuedPlace" type="text" name="myCountry" class="form-control" value="@Model.IssuedPlace">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -250,29 +247,35 @@
         var birthplace = '@Html.Raw(Model.BirthplaceCity)';
         var issuedplace = '@Html.Raw(Model.IssuedPlace)';
         var emptyMode = '@Html.Raw(Model.PatientId)';
+        var cityList = @Json.Serialize(Model.ProvinceCities);
 
         if (emptyMode < 0) {
             $("#btn-edit").hide();
         }
 
+        autocomplete(document.getElementById("homeTown"), cityList);
+        autocomplete(document.getElementById("birthplace"), cityList);
+        autocomplete(document.getElementById("issuedPlace"), cityList);
+
         $("#nationalitySelect option[value='" + nationality + "']").attr("selected", "selected");
         $("#genderSelect option[value='" + @(Model.Gender) + "']").attr("selected", "selected");
         $("#maritalSelect option[value='" + @(Model.MaritalStatus) + "']").attr("selected", "selected");
         $("#ethnicSelect option[value='" + ethnic + "']").attr("selected", "selected");
-        $("#hometownSelect option[value='" + hometown + "']").attr("selected", "selected");
-        $("#birthplaceSelect option[value='" + birthplace + "']").attr("selected", "selected");
-        $("#issuedplaceSelect option[value='" + issuedplace + "']").attr("selected", "selected");
         $(".patient-box-detail :input").prop("disabled", true);
     });
+
     $("#search-input").focus(function () {
         $(".search-result-container").css("display", "flex");
     });
+
     $(".search-result-container ul li a").click(function () {
         $(".search-result-container").css("display", "none");
     });
+
     $("#search-input").change(function () {
         var query = $(this).val();
     });
+
     $("#hometownSelect").change(function () {
         var option = $(this).val();
         console.log("hehe", option);

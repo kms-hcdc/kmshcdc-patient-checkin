@@ -28,8 +28,8 @@
             if (arr[parseInt(i, 10)].substr(0, val.length).toUpperCase() === val.toUpperCase()) {
                 b = document.createElement("DIV");
                 b.innerHTML = "<strong>" + arr[parseInt(i, 10)].substr(0, val.length) + "</strong>";
-                b.innerHTML = b.innerHTML + arr[parseInt(i, 10)].substr(val.length);
-                b.innerHTML = b.innerHTML + "<input type='hidden' value='" + arr[parseInt(i, 10)] + "'>";
+                b.innerHTML += arr[parseInt(i, 10)].substr(val.length);
+                b.innerHTML += "<input type='hidden' value='" + arr[parseInt(i, 10)] + "'>";
                 b.onclick = function () {
                     inp.value = this.getElementsByTagName("input")[0].value;
                     closeAllLists();
@@ -39,7 +39,7 @@
         }
         c = document.createElement("DIV");
         c.innerHTML = "<strong>" + "Other" + "</strong>";
-        c.innerHTML = c.innerHTML + "<input type='hidden' value='Other'>";
+        c.innerHTML += "<input type='hidden' value='Other'>";
         c.onclick = function () {
             inp.value = this.getElementsByTagName("input")[0].value;
             closeAllLists();

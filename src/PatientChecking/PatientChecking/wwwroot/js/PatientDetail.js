@@ -11,7 +11,7 @@
 
     var currentFocus;
 
-    inp.addEventListener("input", function () {
+    inp.oninput = function () {
         var a, b, c, i, val = this.value;
 
         closeAllLists();
@@ -45,7 +45,7 @@
             closeAllLists();
         };
         a.appendChild(c);
-    });
+    };
 
     function removeActive(x) {
         for (var i = 0; i < x.length; i++) {
@@ -61,13 +61,13 @@
         x[parseInt(currentFocus, 10)].classList.add("autocomplete-active");
     }
 
-    inp.addEventListener("keydown", function (e) {
+    inp.onkeydown = function (e) {
         var x = document.getElementById(this.id + "autocomplete-list");
         if (x) { x = x.getElementsByTagName("div"); }
         if (e.keyCode === 40) {
             currentFocus++;
             addActive(x);
-        } else if (e.keyCode === 38) { 
+        } else if (e.keyCode === 38) {
             currentFocus--;
             addActive(x);
         } else if (e.keyCode === 13) {
@@ -76,11 +76,11 @@
                 if (x) { x[parseInt(currentFocus, 10)].click(); }
             }
         }
-    });
+    };
 
-    document.addEventListener("click", function (e) {
+    document.onclick = function (e) {
         closeAllLists(e.target);
-    });
+    };
 }
 
 autocomplete();

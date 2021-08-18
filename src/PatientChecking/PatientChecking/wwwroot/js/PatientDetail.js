@@ -3,8 +3,8 @@
     function closeAllLists(elmnt) {
         var x = document.getElementsByClassName("autocomplete-items");
         for (var i = 0; i < x.length; i++) {
-            if (elmnt !== x[i] && elmnt !== inp) {
-                x[i].parentNode.removeChild(x[i]);
+            if (elmnt !== x[parseInt(i)] && elmnt !== inp) {
+                x[parseInt(i)].parentNode.removeChild(x[parseInt(i)]);
             }
         }
     }
@@ -25,11 +25,11 @@
         this.parentNode.appendChild(a);
 
         for (i = 0; i < arr.length; i++) {
-            if (arr[i].substr(0, val.length).toUpperCase() === val.toUpperCase()) {
+            if (arr[parseInt(i)].substr(0, val.length).toUpperCase() === val.toUpperCase()) {
                 b = document.createElement("DIV");
-                b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                b.innerHTML += arr[i].substr(val.length);
-                b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                b.innerHTML = "<strong>" + arr[parseInt(i)].substr(0, val.length) + "</strong>";
+                b.innerHTML += arr[parseInt(i)].substr(val.length);
+                b.innerHTML += "<input type='hidden' value='" + arr[parseInt(i)] + "'>";
                 b.onclick = function () {
                     inp.value = this.getElementsByTagName("input")[0].value;
                     closeAllLists();
@@ -49,7 +49,7 @@
 
     function removeActive(x) {
         for (var i = 0; i < x.length; i++) {
-            x[i].classList.remove("autocomplete-active");
+            x[parseInt(i)].classList.remove("autocomplete-active");
         }
     }
 
@@ -58,7 +58,7 @@
         removeActive(x);
         if (currentFocus >= x.length) { currentFocus = 0; }
         if (currentFocus < 0) { currentFocus = (x.length - 1); }
-        x[currentFocus].classList.add("autocomplete-active");
+        x[parseInt(currentFocus)].classList.add("autocomplete-active");
     }
 
     inp.addEventListener("keydown", function (e) {
@@ -73,7 +73,7 @@
         } else if (e.keyCode === 13) {
             e.preventDefault();
             if (currentFocus > -1) {
-                if (x) { x[currentFocus].click(); }
+                if (x) { x[parseInt(currentFocus)].click(); }
             }
         }
     });

@@ -29,6 +29,6 @@ namespace PatientChecking.Views.ViewModels
         public string IssuedPlace { get; set; }
         public string InsuranceNo { get; set; }
         public string AvatarLink { get; set; }
-        public PatientDetailsInitData InitData { get; set; }
+        public List<string> ProvinceCities { get; set; }
     }
 }

@@ -15,10 +15,12 @@ namespace PatientChecking.Controllers
     {
 
         private readonly IPatientService _patientService;
+        private readonly IProvinceCityService _provinceCityService;
 
-        public PatientController(IPatientService patientService)
+        public PatientController(IPatientService patientService, IProvinceCityService provinceCityService)
         {
             _patientService = patientService;
+            _provinceCityService = provinceCityService;
         }
 
         public IActionResult Index()
@@ -82,13 +84,21 @@ namespace PatientChecking.Controllers
 
         public IActionResult Detail(int patientId)
         {
+            var cityResult = _provinceCityService.GetProvinceCities();
+            var cityList = new List<string>();
+                
+            foreach(PatientCheckIn.DataAccess.Models.ProvinceCity p in cityResult)
+            {
+                cityList.Add(p.ProvinceCityName);
+            };
+
             if(patientId < 0){
                 var emptyModel = new PatientDetailViewModel
                 {
                     PatientId = -1,
                     PatientIdentifier = "",
                     Nationality = "Vietnamese",
-                    InitData = new PatientDetailsInitData()
+                    ProvinceCities = cityList
                 };
                 return View(emptyModel);
             }
@@ -117,7 +127,7 @@ namespace PatientChecking.Controllers
                 IssuedDate = result.IssuedDate?.ToString("yyyy-MM-dd"),
                 IssuedPlace = result.IssuedPlace,
                 InsuranceNo = result.InsuranceNo,
-                InitData = new PatientDetailsInitData()
+                ProvinceCities = cityList
             };
 
             return View(model);

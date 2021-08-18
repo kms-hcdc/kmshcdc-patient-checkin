@@ -29,7 +29,7 @@
                 b = document.createElement("DIV");
                 b.innerHTML = "<strong>" + arr[parseInt(i, 10)].substr(0, val.length) + "</strong>";
                 b.innerHTML += arr[parseInt(i, 10)].substr(val.length);
-                b.innerHTML += "<input type='hidden' value='" + arr[parseInt(i)] + "'>";
+                b.innerHTML += "<input type='hidden' value='" + arr[parseInt(i, 10)] + "'>";
                 b.onclick = function () {
                     inp.value = this.getElementsByTagName("input")[0].value;
                     closeAllLists();

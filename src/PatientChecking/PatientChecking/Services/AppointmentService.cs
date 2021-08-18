@@ -20,6 +20,19 @@ namespace PatientChecking.Services
             _patientCheckInContext = patientCheckInContext;
         }
 
+        public async Task<ServiceModels.Appointment> GetAppointmentById(int appointmentId)
+        {
+            var appointment = await _patientCheckInContext.Appointments.SingleOrDefaultAsync(x => x.AppointmentId == appointmentId);
+            return new ServiceModels.Appointment
+            { 
+                AppointmentId = appointment.AppointmentId,
+                CheckInDate = appointment.CheckInDate,
+                MedicalConcerns = appointment?.MedicalConcerns,
+                Status  = appointment.Status,
+                PatientId = appointment.PatientId
+            };
+        }
+
         public async Task<AppointmentDashboard> GetAppointmentSummary()
         {
             var numberOfAppointments = await _patientCheckInContext.Appointments.ToListAsync();

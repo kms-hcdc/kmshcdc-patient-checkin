@@ -11,5 +11,6 @@ namespace PatientChecking.Services.Repository
     {
         Task<AppointmentDashboard> GetAppointmentSummary();
         Task<AppointmentList> GetListAppoinmentsPaging(PagingRequest request);
+        Task<Appointment> GetAppointmentById(int appointmentId);
     }
 }

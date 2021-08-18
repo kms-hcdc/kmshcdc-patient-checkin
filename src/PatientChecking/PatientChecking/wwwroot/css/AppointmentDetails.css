@@ -1,0 +1,51 @@
+﻿.appointment-detail-container {
+    width: 100%;
+    height: 94vh;
+}
+
+.appointment-detail-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.appointment-detail-title hr {
+    border: 1px solid #14b1e7;
+    width: 50%;
+}
+
+.btn-edit-appoinment {
+    width: 80%;
+    text-align: right;
+}
+
+.btn-primary{
+    width: 100px;
+}
+
+.row-appointment-info {
+    width: 59%;
+    display: flex;
+}
+
+.appointment-detail-info {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+#check-in-date-box {
+    display: flex;
+    align-items: center;
+}
+
+#btn-cancel {
+    display: none;
+    width: 100px;
+}
+
+#btn-save {
+    display: none;
+    width: 100px;
+}

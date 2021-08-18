@@ -15,9 +15,9 @@ namespace PatientChecking.Controllers
     {
 
         private readonly IPatientService _patientService;
-        private readonly IProvinceCityService _provinceCityService;
+        private readonly IAppConfigurationService _provinceCityService;
 
-        public PatientController(IPatientService patientService, IProvinceCityService provinceCityService)
+        public PatientController(IPatientService patientService, IAppConfigurationService provinceCityService)
         {
             _patientService = patientService;
             _provinceCityService = provinceCityService;
@@ -87,7 +87,7 @@ namespace PatientChecking.Controllers
             var cityResult = _provinceCityService.GetProvinceCities();
             var cityList = new List<string>();
                 
-            foreach(PatientCheckIn.DataAccess.Models.ProvinceCity p in cityResult)
+            foreach(ProvinceCity p in cityResult)
             {
                 cityList.Add(p.ProvinceCityName);
             }

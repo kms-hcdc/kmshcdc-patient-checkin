@@ -74,7 +74,7 @@ namespace PatientChecking.Services
         {
             var patient = _patientCheckInContext.Patients.Find(patientId);
 
-            var patientDetail = new ServiceModels.PatientDetails
+            var patientDetail = new PatientDetails
             {
                 PatientId = patient.PatientId,
                 PatientIdentifier = patient.PatientIdentifier,

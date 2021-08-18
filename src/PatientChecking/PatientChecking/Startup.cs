@@ -38,7 +38,7 @@ namespace PatientChecking
             //add Appointment Dependency
             services.AddScoped<IAppointmentService, AppointmentService>();
             //add ProvinceCity Dependency
-            services.AddScoped<IProvinceCityService, ProvinceCityService>();
+            services.AddScoped<IAppConfigurationService, AppConfigurationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

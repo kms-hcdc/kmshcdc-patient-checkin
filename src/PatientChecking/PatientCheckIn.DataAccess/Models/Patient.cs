@@ -9,8 +9,9 @@ namespace PatientCheckIn.DataAccess.Models
     {
         public Patient()
         {
+            Addresses = new HashSet<Address>();
             Appointments = new HashSet<Appointment>();
-            Contacts = new HashSet<Contact>();
+            EmergencyContacts = new HashSet<EmergencyContact>();
         }
 
         public int PatientId { get; set; }
@@ -21,6 +22,8 @@ namespace PatientCheckIn.DataAccess.Models
         public string FullName { get; set; }
         public DateTime DoB { get; set; }
         public int Gender { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
         public bool MaritalStatus { get; set; }
         public string Nationality { get; set; }
         public string EthnicRace { get; set; }
@@ -32,7 +35,8 @@ namespace PatientCheckIn.DataAccess.Models
         public string InsuranceNo { get; set; }
         public string AvatarLink { get; set; }
 
+        public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
-        public virtual ICollection<Contact> Contacts { get; set; }
+        public virtual ICollection<EmergencyContact> EmergencyContacts { get; set; }
     }
 }

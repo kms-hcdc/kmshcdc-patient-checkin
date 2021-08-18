@@ -37,6 +37,8 @@ namespace PatientChecking
             services.AddScoped<IPatientService, PatientService>();
             //add Appointment Dependency
             services.AddScoped<IAppointmentService, AppointmentService>();
+            //add ProvinceCity Dependency
+            services.AddScoped<IAppConfigurationService, AppConfigurationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,7 +72,7 @@ namespace PatientChecking
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Dashboard}/{action=Home}");
+                    pattern: "{controller=Dashboard}/{action=Home}/{Id?}");
             });
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),

@@ -7,10 +7,11 @@ namespace PatientChecking.Services.ServiceModels
 {
     public class PatientDetails : Patient
     {
-        public PatientDetails() : base()
+        public PatientDetails()
         {
+            Addresses = new HashSet<Address>();
             Appointments = new HashSet<Appointment>();
-            Contacts = new HashSet<Contact>();
+            EmergencyContacts = new HashSet<EmergencyContact>();
         }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -24,7 +25,8 @@ namespace PatientChecking.Services.ServiceModels
         public DateTime? IssuedDate { get; set; }
         public string IssuedPlace { get; set; }
         public string InsuranceNo { get; set; }
-        public virtual ICollection<Contact> Contacts { get; set; }
+        public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
+        public virtual ICollection<EmergencyContact> EmergencyContacts { get; set; }
     }
 }

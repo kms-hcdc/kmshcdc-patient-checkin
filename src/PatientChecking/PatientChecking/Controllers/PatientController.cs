@@ -15,15 +15,35 @@ namespace PatientChecking.Controllers
     {
 
         private readonly IPatientService _patientService;
+        private readonly IAppConfigurationService _provinceCityService;
 
-        public PatientController(IPatientService patientService)
+        public PatientController(IPatientService patientService, IAppConfigurationService provinceCityService)
         {
             _patientService = patientService;
+            _provinceCityService = provinceCityService;
         }
 
-        public IActionResult Index(int sortOption = (int)PatientSortSelection.ID, int pagingOption = 10, int currentPage = 1)
+        public IActionResult Index()
         {
-            var request = new PagingRequest()
+            return Index((int)PatientSortSelection.ID, 10, 1);
+        }
+
+        [Route("[Controller]/Index/{sortOption}")]
+        public IActionResult Index(int sortOption)
+        {
+            return Index(sortOption, 10, 1);
+        }
+
+        [Route("[Controller]/Index/{sortOption}-{pagingOption}")]
+        public IActionResult Index(int sortOption, int pagingOption)
+        {
+            return Index(sortOption, pagingOption, 1);
+        }
+
+        [Route("[Controller]/Index/{sortOption}-{pagingOption}/{currentPage}")]
+        public IActionResult Index(int sortOption, int pagingOption, int currentPage)
+        {
+            var request = new PagingRequest
             {
                 PageIndex = currentPage,
                 PageSize = pagingOption,
@@ -36,20 +56,21 @@ namespace PatientChecking.Controllers
 
             foreach (Patient p in result.Patients)
             {
-                patientsVm.Add(new PatientViewModel()
+                patientsVm.Add(new PatientViewModel
                 {
+                    PatientId = p.PatientId,
                     PatientIdentifier = p.PatientIdentifier,
                     FullName = p.FullName,
                     Gender = p.Gender.ToString(),
-                    DoB = p.DoB.ToString("dd-MM-yyyy"),
+                    DoB = p.DoB.ToString("MM-dd-yyyy"),
                     AvatarLink = p.AvatarLink,
                     Address = p.PrimaryAddress?.StreetLine,
-                    Email = p.PrimaryContact?.Email,
-                    PhoneNumber = p.PrimaryContact?.PhoneNumber
+                    Email = p.Email,
+                    PhoneNumber = p.PhoneNumber
                 });
             }
 
-            var model = new PatientListViewModel()
+            var model = new PatientListViewModel
             {
                 Patients = patientsVm,
                 SortSelection = request.SortSelection,
@@ -61,9 +82,55 @@ namespace PatientChecking.Controllers
             return View(model);
         }
 
-        public IActionResult Detail()
+        public IActionResult Detail(int patientId)
         {
-            return View();
+            var cityResult = _provinceCityService.GetProvinceCities();
+            var cityList = new List<string>();
+                
+            foreach(ProvinceCity p in cityResult)
+            {
+                cityList.Add(p.ProvinceCityName);
+            }
+
+            if(patientId < 0){
+                var emptyModel = new PatientDetailViewModel
+                {
+                    PatientId = -1,
+                    PatientIdentifier = "",
+                    Nationality = "Vietnamese",
+                    ProvinceCities = cityList
+                };
+                return View(emptyModel);
+            }
+
+            var result = _patientService.GetPatientInDetail(patientId);
+
+            var model = new PatientDetailViewModel
+            {
+                PatientId = result.PatientId,
+                PatientIdentifier = result.PatientIdentifier,
+                FirstName = result.FirstName,
+                LastName = result.LastName,
+                MiddleName = result.MiddleName,
+                FullName = result.FullName,
+                Nationality = result.Nationality,
+                DoB = result.DoB.ToString("yyyy-MM-dd"),
+                MaritalStatus = (int)(result.MaritalStatus == true ? PatientMaritalStatus.Married : PatientMaritalStatus.Unmarried),
+                Gender = (int) result.Gender,
+                AvatarLink = result.AvatarLink,
+                Email = result.Email,
+                PhoneNumber = result.PhoneNumber,
+                EthnicRace = result.EthnicRace,
+                HomeTown = result.HomeTown,
+                BirthplaceCity = result.BirthplaceCity,
+                IdcardNo = result.IdcardNo,
+                IssuedDate = result.IssuedDate?.ToString("yyyy-MM-dd"),
+                IssuedPlace = result.IssuedPlace,
+                InsuranceNo = result.InsuranceNo,
+                ProvinceCities = cityList
+            };
+
+            return View(model);
         }
     }
 }

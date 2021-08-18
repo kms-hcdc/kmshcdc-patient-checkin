@@ -20,9 +20,27 @@ namespace PatientChecking.Controllers
             _appointmentService = appointmentService;
         }
 
-        public async Task<IActionResult> Index(int option = (int)AppointmentSortSelection.ID, int pageSize = 10, int pageIndex = 1)
+        public async Task<IActionResult> Index()
         {
-            var request = new PagingRequest()
+            return await Index((int)AppointmentSortSelection.ID, 10, 1).ConfigureAwait(false);
+        }
+       
+        [Route("[Controller]/Index/{option}")]
+        public async Task<IActionResult> Index(int option)
+        {
+            return await Index(option, 10, 1).ConfigureAwait(false);
+        }
+
+        [Route("[Controller]/Index/{option}-{pageSize}")]
+        public async Task<IActionResult> Index(int option, int pageSize)
+        {
+            return await Index(option, pageSize, 1).ConfigureAwait(false);
+        }
+
+        [Route("[Controller]/Index/{option}-{pageSize}/{pageIndex}")]
+        public async Task<IActionResult> Index(int option, int pageSize, int pageIndex)
+        {
+            var request = new PagingRequest
             {
                 PageIndex = pageIndex,
                 PageSize = pageSize,
@@ -35,7 +53,7 @@ namespace PatientChecking.Controllers
 
             foreach(Appointment appointment in pagedResult.Appointments)
             {
-                appointmentViewModels.Add(new AppointmentViewModel()
+                appointmentViewModels.Add(new AppointmentViewModel
                 {
                     AppointmentId = appointment.AppointmentId,
                     CheckInDate = appointment.CheckInDate.ToString("dd-MM-yyyy"),
@@ -43,10 +61,10 @@ namespace PatientChecking.Controllers
                     FullName = appointment.Patient?.FullName,
                     PatientIdentifier = appointment.Patient?.PatientIdentifier,
                     Status = appointment.Status,
-                    AvatarLink = appointment.Patient?.AvatarLink
+                    AvatarLink = appointment.Patient?.AvatarLink,
                 });
             }
-            var myModel = new AppointmentListViewModel()
+            var myModel = new AppointmentListViewModel
             {
                 AppointmentViewModels = appointmentViewModels,
                 PageIndex = pageIndex,
@@ -55,6 +73,19 @@ namespace PatientChecking.Controllers
                 TotalCount = pagedResult.TotalCount
             };
             return View(myModel);
+        }
+        public async Task<IActionResult> Detail(int appointmentId)
+        {
+            var appointment = await _appointmentService.GetAppointmentById(appointmentId);
+            var appointmentDetailViewModel = new AppointmentDetailViewModel
+            {
+                AppointmentId = appointmentId,
+                CheckInDate = appointment.CheckInDate.ToString("yyyy-MM-dd"),
+                MedicalConcerns = appointment.MedicalConcerns,
+                Status = appointment.Status,
+                PatientId = appointment.PatientId
+            };
+            return View(appointmentDetailViewModel);
         }
     }
 }

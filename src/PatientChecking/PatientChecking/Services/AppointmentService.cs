@@ -20,6 +20,19 @@ namespace PatientChecking.Services
             _patientCheckInContext = patientCheckInContext;
         }
 
+        public async Task<ServiceModels.Appointment> GetAppointmentById(int appointmentId)
+        {
+            var appointment = await _patientCheckInContext.Appointments.SingleOrDefaultAsync(x => x.AppointmentId == appointmentId);
+            return new ServiceModels.Appointment
+            { 
+                AppointmentId = appointment.AppointmentId,
+                CheckInDate = appointment.CheckInDate,
+                MedicalConcerns = appointment?.MedicalConcerns,
+                Status  = appointment.Status,
+                PatientId = appointment.PatientId
+            };
+        }
+
         public async Task<AppointmentDashboard> GetAppointmentSummary()
         {
             var numberOfAppointments = await _patientCheckInContext.Appointments.ToListAsync();
@@ -28,7 +41,7 @@ namespace PatientChecking.Services
             var numberOfPatientsInMonth = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Year == DateTime.Now.Year && x.CheckInDate.Month == DateTime.Now.Month)
                                                                  .GroupBy(p => p.PatientId)
                                                                  .Select(g => new { g.Key, count = g.Count() }).ToListAsync();
-            return new AppointmentDashboard()
+            return new AppointmentDashboard
             {
                 NumOfAppointments = numberOfAppointments.Count(),
                 NumOfAppointmentsInMonth = numberOfAppointmentsInMonth.Count(),
@@ -67,12 +80,12 @@ namespace PatientChecking.Services
             }
             int totalRow = query.Count();
             var data = query.Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize).Select(x => new ServiceModels.Appointment()
+                .Take(request.PageSize).Select(x => new ServiceModels.Appointment
                 {
                     AppointmentId = x.appointment.AppointmentId,
                     CheckInDate = x.appointment.CheckInDate,
                     Status = x.appointment.Status,
-                    Patient = new ServiceModels.Patient()
+                    Patient = new ServiceModels.Patient
                     {
                         AvatarLink = x.patient.AvatarLink,
                         DoB = x.patient.DoB,
@@ -80,7 +93,7 @@ namespace PatientChecking.Services
                         PatientIdentifier = x.patient.PatientIdentifier
                     }
                 }).ToList();
-            AppointmentList appointmentList = new AppointmentList() 
+            AppointmentList appointmentList = new AppointmentList
             {
                 TotalCount = totalRow,
                 Appointments = data

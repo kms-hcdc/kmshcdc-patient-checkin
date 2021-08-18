@@ -17,6 +17,7 @@ namespace PatientChecking.Views.ViewModels
 
     public class PatientViewModel
     {
+        public int PatientId { get; set; }
         public string PatientIdentifier { get; set; }
         public string FullName { get; set; }
         public string DoB { get; set; }

@@ -6,9 +6,9 @@
     <link rel="stylesheet" href="~/css/site.css" />
     @RenderSection("css", false)
     <script src="~/lib/jquery/dist/jquery.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" >
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+          href="~/lib/font-awesome/css/all.min.css" />
 </head>
 <body>
     <div class="main-container">
@@ -37,7 +37,7 @@
                             </a>
                         </li>
                         <li class="detail @((ViewBag.Action == "Detail" && @ViewBag.Controller == "Patient") ? "active" : "")">
-                            <a asp-controller="Patient" asp-action="Detail">
+                            <a asp-controller="Patient" asp-action="Detail" asp-route-patientId="-1">
                                 <i class="fas fa-info-circle m-1"></i>
                                 Detail Information
                             </a>

@@ -12,16 +12,20 @@
 }
 <div class="search-container">
     <div class="search-area">
+        <i class="fas fa-search search-icon"></i>
         <input class="form-control"
                type="text"
-               placeholder="Search"
+               placeholder="ID, name, dob, gender, phone, email"
                aria-label="Search" />
+        <i class="fas fa-times delete-icon"></i>
     </div>
+    <i class="fas fa-info-circle info-icon"></i>
     <div class="sort-area">
+        <span class="sort-info">Sort by:</span>
         <select id="sort-selection" class="form-select">
-            <option value="0">Sort By ID</option>
-            <option value="1">Sort By Name</option>
-            <option value="2">Sort By DoB</option>
+            <option value="0">Id number</option>
+            <option value="1">Name</option>
+            <option value="2">DOB</option>
         </select>
     </div>
 </div>
@@ -33,10 +37,10 @@
                 <div class="col l-4">
                     <div class="item patient-item1">
                         <div>
-                            <img src="~/Image/no-avatar.jpg" alt="Avatar" class="patient-img" />
+                            <img src="@(string.IsNullOrEmpty(item.AvatarLink) ? "/Image/no-avatar.jpg" : @item.AvatarLink)" alt="Avatar" class="patient-img" />
                         </div>
                         <div class="patient-name">
-                            <p class="patient-name-bold">@item.FullName</p>
+                            <a href="@Url.Action("Detail", "Patient", new {patientId = item.PatientId})"><p class="fs-6 fw-bold">@item.FullName</p></a>
                             <p>@item.PatientIdentifier</p>
                         </div>
                     </div>
@@ -44,12 +48,12 @@
                 <div class="col l-4">
                     <div class="item patient-item2">
                         <div>
-                            <p class="dob-bold">DoB</p>
-                            <p>@item.DoB</p>
+                            <p>DOB</p>
+                            <p class="fw-bold">@item.DoB</p>
                         </div>
                         <div>
-                            <p class="dob-bold">Gender</p>
-                            <p>@item.Gender</p>
+                            <p>Gender</p>
+                            <p class="fw-bold">@item.Gender</p>
                         </div>
                     </div>
                 </div>
@@ -57,7 +61,7 @@
                     <div class="item patient-item3">
                         <div>
                             <div class="contact-icon">
-                                <i class="fas fa-phone"></i>
+                                <i class="fas fa-phone fa-rotate-90"></i>
                             </div>
                             <p class="contact-info">@item.PhoneNumber</p>
                         </div>
@@ -65,7 +69,14 @@
                             <div class="contact-icon">
                                 <i class="fas fa-envelope"></i>
                             </div>
-                            <p class="contact-info">@item.Email</p>
+                            @{
+                                if (!string.IsNullOrEmpty(item.Email))
+                                {
+                                    string[] result = item.Email.Split("@");
+                                    <p class="email-link">@result[0]</p>
+                                    <p class="contact-info">@@@result[1]</p>
+                                }
+                            }
                         </div>
                         <div>
                             <div class="contact-icon">
@@ -92,13 +103,13 @@
     <span class="total-row"> @from - @to of @totalCount</span>
     <ul class="pagination">
         <li class="page-item @(pageIndex == 1 ? "disabled" : "")">
-            <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, PagingOption = pageSize, currentPage = pageIndex-1})" aria-label="Previous">
+            <a class="page-link text-dark" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, PagingOption = pageSize, currentPage = pageIndex-1})" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Previous</span>
             </a>
         </li>
         @{
-            var totalPage = (totalCount + pageSize - 1)/pageSize;
+            var totalPage = (totalCount + pageSize - 1) / pageSize;
 
             int pageLeft = 1, pageRight = 1;//Number of pages before and after current page
 
@@ -113,13 +124,13 @@
             if (fromPage > 1)
             {
                 <li class="page-item @(pageIndex == 1 ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = 1})">1</a>
+                    <a class="page-link text-dark" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = 1})">1</a>
                 </li>
                 if (fromPage > 2)
                 {
                     var middleNumber = (int)Math.Ceiling((double)(fromPage - 2) / 2) + 1;
                     <li class="page-item @(pageIndex == middleNumber ? "active" : "")">
-                        <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = middleNumber})">...</a>
+                        <a class="page-link text-dark" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = middleNumber})">...</a>
                     </li>
                 }
             }
@@ -127,7 +138,7 @@
             for (int i = fromPage; i <= toPage; i++)
             {
                 <li class="page-item @(pageIndex == i ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = i})">@i</a>
+                    <a class="page-link text-dark" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = i})">@i</a>
                 </li>
             }
 
@@ -135,18 +146,18 @@
             {
                 int middleNumber = (int)Math.Ceiling((double)(totalPage - toPage) / 2) + toPage;
                 <li class="page-item @(pageIndex == totalPage ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = middleNumber})">...</a>
+                    <a class="page-link text-dark" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = middleNumber})">...</a>
                 </li>
                 if (toPage < totalPage - 1)
                 {
                     <li class="page-item @(pageIndex == totalPage ? "active" : "")">
-                        <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = totalPage})">@totalPage</a>
+                        <a class="page-link text-dark" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = totalPage})">@totalPage</a>
                     </li>
                 }
             }
         }
         <li class="page-item @(pageIndex == totalPage ? "disabled" : "")">
-            <a class="page-link" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = pageIndex+1})" aria-label="Next">
+            <a class="page-link text-dark" href="@Url.Action("Index", "Patient", new {sortOption = sortOption, pagingOption = pageSize, currentPage = pageIndex+1})" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>
             </a>

@@ -1,5 +1,14 @@
 ﻿function autocomplete(inp, arr) {
 
+    function closeAllLists(elmnt) {
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+            if (elmnt !== x[i] && elmnt !== inp) {
+                x[i].parentNode.removeChild(x[i]);
+            }
+        }
+    }
+
     var currentFocus;
 
     inp.addEventListener("input", function () {
@@ -45,16 +54,16 @@
     }
 
     function addActive(x) {
-        if (!x) return false;
+        if (!x) { return false; }
         removeActive(x);
-        if (currentFocus >= x.length) currentFocus = 0;
-        if (currentFocus < 0) currentFocus = (x.length - 1);
+        if (currentFocus >= x.length) { currentFocus = 0; }
+        if (currentFocus < 0) { currentFocus = (x.length - 1); }
         x[currentFocus].classList.add("autocomplete-active");
     }
 
     inp.addEventListener("keydown", function (e) {
         var x = document.getElementById(this.id + "autocomplete-list");
-        if (x) x = x.getElementsByTagName("div");
+        if (x) { x = x.getElementsByTagName("div"); }
         if (e.keyCode === 40) {
             currentFocus++;
             addActive(x);
@@ -64,19 +73,10 @@
         } else if (e.keyCode === 13) {
             e.preventDefault();
             if (currentFocus > -1) {
-                if (x) x[currentFocus].click();
+                if (x) { x[currentFocus].click(); }
             }
         }
     });
-    
-    function closeAllLists(elmnt) {
-        var x = document.getElementsByClassName("autocomplete-items");
-        for (var i = 0; i < x.length; i++) {
-            if (elmnt != x[i] && elmnt != inp) {
-                x[i].parentNode.removeChild(x[i]);
-            }
-        }
-    }
 
     document.addEventListener("click", function (e) {
         closeAllLists(e.target);

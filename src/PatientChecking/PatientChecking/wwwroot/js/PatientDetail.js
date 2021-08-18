@@ -30,20 +30,20 @@
                 b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
                 b.innerHTML += arr[i].substr(val.length);
                 b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-                b.addEventListener("click", function () {
+                b.onclick = function () {
                     inp.value = this.getElementsByTagName("input")[0].value;
                     closeAllLists();
-                });
+                };
                 a.appendChild(b);
             }
         }
         c = document.createElement("DIV");
         c.innerHTML = "<strong>" + "Other" + "</strong>";
         c.innerHTML += "<input type='hidden' value='Other'>";
-        c.addEventListener("click", function () {
+        c.onclick = function () {
             inp.value = this.getElementsByTagName("input")[0].value;
             closeAllLists();
-        });
+        };
         a.appendChild(c);
     });
 

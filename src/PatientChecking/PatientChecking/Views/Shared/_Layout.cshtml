@@ -69,6 +69,7 @@
             $("nav ul .first").toggleClass("rotate");
         });
     </script>
+    @await Component.InvokeAsync("Notyf")
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

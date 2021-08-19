@@ -106,5 +106,30 @@ namespace PatientChecking.Services
             var NumberOfPatients = await _patientCheckInContext.Patients.ToListAsync();
             return NumberOfPatients.Count();
         }
+
+        public int UpdatePatientDetail(PatientDetails patientDetails)
+        {
+            var patient = _patientCheckInContext.Patients.Find(patientDetails.PatientId);
+
+            patient.FirstName = patientDetails.FirstName;
+            patient.MiddleName = patientDetails.MiddleName;
+            patient.LastName = patientDetails.LastName;
+            patient.FullName = patientDetails.FullName;
+            patient.Gender = (int) patientDetails.Gender;
+            patient.MaritalStatus = patientDetails.MaritalStatus;
+            patient.DoB = patientDetails.DoB;
+            patient.Nationality = patientDetails.Nationality;
+            patient.EthnicRace = patientDetails.EthnicRace;
+            patient.HomeTown = patientDetails.HomeTown;
+            patient.BirthplaceCity = patientDetails.BirthplaceCity;
+            patient.InsuranceNo = patientDetails.InsuranceNo;
+            patient.IdcardNo = patientDetails.IdcardNo;
+            patient.IssuedDate = patientDetails.IssuedDate;
+            patient.IssuedPlace = patientDetails.IssuedPlace;
+
+            _patientCheckInContext.Update(patient);
+
+            return _patientCheckInContext.SaveChanges();
+        }
     }
 }

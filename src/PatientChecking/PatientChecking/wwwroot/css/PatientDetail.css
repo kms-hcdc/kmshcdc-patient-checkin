@@ -210,7 +210,7 @@
     width: 11%;
 }
 
-.edit-mode :nth-of-type(2){
+.edit-mode > button{
     color: white;
     background: #14b1e7;
     border: 1px solid #14b1e7;
@@ -224,6 +224,12 @@
 }
 
 .edit-mode > a:hover {
+    color: white;
+    background: #14b1e7;
+    border: 1px solid #14b1e7;
+}
+
+.edit-mode > button:hover {
     color: white;
     background: #14b1e7;
     border: 1px solid #14b1e7;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Mvc;
 using PatientChecking.Services.Repository;
 using PatientChecking.Services.ServiceModels;
 using PatientChecking.Services.ServiceModels.Enum;
@@ -16,11 +17,13 @@ namespace PatientChecking.Controllers
 
         private readonly IPatientService _patientService;
         private readonly IAppConfigurationService _provinceCityService;
+        private readonly INotyfService _notyf;
 
-        public PatientController(IPatientService patientService, IAppConfigurationService provinceCityService)
+        public PatientController(IPatientService patientService, IAppConfigurationService provinceCityService, INotyfService notyf)
         {
             _patientService = patientService;
             _provinceCityService = provinceCityService;
+            _notyf = notyf;
         }
 
         public IActionResult Index()
@@ -131,6 +134,48 @@ namespace PatientChecking.Controllers
             };
 
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Update(PatientDetailViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Please try again");
+            }
+
+            var patientDetails = new PatientDetails
+            {
+                PatientId = model.PatientId,
+                FirstName = model.FirstName,
+                MiddleName = model.MiddleName,
+                LastName = model.LastName,
+                FullName = string.IsNullOrEmpty(model.MiddleName) ? model.FirstName + " " + model.LastName : model.FirstName + " " + model.MiddleName + " " + model.LastName,
+                Nationality = model.Nationality,
+                DoB = DateTime.Parse(model.DoB),
+                MaritalStatus = model.MaritalStatus == (int)PatientMaritalStatus.Married,
+                Gender = (PatientGender)model.Gender,
+                EthnicRace = model.Nationality == "Vietnamese" ? model.EthnicRace : null,
+                HomeTown = model.HomeTown,
+                BirthplaceCity = model.BirthplaceCity,
+                InsuranceNo = model.InsuranceNo,
+                IdcardNo = model.IdcardNo,
+                IssuedDate = !string.IsNullOrEmpty(model.IssuedDate) ? DateTime.Parse(model.IssuedDate) : null,
+                IssuedPlace = model.IssuedPlace
+            };
+
+            var result = _patientService.UpdatePatientDetail(patientDetails);
+
+            if (result > 0)
+            {
+                _notyf.Success("Update patient detail successfully!");
+            }
+            else
+            {
+                _notyf.Error("Update patient detail Failed!");
+            }
+
+            return RedirectToAction("Detail", new { patientId = patientDetails.PatientId });
         }
     }
 }

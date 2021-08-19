@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Mvc;
 using PatientChecking.Services.Repository;
 using PatientChecking.Services.ServiceModels;
 using PatientChecking.Services.ServiceModels.Enum;
@@ -14,10 +15,12 @@ namespace PatientChecking.Controllers
     public class AppointmentController : BaseController
     {
         private readonly IAppointmentService _appointmentService;
+        private readonly INotyfService _notyf;
 
-        public AppointmentController(IAppointmentService appointmentService)
+        public AppointmentController(IAppointmentService appointmentService, INotyfService notyf)
         {
             _appointmentService = appointmentService;
+            _notyf = notyf;
         }
 
         public async Task<IActionResult> Index()
@@ -74,6 +77,7 @@ namespace PatientChecking.Controllers
             };
             return View(myModel);
         }
+
         public async Task<IActionResult> Detail(int appointmentId)
         {
             var appointment = await _appointmentService.GetAppointmentById(appointmentId);
@@ -86,6 +90,32 @@ namespace PatientChecking.Controllers
                 PatientId = appointment.PatientId
             };
             return View(appointmentDetailViewModel);
+        }
+
+        public IActionResult Update(AppointmentDetailViewModel appointmentDetailViewModel)
+        {
+            var appointment = new Appointment
+            {
+                AppointmentId = appointmentDetailViewModel.AppointmentId,
+                CheckInDate = DateTime.Parse(appointmentDetailViewModel.CheckInDate),
+                MedicalConcerns = appointmentDetailViewModel.MedicalConcerns,
+                PatientId = appointmentDetailViewModel.PatientId,
+                Status = appointmentDetailViewModel.Status
+            };
+            if(appointment.CheckInDate < DateTime.Now)
+            {
+                _notyf.Error("Update Appointment Failed!");
+            }
+            var result = _appointmentService.UpdateAppointment(appointment);
+            if(result > 0)
+            {
+                _notyf.Success("Update Appointment successfully!");
+            }
+            else
+            {
+                _notyf.Error("Update Appointment Failed!");
+            }
+            return RedirectToAction("Detail",new { appointmentId = appointment.AppointmentId});
         }
     }
 }

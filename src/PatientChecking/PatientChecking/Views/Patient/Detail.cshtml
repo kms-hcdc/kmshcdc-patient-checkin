@@ -44,8 +44,12 @@
     <div class="edit-patient-info-container">
         <div class="patient-box-info">
             <div>
-                <div>
+                <div class="patient-image-box">
                     <img src="@(string.IsNullOrEmpty(Model.AvatarLink) ? "/Image/no-avatar.jpg" : Model.AvatarLink)" class="patient-avatar" />
+                    <div id="add-photo">
+                        <i class="fas fa-camera-retro"></i>
+                        <span>Upload patient photo</span>
+                    </div>
                 </div>
                 <div class="patient-name-detail">
                     <span>@Model.FullName</span>
@@ -61,6 +65,26 @@
                 <a href="#">Contact detail</a>
             </div>
         </div>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content-container">
+                <div class="modal-header">
+                    <p>Upload Patient Image</p>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="upload-image-container">
+                    @using (Html.BeginForm("UploadImage", "Patient", FormMethod.Post,
+                        new { enctype = "multipart/form-data", @class = "upload-form" }))
+                    {
+                        <img src="@(string.IsNullOrEmpty(Model.AvatarLink) ? "/Image/no-avatar.jpg" : Model.AvatarLink)" alt="Patient-image" id="uploaded-image" class="w-75 p-3 d-flex justify-content-center" />
+                        <input type="file" name="formFile" id="file" class="form-control" onchange="readURL(this)" accept="image/*" required/>
+                        <input type="hidden" name="PatientId" value="@Model.PatientId">
+                        <input type="submit" value="Upload" class="submit form-control" id="uploadButton"/>
+                    }
+                </div>
+            </div>
+        </div>
+
         <div class="patient-box-detail">
             @using (Html.BeginForm("Update", "Patient", FormMethod.Post))
             {
@@ -133,7 +157,7 @@
                                 <div class="form-group">
                                     <label for="DoB">Date of birth</label>
                                     <span class="text-error">*</span>
-                                    <input type="date" class="form-control" name="DoB" value=@Model.DoB required>
+                                    <input type="date" class="form-control" name="DoB" value=@Model.DoB required max='@DateTime.Now.ToString("yyyy-MM-dd")'>
                                 </div>
                             </div>
                         </div>
@@ -219,7 +243,7 @@
                             <div class="item">
                                 <div class="form-group">
                                     <label for="issuedDate">Issued date</label>
-                                    <input type="date" class="form-control" id="issuedDate" name="IssuedDate" value=@Model.IssuedDate>
+                                    <input type="date" class="form-control" id="issuedDate" name="IssuedDate" value=@Model.IssuedDate max='@DateTime.Now.ToString("yyyy-MM-dd")'>
                                 </div>
                             </div>
                         </div>
@@ -319,17 +343,29 @@
         }
     });
 
-    $("#homeTown, #birthplace, #issuedPlace").keydown(function (e) {
+    $("#homeTown").keydown(function (e) {
         var homeTownOption = $("#homeTown").val();
-        var birthplaceOption = $("#birthplace").val();
-        var issuedPlaceOption = $("#issuedPlace").val();
         if (e.keyCode === 9) {
             if (!cityList.includes(homeTownOption)) {
                 $("#homeTown").val("Other");
             }
+            $(".autocomplete-items").hide();
+        }
+    });
+
+    $("#birthplace").keydown(function (e) {
+        var birthplaceOption = $("#birthplace").val();
+        if (e.keyCode === 9) {
             if (!cityList.includes(birthplaceOption)) {
                 $("#birthplace").val("Other");
             }
+            $(".autocomplete-items").hide();
+        }
+    });
+
+    $("#issuedPlace").keydown(function (e) {
+        var issuedPlaceOption = $("#issuedPlace").val();
+        if (e.keyCode === 9) {
             if (!cityList.includes(issuedPlaceOption)) {
                 $("#issuedPlace").val("Other");
             }
@@ -349,5 +385,34 @@
             $("#issuedPlace").prop("disabled", true);
         }
     });
+
+    $(".patient-image-box").mouseenter(function () {
+        $("#add-photo").css("display", "flex");
+    });
+
+    $(".patient-image-box").mouseleave(function () {
+        $("#add-photo").css("display", "none");
+    });
+
+    $("#add-photo").click(function () {
+        $("#myModal").css("display", "block");
+    });
+
+    $(".close").click(function () {
+        $("#myModal").css("display", "none");
+    });
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#uploaded-image')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 
 </script>

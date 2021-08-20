@@ -1,4 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PatientChecking.Services.Repository;
 using PatientChecking.Services.ServiceModels;
@@ -7,6 +9,7 @@ using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,12 +21,14 @@ namespace PatientChecking.Controllers
         private readonly IPatientService _patientService;
         private readonly IAppConfigurationService _provinceCityService;
         private readonly INotyfService _notyf;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public PatientController(IPatientService patientService, IAppConfigurationService provinceCityService, INotyfService notyf)
+        public PatientController(IPatientService patientService, IAppConfigurationService provinceCityService, INotyfService notyf, IHostingEnvironment hostingEnvironment)
         {
             _patientService = patientService;
             _provinceCityService = provinceCityService;
             _notyf = notyf;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index()
@@ -89,13 +94,14 @@ namespace PatientChecking.Controllers
         {
             var cityResult = _provinceCityService.GetProvinceCities();
             var cityList = new List<string>();
-                
-            foreach(ProvinceCity p in cityResult)
+
+            foreach (ProvinceCity p in cityResult)
             {
                 cityList.Add(p.ProvinceCityName);
             }
 
-            if(patientId < 0){
+            if (patientId < 0)
+            {
                 var emptyModel = new PatientDetailViewModel
                 {
                     PatientId = -1,
@@ -119,7 +125,7 @@ namespace PatientChecking.Controllers
                 Nationality = result.Nationality,
                 DoB = result.DoB.ToString("yyyy-MM-dd"),
                 MaritalStatus = (int)(result.MaritalStatus == true ? PatientMaritalStatus.Married : PatientMaritalStatus.Unmarried),
-                Gender = (int) result.Gender,
+                Gender = (int)result.Gender,
                 AvatarLink = result.AvatarLink,
                 Email = result.Email,
                 PhoneNumber = result.PhoneNumber,
@@ -176,6 +182,48 @@ namespace PatientChecking.Controllers
             }
 
             return RedirectToAction("Detail", new { patientId = patientDetails.PatientId });
+        }
+
+        [HttpPost]
+        public IActionResult UploadImage(int patientId, IFormFile formFile)
+        {
+            try
+            {
+                if (formFile != null)
+                {
+                    var fileExtension = Path.GetExtension(formFile.FileName).ToLower();
+
+                    if (fileExtension != ".jpg" && fileExtension != ".png" && fileExtension != "jpeg")
+                    {
+                        _notyf.Error("Upload patient image Failed! Uploaded file must be image extensions");
+                        return RedirectToAction("Detail", new { patientId = patientId });
+                    }
+
+                    string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "Image");
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(formFile.FileName);
+
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    formFile.CopyTo(new FileStream(filePath, FileMode.Create));
+
+                    var avatarLink = "/Image/" + uniqueFileName;
+
+                    var result = _patientService.UploadPatientImage(patientId, avatarLink);
+                    if (result > 0)
+                    {
+                        _notyf.Success("Update patient detail successfully!");
+                    }
+                    else
+                    {
+                        _notyf.Error("Upload patient image Failed!");
+                    }
+                }
+            }
+            catch (IOException)
+            {
+                _notyf.Error("Upload patient image Failed!");
+            }
+
+            return RedirectToAction("Detail", new { patientId = patientId });
         }
     }
 }

@@ -131,5 +131,16 @@ namespace PatientChecking.Services
 
             return _patientCheckInContext.SaveChanges();
         }
+
+        public int UploadPatientImage(int patientId, string avatarLink)
+        {
+            var patient = _patientCheckInContext.Patients.Find(patientId);
+
+            patient.AvatarLink = avatarLink;
+
+            _patientCheckInContext.Update(patient);
+
+            return _patientCheckInContext.SaveChanges();
+        }
     }
 }

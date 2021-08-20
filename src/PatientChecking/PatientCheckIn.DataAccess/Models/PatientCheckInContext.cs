@@ -117,7 +117,7 @@ namespace PatientCheckIn.DataAccess.Models
 
                 entity.Property(e => e.PatientId).HasColumnName("PatientID");
 
-                entity.Property(e => e.AvatarLink).HasMaxLength(100);
+                entity.Property(e => e.AvatarLink).HasMaxLength(300);
 
                 entity.Property(e => e.BirthplaceCity).HasMaxLength(50);
 

@@ -19,17 +19,9 @@ namespace PatientChecking.Services.Appointment
             _patientCheckInContext = patientCheckInContext;
         }
 
-        public async Task<PatientChecking.ServiceModels.Appointment> GetAppointmentById(int appointmentId)
+        public async Task<PatientCheckIn.DataAccess.Models.Appointment> GetAppointmentById(int appointmentId)
         {
-            var appointment = await _patientCheckInContext.Appointments.SingleOrDefaultAsync(x => x.AppointmentId == appointmentId);
-            return new ServiceModels.Appointment
-            {
-                AppointmentId = appointment.AppointmentId,
-                CheckInDate = appointment.CheckInDate,
-                MedicalConcerns = appointment?.MedicalConcerns,
-                Status = appointment.Status,
-                PatientId = appointment.PatientId
-            };
+            return await _patientCheckInContext.Appointments.FirstOrDefaultAsync(x => x.AppointmentId == appointmentId);
         }
 
         public async Task<AppointmentDashboard> GetAppointmentSummary()

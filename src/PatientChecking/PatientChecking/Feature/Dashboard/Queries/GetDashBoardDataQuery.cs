@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using PatientChecking.Services.Appointment;
+using PatientChecking.Services.Patient;
 using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -12,9 +14,26 @@ namespace PatientChecking.Feature.Dashboard.Queries
     {
         class GetDashBoardDataHandler : IRequestHandler<GetDashBoardDataQuery, DashboardViewModel>
         {
-            public Task<DashboardViewModel> Handle(GetDashBoardDataQuery request, CancellationToken cancellationToken)
+            private readonly IAppointmentService _appointmentService;
+            private readonly IPatientService _patientService;
+
+            public GetDashBoardDataHandler(IAppointmentService appointmentService, IPatientService patientService)
             {
-                throw new NotImplementedException();
+                _appointmentService = appointmentService;
+                _patientService = patientService;
+            }
+
+            public async Task<DashboardViewModel> Handle(GetDashBoardDataQuery request, CancellationToken cancellationToken)
+            {
+                var appointmentSummary = await _appointmentService.GetAppointmentSummary();
+                return new DashboardViewModel
+                {
+                    NumOfAppointments = appointmentSummary.NumOfAppointments,
+                    NumOfAppointmentsInMonth = appointmentSummary.NumOfAppointmentsInMonth,
+                    NumOfAppointmentsInToday = appointmentSummary.NumOfAppointmentsInToday,
+                    NumOfPatients = await _patientService.GetPatientsSummary(),
+                    NumOfPatientsInMonth = appointmentSummary.NumOfPatientsInMonth
+                };
             }
         }
     }

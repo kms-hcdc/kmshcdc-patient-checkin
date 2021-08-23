@@ -1,5 +1,5 @@
-﻿using PatientCheckIn.DataAccess.Models;
-using PatientChecking.ServiceModels;
+﻿using Microsoft.EntityFrameworkCore;
+using PatientCheckIn.DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,20 +15,9 @@ namespace PatientChecking.Services.AppConfiguration
         {
             _patientCheckInContext = patientCheckInContext;
         }
-        public List<PatientChecking.ServiceModels.ProvinceCity> GetProvinceCities()
+        public async Task<List<ProvinceCity>> GetProvinceCities()
         {
-            var query = _patientCheckInContext.ProvinceCities.ToList();
-            var result = new List<PatientChecking.ServiceModels.ProvinceCity>();
-
-            foreach (PatientCheckIn.DataAccess.Models.ProvinceCity pc in query)
-            {
-                result.Add(new ServiceModels.ProvinceCity
-                {
-                    ProvinceCityId = pc.ProvinceCityId,
-                    ProvinceCityName = pc.ProvinceCityName
-                });
-            }
-
+            var result = await _patientCheckInContext.ProvinceCities.ToListAsync();
             return result;
         }
     }

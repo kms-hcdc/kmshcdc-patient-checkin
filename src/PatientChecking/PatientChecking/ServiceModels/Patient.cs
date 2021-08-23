@@ -1,4 +1,5 @@
-﻿using PatientChecking.ServiceModels.Enum;
+﻿using PatientCheckIn.DataAccess.Models;
+using PatientChecking.ServiceModels.Enum;
 using System;
 using System.Collections;
 using System.Collections.Generic;

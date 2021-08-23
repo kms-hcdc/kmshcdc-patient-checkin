@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using PatientChecking.Feature.Patient.Queries;
 using PatientChecking.ServiceModels;
 using PatientChecking.ServiceModels.Enum;
 using PatientChecking.Services.AppConfiguration;
@@ -14,35 +16,32 @@ namespace PatientChecking.Controllers
 {
     public class PatientController : BaseController
     {
+        private readonly IMediator _mediator;
 
-        private readonly IPatientService _patientService;
-        private readonly IAppConfigurationService _provinceCityService;
-
-        public PatientController(IPatientService patientService, IAppConfigurationService provinceCityService)
+        public PatientController(IMediator mediator)
         {
-            _patientService = patientService;
-            _provinceCityService = provinceCityService;
+            _mediator = mediator;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return Index((int)PatientSortSelection.ID, 10, 1);
+            return await Index((int)PatientSortSelection.ID, 10, 1);
         }
 
         [Route("[Controller]/Index/{sortOption}")]
-        public IActionResult Index(int sortOption)
+        public async Task<IActionResult> Index(int sortOption)
         {
-            return Index(sortOption, 10, 1);
+            return await Index(sortOption, 10, 1);
         }
 
         [Route("[Controller]/Index/{sortOption}-{pagingOption}")]
-        public IActionResult Index(int sortOption, int pagingOption)
+        public async Task<IActionResult> Index(int sortOption, int pagingOption)
         {
-            return Index(sortOption, pagingOption, 1);
+            return await Index(sortOption, pagingOption, 1);
         }
 
         [Route("[Controller]/Index/{sortOption}-{pagingOption}/{currentPage}")]
-        public IActionResult Index(int sortOption, int pagingOption, int currentPage)
+        public async Task<IActionResult> Index(int sortOption, int pagingOption, int currentPage)
         {
             var request = new PagingRequest
             {
@@ -51,87 +50,12 @@ namespace PatientChecking.Controllers
                 SortSelection = sortOption
             };
 
-            var result = _patientService.GetListPatientPaging(request);
-
-            var patientsVm = new List<PatientViewModel>();
-
-            foreach (Patient p in result.Patients)
-            {
-                patientsVm.Add(new PatientViewModel
-                {
-                    PatientId = p.PatientId,
-                    PatientIdentifier = p.PatientIdentifier,
-                    FullName = p.FullName,
-                    Gender = p.Gender.ToString(),
-                    DoB = p.DoB.ToString("MM-dd-yyyy"),
-                    AvatarLink = p.AvatarLink,
-                    Address = p.PrimaryAddress?.StreetLine,
-                    Email = p.Email,
-                    PhoneNumber = p.PhoneNumber
-                });
-            }
-
-            var model = new PatientListViewModel
-            {
-                Patients = patientsVm,
-                SortSelection = request.SortSelection,
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                TotalCount = result.TotalCount
-            };
-
-            return View(model);
+            return View(await _mediator.Send(new GetAllPatientsPagingQuery() { requestPaging = request }));
         }
 
-        public IActionResult Detail(int patientId)
+        public async Task<IActionResult> Detail(int patientId)
         {
-            var cityResult = _provinceCityService.GetProvinceCities();
-            var cityList = new List<string>();
-                
-            foreach(ProvinceCity p in cityResult)
-            {
-                cityList.Add(p.ProvinceCityName);
-            }
-
-            if(patientId < 0){
-                var emptyModel = new PatientDetailViewModel
-                {
-                    PatientId = -1,
-                    PatientIdentifier = "",
-                    Nationality = "Vietnamese",
-                    ProvinceCities = cityList
-                };
-                return View(emptyModel);
-            }
-
-            var result = _patientService.GetPatientInDetail(patientId);
-
-            var model = new PatientDetailViewModel
-            {
-                PatientId = result.PatientId,
-                PatientIdentifier = result.PatientIdentifier,
-                FirstName = result.FirstName,
-                LastName = result.LastName,
-                MiddleName = result.MiddleName,
-                FullName = result.FullName,
-                Nationality = result.Nationality,
-                DoB = result.DoB.ToString("yyyy-MM-dd"),
-                MaritalStatus = (int)(result.MaritalStatus == true ? PatientMaritalStatus.Married : PatientMaritalStatus.Unmarried),
-                Gender = (int) result.Gender,
-                AvatarLink = result.AvatarLink,
-                Email = result.Email,
-                PhoneNumber = result.PhoneNumber,
-                EthnicRace = result.EthnicRace,
-                HomeTown = result.HomeTown,
-                BirthplaceCity = result.BirthplaceCity,
-                IdcardNo = result.IdcardNo,
-                IssuedDate = result.IssuedDate?.ToString("yyyy-MM-dd"),
-                IssuedPlace = result.IssuedPlace,
-                InsuranceNo = result.InsuranceNo,
-                ProvinceCities = cityList
-            };
-
-            return View(model);
+            return View(await _mediator.Send(new GetPatientInDetailByIdQuery() { PatientId = patientId }));
         }
     }
 }

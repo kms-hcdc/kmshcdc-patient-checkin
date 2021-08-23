@@ -7,7 +7,7 @@ namespace PatientChecking.Services.Patient
     public interface IPatientService
     {
         Task<int> GetPatientsSummary();
-        PatientList GetListPatientPaging(PagingRequest request);
-        PatientDetails GetPatientInDetail(int patientId);
+        Task<PatientList> GetListPatientPaging(PagingRequest request);
+        Task<PatientCheckIn.DataAccess.Models.Patient> GetPatientInDetail(int patientId);
     }
 }

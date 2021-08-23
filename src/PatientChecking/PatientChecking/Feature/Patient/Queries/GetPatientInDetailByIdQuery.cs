@@ -26,10 +26,10 @@ namespace PatientChecking.Feature.Patient.Queries
             }
             public async Task<PatientDetailViewModel> Handle(GetPatientInDetailByIdQuery request, CancellationToken cancellationToken)
             {
-                var cities = _provinceCityService.GetProvinceCities();
+                var cities = await _provinceCityService.GetProvinceCities();
                 var cityList = new List<string>();
 
-                foreach (ProvinceCity p in cities)
+                foreach (PatientCheckIn.DataAccess.Models.ProvinceCity p in cities)
                 {
                     cityList.Add(p.ProvinceCityName);
                 }

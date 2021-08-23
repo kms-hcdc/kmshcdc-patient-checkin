@@ -1,4 +1,4 @@
-﻿using PatientChecking.ServiceModels;
+﻿using PatientCheckIn.DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,6 @@ namespace PatientChecking.Services.AppConfiguration
 {
     public interface IAppConfigurationService
     {
-        List<ProvinceCity> GetProvinceCities();
+        Task<List<ProvinceCity>> GetProvinceCities();
     }
 }

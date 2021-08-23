@@ -43,7 +43,7 @@
     {
         <div class="row-value">
             <div class="col-3 col-md-3" id="name-value">
-                <img src="~/Image/no-avatar.jpg" alt="Avatar" class="avatar-patient-inappointment">
+                <img src="@(string.IsNullOrEmpty(item.AvatarLink) ? "/Image/no-avatar.jpg" : item.AvatarLink)"  alt="Avatar" class="avatar-patient-inappointment">
                 <div id="patient-identity">
                     <p class="patient-name">@item.FullName</p>
                     <b class="patient-identifier">(@item.PatientIdentifier)</b>

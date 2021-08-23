@@ -41,7 +41,8 @@ namespace PatientChecking
             //add ProvinceCity Dependency
             services.AddScoped<IAppConfigurationService, AppConfigurationService>();
             //add Notyf configuration
-            services.AddNotyf(config => 
+
+            services.AddNotyf(config =>
             {
                 config.DurationInSeconds = 3;
                 config.IsDismissable = true;

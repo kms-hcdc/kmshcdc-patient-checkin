@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PatientChecking.Services.Repository;
-using PatientChecking.Services.ServiceModels;
-using PatientChecking.Services.ServiceModels.Enum;
+using PatientChecking.ServiceModels;
+using PatientChecking.ServiceModels.Enum;
+using PatientChecking.Services.Appointment;
 using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;

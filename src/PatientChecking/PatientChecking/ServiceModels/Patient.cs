@@ -1,4 +1,4 @@
-﻿using PatientChecking.Services.ServiceModels.Enum;
+﻿using PatientChecking.ServiceModels.Enum;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,12 +6,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
-namespace PatientChecking.Services.ServiceModels
+namespace PatientChecking.ServiceModels
 {
     public class Patient
     {
         public int PatientId { get; set; }
-        public string PatientIdentifier { get; set; } 
+        public string PatientIdentifier { get; set; }
         public string FullName { get; set; }
         public DateTime DoB { get; set; }
         public PatientGender Gender { get; set; }

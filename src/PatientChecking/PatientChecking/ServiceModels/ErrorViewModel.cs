@@ -1,6 +1,6 @@
 using System;
 
-namespace PatientChecking.Models
+namespace PatientChecking.ServiceModels
 {
     public class ErrorViewModel
     {

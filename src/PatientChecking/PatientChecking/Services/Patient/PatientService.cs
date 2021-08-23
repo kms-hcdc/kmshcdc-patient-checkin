@@ -1,15 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PatientCheckIn.DataAccess.Models;
-using PatientChecking.Services.Repository;
-using PatientChecking.Services.ServiceModels;
-using PatientChecking.Services.ServiceModels.Enum;
+using PatientChecking.ServiceModels;
+using PatientChecking.ServiceModels.Enum;
 using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PatientChecking.Services
+namespace PatientChecking.Services.Patient
 {
     public class PatientService : IPatientService
     {
@@ -51,7 +50,7 @@ namespace PatientChecking.Services
                     PatientIdentifier = x.patient.PatientIdentifier,
                     FullName = x.patient.FullName,
                     DoB = x.patient.DoB,
-                    Gender = (PatientGender) x.patient.Gender,
+                    Gender = (PatientGender)x.patient.Gender,
                     AvatarLink = x.patient.AvatarLink != null ? x.patient.AvatarLink : "",
                     Email = x.patient.Email,
                     PhoneNumber = x.patient.PhoneNumber,
@@ -85,7 +84,7 @@ namespace PatientChecking.Services
                 Nationality = patient.Nationality,
                 DoB = patient.DoB,
                 MaritalStatus = patient.MaritalStatus,
-                Gender = (PatientGender) patient.Gender,
+                Gender = (PatientGender)patient.Gender,
                 AvatarLink = patient.AvatarLink,
                 Email = patient.Email,
                 PhoneNumber = patient.PhoneNumber,

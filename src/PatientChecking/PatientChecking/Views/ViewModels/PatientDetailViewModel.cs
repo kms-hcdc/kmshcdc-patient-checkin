@@ -1,5 +1,5 @@
-﻿using PatientChecking.Services.ServiceModels;
-using PatientChecking.Services.ServiceModels.Enum;
+﻿using PatientChecking.ServiceModels;
+using PatientChecking.ServiceModels.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;

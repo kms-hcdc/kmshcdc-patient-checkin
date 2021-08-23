@@ -1,8 +1,8 @@
-using PatientChecking.Services.ServiceModels;
+using PatientChecking.ServiceModels;
 using PatientChecking.Views.ViewModels;
 using System.Threading.Tasks;
 
-namespace PatientChecking.Services.Repository
+namespace PatientChecking.Services.Patient
 {
     public interface IPatientService
     {

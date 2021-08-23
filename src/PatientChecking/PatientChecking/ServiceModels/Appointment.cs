@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
-namespace PatientChecking.Services.ServiceModels
+namespace PatientChecking.ServiceModels
 {
     public class Appointment
     {

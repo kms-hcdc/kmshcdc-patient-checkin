@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace PatientChecking.Services.ServiceModels
+namespace PatientChecking.ServiceModels
 {
     public class EmergencyContact
     {

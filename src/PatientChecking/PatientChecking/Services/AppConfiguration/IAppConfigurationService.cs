@@ -1,10 +1,10 @@
-﻿using PatientChecking.Services.ServiceModels;
+﻿using PatientChecking.ServiceModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PatientChecking.Services.Repository
+namespace PatientChecking.Services.AppConfiguration
 {
     public interface IAppConfigurationService
     {

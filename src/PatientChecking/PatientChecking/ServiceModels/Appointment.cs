@@ -15,9 +15,4 @@ namespace PatientChecking.ServiceModels
         public int PatientId { get; set; }
         public virtual Patient Patient { get; set; }
     }
-    public class AppointmentList
-    {
-        public List<Appointment> Appointments { get; set; }
-        public int TotalCount { get; set; }
-    }
 }

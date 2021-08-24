@@ -1,4 +1,7 @@
 ﻿@model PatientChecking.Views.ViewModels.PatientDetailViewModel
+@using PatientChecking.Helpers
+@using PatientChecking.Services.ServiceModels
+@using Newtonsoft.Json
 @{
     ViewData["Title"] = "Patient";
     ViewData["Page"] = "Patient information";
@@ -6,6 +9,16 @@
 @section css {
     <link href="@Url.Content("~/css/PatientDetail.css")" rel="stylesheet" type="text/css" />
     <script src="~/js/PatientDetail.js"></script>
+}
+@{
+    if (!string.IsNullOrEmpty((string)TempData["Message"]))
+    {
+        var message = (ViewMessage)JsonConvert.DeserializeObject<ViewMessage>((string)TempData["Message"]);
+        if (message != null)
+        {
+            @Html.MessageAlert(message)
+        }
+    }
 }
 <div class="detail-patient-container">
     <div class="search-area">
@@ -74,12 +87,12 @@
                 </div>
                 <div class="upload-image-container">
                     @using (Html.BeginForm("UploadImage", "Patient", FormMethod.Post,
-                        new { enctype = "multipart/form-data", @class = "upload-form" }))
+                new { enctype = "multipart/form-data", @class = "upload-form" }))
                     {
                         <img src="@(string.IsNullOrEmpty(Model.AvatarLink) ? "/Image/no-avatar.jpg" : Model.AvatarLink)" alt="Patient-image" id="uploaded-image" class="w-75 p-3 d-flex justify-content-center" />
-                        <input type="file" name="formFile" id="file" class="form-control" onchange="readURL(this)" accept="image/*" required/>
+                        <input type="file" name="formFile" id="file" class="form-control" onchange="readURL(this)" accept="image/*" required />
                         <input type="hidden" name="PatientId" value="@Model.PatientId">
-                        <input type="submit" value="Upload" class="submit form-control" id="uploadButton"/>
+                        <input type="submit" value="Upload" class="submit form-control" id="uploadButton" />
                     }
                 </div>
             </div>
@@ -414,5 +427,9 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+    $("#alert-message").fadeTo(2000, 500).slideUp(500, function () {
+        $("#alert-message").slideUp(1000);
+    });
 
 </script>

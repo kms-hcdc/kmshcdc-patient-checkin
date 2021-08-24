@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PatientChecking.Services.Repository;
 using PatientChecking.Services.ServiceModels;
 using PatientChecking.Services.ServiceModels.Enum;
@@ -174,11 +175,23 @@ namespace PatientChecking.Controllers
 
             if (result > 0)
             {
-                _notyf.Success("Update patient detail successfully!");
+                var message = new ViewMessage
+                {
+                    MsgType = MessageType.Success,
+                    MsgText = "Update patient information successfully!",
+                    MsgTitle = "Success updated"
+                };
+                TempData["Message"] = JsonConvert.SerializeObject(message);
             }
             else
             {
-                _notyf.Error("Update patient detail Failed!");
+                var message = new ViewMessage
+                {
+                    MsgType = MessageType.Error,
+                    MsgText = "Update patient information failed!",
+                    MsgTitle = "Success updated"
+                };
+                TempData["Message"] = JsonConvert.SerializeObject(message);
             }
 
             return RedirectToAction("Detail", new { patientId = patientDetails.PatientId });

@@ -11,8 +11,8 @@ namespace PatientChecking.ServiceModels
         public ViewMessage()
         {
             MsgType = MessageType.Information;
-            MsgText = String.Empty;
-            MsgTitle = String.Empty;
+            MsgText = string.Empty;
+            MsgTitle = string.Empty;
         }
         public ViewMessage(MessageType msgType, string msg, string title)
         {

@@ -18,3 +18,4 @@ namespace PatientChecking.ServiceModels.Enum
         Success
     }
 }
+

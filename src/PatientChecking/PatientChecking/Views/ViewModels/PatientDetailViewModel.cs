@@ -30,6 +30,5 @@ namespace PatientChecking.Views.ViewModels
         public string InsuranceNo { get; set; }
         public string AvatarLink { get; set; }
         public List<string> ProvinceCities { get; set; }
-        public ViewMessage Message { get; set; }
     }
 }

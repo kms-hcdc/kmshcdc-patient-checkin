@@ -104,7 +104,7 @@ namespace PatientChecking.Controllers
                 {
                     PatientId = -1,
                     PatientIdentifier = "",
-                    Nationality = "Vietnamese",
+                    Nationality = PatientNationality.Vietnamese.ToString(),
                     ProvinceCities = cityList
                 };
                 return View(emptyModel);
@@ -154,7 +154,7 @@ namespace PatientChecking.Controllers
                 DoB = DateTime.Parse(model.DoB),
                 MaritalStatus = model.MaritalStatus == (int)PatientMaritalStatus.Married,
                 Gender = (PatientGender)model.Gender,
-                EthnicRace = model.Nationality == "Vietnamese" ? model.EthnicRace : null,
+                EthnicRace = model.Nationality == PatientNationality.Vietnamese.ToString() ? model.EthnicRace : null,
                 HomeTown = model.HomeTown,
                 BirthplaceCity = model.BirthplaceCity,
                 InsuranceNo = model.InsuranceNo,

@@ -33,15 +33,22 @@ namespace PatientChecking.Services
 
         public string SaveImage(IFormFile formFile)
         {
-            string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "Image");
-            string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(formFile.FileName);
+            try
+            {
+                string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "Image");
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(formFile.FileName);
 
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-            formFile.CopyTo(new FileStream(filePath, FileMode.Create));
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                formFile.CopyTo(new FileStream(filePath, FileMode.Create));
 
-            var avatarLink = "/Image/" + uniqueFileName;
+                var avatarLink = "/Image/" + uniqueFileName;
 
-            return avatarLink;
+                return avatarLink;
+            }
+            catch (IOException)
+            {
+                throw new IOException("Cannot save image to server");
+            }
         }
     }
 }

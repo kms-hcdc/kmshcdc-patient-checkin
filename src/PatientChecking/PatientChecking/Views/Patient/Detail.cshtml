@@ -86,8 +86,7 @@
                     <span class="close">&times;</span>
                 </div>
                 <div class="upload-image-container">
-                    @using (Html.BeginForm("UploadImage", "Patient", FormMethod.Post,
-                new { enctype = "multipart/form-data", @class = "upload-form" }))
+                    @using (Html.BeginForm("UploadImage", "Patient", FormMethod.Post, new { enctype = "multipart/form-data", @class = "upload-form" }))
                     {
                         <img src="@(string.IsNullOrEmpty(Model.AvatarLink) ? "/Image/no-avatar.jpg" : Model.AvatarLink)" alt="Patient-image" id="uploaded-image" class="w-75 p-3 d-flex justify-content-center" />
                         <input type="file" name="formFile" id="file" class="form-control" onchange="readURL(this)" accept="image/*" required />

@@ -91,5 +91,21 @@ namespace PatientChecking.Services.Appointment
             };
             return appointmentList;
         }
+
+        public int UpdateAppointment(ServiceModels.Appointment appointment)
+        {
+            var appointmentDataAccess = _patientCheckInContext.Appointments.FirstOrDefault(x => x.AppointmentId == appointment.AppointmentId);
+            appointmentDataAccess.CheckInDate = appointment.CheckInDate;
+            appointmentDataAccess.MedicalConcerns = appointment.MedicalConcerns;
+            appointmentDataAccess.Status = appointment.Status;
+            _patientCheckInContext.Update(appointmentDataAccess);
+            return _patientCheckInContext.SaveChanges();
+        }
+
+        public async Task<int> UpdateAppointment(PatientCheckIn.DataAccess.Models.Appointment appointment)
+        {
+            _patientCheckInContext.Appointments.Update(appointment);
+            return await _patientCheckInContext.SaveChangesAsync();
+        }
     }
 }

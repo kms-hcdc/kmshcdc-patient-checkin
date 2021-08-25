@@ -1,5 +1,6 @@
-﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using MediatR;
 using PatientChecking.Feature.Appointment.Queries;
 using PatientChecking.ServiceModels;
 using PatientChecking.ServiceModels.Enum;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using PatientChecking.Feature.Appointment.Commands;
 
 namespace PatientChecking.Controllers
 {
@@ -44,9 +46,38 @@ namespace PatientChecking.Controllers
         {
             return View(await _mediator.Send(new GetAppointmentPagingQuery { option = option, pageIndex = pageIndex, pageSize  = pageSize }));
         }
+
         public async Task<IActionResult> Detail(int appointmentId)
         {
             return View(await _mediator.Send(new GetAppointmentByIdQuery() { Id = appointmentId }));
+        }
+
+        public async Task<IActionResult> Update(AppointmentDetailViewModel appointmentDetailViewModel)
+        {
+            var result = await _mediator.Send(new UpdateAppointmentCommand() { appointmentDetailViewModel = appointmentDetailViewModel });
+
+            if (result > 0)
+            {
+                var message = new ViewMessage
+                {
+                    MsgType = MessageType.Success,
+                    MsgText = "Update Appointment Successfully!",
+                    MsgTitle = "Update Successfully"
+                };
+                TempData["Message"] = JsonConvert.SerializeObject(message);
+            }
+            else
+            {
+                var message = new ViewMessage
+                {
+                    MsgType = MessageType.Error,
+                    MsgText = "Update Appointment Failed!",
+                    MsgTitle = "Update Failed"
+                };
+                TempData["Message"] = JsonConvert.SerializeObject(message);
+            }
+
+            return RedirectToAction("Detail",new { appointmentId = appointmentDetailViewModel.AppointmentId });
         }
     }
 }

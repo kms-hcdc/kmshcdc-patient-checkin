@@ -11,6 +11,7 @@ namespace PatientChecking.Services.Appointment
     {
         Task<AppointmentDashboard> GetAppointmentSummary();
         Task<AppointmentList> GetListAppoinmentsPaging(PagingRequest request);
+        Task <int> UpdateAppointment(PatientCheckIn.DataAccess.Models.Appointment appointment);
         Task<PatientCheckIn.DataAccess.Models.Appointment> GetAppointmentById(int appointmentId);
     }
 }

@@ -170,7 +170,7 @@ namespace PatientChecking.Controllers
                 var message = new ViewMessage
                 {
                     MsgType = MessageType.Success,
-                    MsgText = "Update patient information successfully!",
+                    MsgText = "Update Patient Information Successfully!",
                     MsgTitle = "Update Successfully"
                 };
                 TempData["Message"] = JsonConvert.SerializeObject(message);
@@ -180,7 +180,7 @@ namespace PatientChecking.Controllers
                 var message = new ViewMessage
                 {
                     MsgType = MessageType.Error,
-                    MsgText = "Update patient information failed!",
+                    MsgText = "Update Patient Information Failed!",
                     MsgTitle = "Update Failed"
                 };
                 TempData["Message"] = JsonConvert.SerializeObject(message);
@@ -201,7 +201,7 @@ namespace PatientChecking.Controllers
                         var message = new ViewMessage
                         {
                             MsgType = MessageType.Error,
-                            MsgText = "Upload file must be in the form of an image! Please try again",
+                            MsgText = "Uploaded File Must Be In Image Format! Please Try Again",
                             MsgTitle = "Upload Failed"
                         };
                         TempData["Message"] = JsonConvert.SerializeObject(message);
@@ -217,7 +217,7 @@ namespace PatientChecking.Controllers
                         var message = new ViewMessage
                         {
                             MsgType = MessageType.Success,
-                            MsgText = "Upload patient image successfully!",
+                            MsgText = "Upload Patient Image Successfully!",
                             MsgTitle = "Upload Successfully"
                         };
                         TempData["Message"] = JsonConvert.SerializeObject(message);
@@ -227,7 +227,7 @@ namespace PatientChecking.Controllers
                         var message = new ViewMessage
                         {
                             MsgType = MessageType.Error,
-                            MsgText = "Upload patient image failed!",
+                            MsgText = "Upload Patient Image Failed!",
                             MsgTitle = "Upload Failed"
                         };
                         TempData["Message"] = JsonConvert.SerializeObject(message);
@@ -239,7 +239,7 @@ namespace PatientChecking.Controllers
                 var message = new ViewMessage
                 {
                     MsgType = MessageType.Error,
-                    MsgText = "Upload patient image failed!",
+                    MsgText = "Upload Patient Image Failed!",
                     MsgTitle = "Upload Failed"
                 };
                 TempData["Message"] = JsonConvert.SerializeObject(message);

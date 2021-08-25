@@ -108,7 +108,7 @@ namespace PatientChecking.Controllers
                 var message = new ViewMessage
                 {
                     MsgType = MessageType.Success,
-                    MsgText = "Update Appointment successfully!",
+                    MsgText = "Update Appointment Successfully!",
                     MsgTitle = "Update Successfully"
                 };
                 TempData["Message"] = JsonConvert.SerializeObject(message);
@@ -118,7 +118,7 @@ namespace PatientChecking.Controllers
                 var message = new ViewMessage
                 {
                     MsgType = MessageType.Error,
-                    MsgText = "Update Appointment failed!",
+                    MsgText = "Update Appointment Failed!",
                     MsgTitle = "Update Failed"
                 };
                 TempData["Message"] = JsonConvert.SerializeObject(message);

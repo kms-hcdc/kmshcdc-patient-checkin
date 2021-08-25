@@ -40,13 +40,8 @@ namespace PatientChecking
             services.AddScoped<IAppointmentService, AppointmentService>();
             //add ProvinceCity Dependency
             services.AddScoped<IAppConfigurationService, AppConfigurationService>();
-            //add Notyf configuration
-            services.AddNotyf(config => 
-            {
-                config.DurationInSeconds = 3;
-                config.IsDismissable = true;
-                config.Position = NotyfPosition.TopRight;
-            });
+            //add Image Dependency
+            services.AddScoped<IImageService, ImageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

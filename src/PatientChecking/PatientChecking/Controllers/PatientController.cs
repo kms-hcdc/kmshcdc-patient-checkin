@@ -1,5 +1,4 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -21,15 +20,13 @@ namespace PatientChecking.Controllers
 
         private readonly IPatientService _patientService;
         private readonly IAppConfigurationService _provinceCityService;
-        private readonly INotyfService _notyf;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IImageService _imageService;
 
-        public PatientController(IPatientService patientService, IAppConfigurationService provinceCityService, INotyfService notyf, IHostingEnvironment hostingEnvironment)
+        public PatientController(IPatientService patientService, IAppConfigurationService provinceCityService, IImageService imageService)
         {
             _patientService = patientService;
             _provinceCityService = provinceCityService;
-            _notyf = notyf;
-            _hostingEnvironment = hostingEnvironment;
+            _imageService = imageService;
         }
 
         public IActionResult Index()
@@ -146,11 +143,6 @@ namespace PatientChecking.Controllers
         [HttpPost]
         public IActionResult Update(PatientDetailViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError("", "Unable to save changes. Please try again");
-            }
-
             var patientDetails = new PatientDetails
             {
                 PatientId = model.PatientId,
@@ -179,7 +171,7 @@ namespace PatientChecking.Controllers
                 {
                     MsgType = MessageType.Success,
                     MsgText = "Update patient information successfully!",
-                    MsgTitle = "Success updated"
+                    MsgTitle = "Update Successfully"
                 };
                 TempData["Message"] = JsonConvert.SerializeObject(message);
             }
@@ -189,7 +181,7 @@ namespace PatientChecking.Controllers
                 {
                     MsgType = MessageType.Error,
                     MsgText = "Update patient information failed!",
-                    MsgTitle = "Success updated"
+                    MsgTitle = "Update Failed"
                 };
                 TempData["Message"] = JsonConvert.SerializeObject(message);
             }
@@ -204,36 +196,53 @@ namespace PatientChecking.Controllers
             {
                 if (formFile != null)
                 {
-                    var fileExtension = Path.GetExtension(formFile.FileName).ToLower();
-
-                    if (fileExtension != ".jpg" && fileExtension != ".png" && fileExtension != "jpeg")
+                    if (!_imageService.IsImageFile(formFile))
                     {
-                        _notyf.Error("Upload patient image Failed! Uploaded file must be image extensions");
+                        var message = new ViewMessage
+                        {
+                            MsgType = MessageType.Error,
+                            MsgText = "Upload file must be in the form of an image! Please try again",
+                            MsgTitle = "Upload Failed"
+                        };
+                        TempData["Message"] = JsonConvert.SerializeObject(message);
                         return RedirectToAction("Detail", new { patientId = patientId });
                     }
 
-                    string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "Image");
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(formFile.FileName);
-
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    formFile.CopyTo(new FileStream(filePath, FileMode.Create));
-
-                    var avatarLink = "/Image/" + uniqueFileName;
+                    var avatarLink = _imageService.SaveImage(formFile);
 
                     var result = _patientService.UploadPatientImage(patientId, avatarLink);
+
                     if (result > 0)
                     {
-                        _notyf.Success("Update patient detail successfully!");
+                        var message = new ViewMessage
+                        {
+                            MsgType = MessageType.Success,
+                            MsgText = "Upload patient image successfully!",
+                            MsgTitle = "Upload Successfully"
+                        };
+                        TempData["Message"] = JsonConvert.SerializeObject(message);
                     }
                     else
                     {
-                        _notyf.Error("Upload patient image Failed!");
+                        var message = new ViewMessage
+                        {
+                            MsgType = MessageType.Error,
+                            MsgText = "Upload patient image failed!",
+                            MsgTitle = "Upload Failed"
+                        };
+                        TempData["Message"] = JsonConvert.SerializeObject(message);
                     }
                 }
             }
             catch (IOException)
             {
-                _notyf.Error("Upload patient image Failed!");
+                var message = new ViewMessage
+                {
+                    MsgType = MessageType.Error,
+                    MsgText = "Upload patient image failed!",
+                    MsgTitle = "Upload Failed"
+                };
+                TempData["Message"] = JsonConvert.SerializeObject(message);
             }
 
             return RedirectToAction("Detail", new { patientId = patientId });

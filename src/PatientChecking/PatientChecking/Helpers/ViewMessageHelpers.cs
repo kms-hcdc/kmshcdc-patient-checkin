@@ -18,6 +18,7 @@ namespace PatientChecking.Helpers
         {
             return MessageAlert(helper, msg, null);
         }
+
         public static IHtmlContent MessageAlert(this IHtmlHelper helper, ViewMessage msg,
                                            object htmlAttributes)
         {
@@ -28,6 +29,7 @@ namespace PatientChecking.Helpers
 
             return BuildMessageHelper(helper, msg, htmlAttributes);
         }
+
         private static IHtmlContent BuildMessageHelper(this IHtmlHelper helper, ViewMessage msg,
                                                  object attributes)
         {

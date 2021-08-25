@@ -9,5 +9,7 @@ namespace PatientChecking.Services.Patient
         Task<int> GetPatientsSummary();
         Task<PatientList> GetListPatientPaging(PagingRequest request);
         Task<PatientCheckIn.DataAccess.Models.Patient> GetPatientInDetail(int patientId);
+        Task<int> UpdatePatientDetail(PatientCheckIn.DataAccess.Models.Patient patientDetails);
+        Task<int> UploadPatientImage(int patientId, string avatarLink);
     }
 }

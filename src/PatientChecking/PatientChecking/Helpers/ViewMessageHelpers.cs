@@ -22,7 +22,7 @@ namespace PatientChecking.Helpers
         public static IHtmlContent MessageAlert(this IHtmlHelper helper, ViewMessage msg,
                                            object htmlAttributes)
         {
-            if (msg == null || String.IsNullOrEmpty(msg.MsgText))
+            if (String.IsNullOrEmpty(msg?.MsgText))
             {
                 return HtmlString.Empty;
             }
@@ -44,16 +44,16 @@ namespace PatientChecking.Helpers
                     ulMsg.MergeAttribute("class", "alert alert-info");
                     break;
 
-                case MessageType.Error:
-                    ulMsg.MergeAttribute("class", "alert alert-danger");
-                    break;
-
                 case MessageType.Warning:
                     ulMsg.MergeAttribute("class", "alert alert-warning");
                     break;
 
                 case MessageType.Success:
                     ulMsg.MergeAttribute("class", "alert alert-success");
+                    break;
+
+                default:
+                    ulMsg.MergeAttribute("class", "alert alert-danger");
                     break;
             }
 

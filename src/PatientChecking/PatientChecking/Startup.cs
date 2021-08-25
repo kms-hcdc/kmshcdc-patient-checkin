@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using PatientCheckIn.DataAccess.Models;
 using PatientChecking.Services.AppConfiguration;
 using PatientChecking.Services.Appointment;
+using PatientChecking.Services.Image;
 using PatientChecking.Services.Patient;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,8 @@ namespace PatientChecking
             services.AddScoped<IAppointmentService, AppointmentService>();
             //add ProvinceCity Dependency
             services.AddScoped<IAppConfigurationService, AppConfigurationService>();
+            //add Image Dependency
+            services.AddScoped<IImageService, ImageService>();
             //Register all Requests and RequestHandlers 
             services.AddMediatR(Assembly.GetExecutingAssembly());
         }

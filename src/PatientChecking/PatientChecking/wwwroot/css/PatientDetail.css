@@ -46,6 +46,7 @@
     box-shadow: 0px 4px 10px rgb(64 64 64 / 24%);
     border-radius: 3px;
     position: absolute;
+    z-index: 6;
 }
 
 .search-result-container > ul {
@@ -210,7 +211,7 @@
     width: 11%;
 }
 
-.edit-mode :nth-of-type(2){
+.edit-mode > button{
     color: white;
     background: #14b1e7;
     border: 1px solid #14b1e7;
@@ -224,6 +225,12 @@
 }
 
 .edit-mode > a:hover {
+    color: white;
+    background: #14b1e7;
+    border: 1px solid #14b1e7;
+}
+
+.edit-mode > button:hover {
     color: white;
     background: #14b1e7;
     border: 1px solid #14b1e7;
@@ -260,4 +267,94 @@
 
 .autocomplete-active {
     color: #14b1e7;
+}
+
+.patient-image-box {
+    position: relative;
+    cursor: pointer;
+}
+
+#add-photo {
+    position: absolute;
+    display: none;
+    background: rgba(33,33,33,.75);
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 5px;
+}
+
+#add-photo > span {
+    padding-left: 5px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content-container {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 20%;
+}
+
+.modal-header {
+    display: flex;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover, .close:focus {
+  color: #14b1e7;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#uploadButton {
+    background: white;
+    color: #14b1e7;
+    margin-top: 30px;
+    width: 40%;
+    border: 1px solid #14b1e7;
+    cursor: pointer;
+}
+
+#uploadButton:hover{
+    background: #14b1e7;
+    color: white;
+}
+
+#alert-message {
+    height: 60px;
+    position: absolute;
+    right: 10px;
+    top: 60px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
 }

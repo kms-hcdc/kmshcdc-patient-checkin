@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PatientChecking.Views.ViewModels
+namespace PatientChecking.ServiceModels
 {
     public class AppointmentDashboard
     {

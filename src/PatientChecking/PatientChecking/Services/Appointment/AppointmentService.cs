@@ -1,15 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PatientCheckIn.DataAccess.Models;
-using PatientChecking.Services.Repository;
-using PatientChecking.Services.ServiceModels;
-using PatientChecking.Services.ServiceModels.Enum;
+using PatientChecking.ServiceModels;
+using PatientChecking.ServiceModels.Enum;
 using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PatientChecking.Services
+namespace PatientChecking.Services.Appointment
 {
     public class AppointmentService : IAppointmentService
     {
@@ -20,23 +19,15 @@ namespace PatientChecking.Services
             _patientCheckInContext = patientCheckInContext;
         }
 
-        public async Task<ServiceModels.Appointment> GetAppointmentById(int appointmentId)
+        public async Task<PatientCheckIn.DataAccess.Models.Appointment> GetAppointmentById(int appointmentId)
         {
-            var appointment = await _patientCheckInContext.Appointments.SingleOrDefaultAsync(x => x.AppointmentId == appointmentId);
-            return new ServiceModels.Appointment
-            { 
-                AppointmentId = appointment.AppointmentId,
-                CheckInDate = appointment.CheckInDate,
-                MedicalConcerns = appointment?.MedicalConcerns,
-                Status  = appointment.Status,
-                PatientId = appointment.PatientId
-            };
+            return await _patientCheckInContext.Appointments.FirstOrDefaultAsync(x => x.AppointmentId == appointmentId);
         }
 
         public async Task<AppointmentDashboard> GetAppointmentSummary()
         {
             var numberOfAppointments = await _patientCheckInContext.Appointments.ToListAsync();
-            var numberOfAppointmentsInMonth = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Date.Year == DateTime.Now.Year && x.CheckInDate.Date.Month == DateTime.Now.Month ).ToListAsync();
+            var numberOfAppointmentsInMonth = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Date.Year == DateTime.Now.Year && x.CheckInDate.Date.Month == DateTime.Now.Month).ToListAsync();
             var numberOfAppointmentsInToday = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Date == DateTime.Today && x.Status == AppointmentStatus.CheckIn.ToString()).ToListAsync();
             var numberOfPatientsInMonth = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Year == DateTime.Now.Year && x.CheckInDate.Month == DateTime.Now.Month)
                                                                  .GroupBy(p => p.PatientId)
@@ -55,25 +46,25 @@ namespace PatientChecking.Services
             var query = from appointment in _patientCheckInContext.Appointments
                         join patient in _patientCheckInContext.Patients on appointment.Patient.PatientId equals patient.PatientId
                         select new { appointment, patient };
-             if(request.SortSelection == 0)
+            if (request.SortSelection == (int)AppointmentSortSelection.Name)
             {
                 query = query.OrderBy(i => i.patient.FullName);
             }
-            else if(request.SortSelection == 1)
+            else if (request.SortSelection == (int)AppointmentSortSelection.ID)
             {
-                query = query.OrderBy(i => i.patient.PatientIdentifier); 
+                query = query.OrderBy(i => i.patient.PatientIdentifier);
             }
-            else if(request.SortSelection == 2)
+            else if (request.SortSelection == (int)AppointmentSortSelection.DoB)
             {
                 query = query.OrderBy(i => i.patient.DoB);
             }
-            else if (request.SortSelection == 3)
+            else if (request.SortSelection == (int)AppointmentSortSelection.CheckInDate)
             {
                 query = query.OrderByDescending(i => i.appointment.CheckInDate);
             }
             else
             {
-                query = query.OrderBy(i => i.appointment.Status == AppointmentStatus.CheckIn.ToString() ? 1 
+                query = query.OrderBy(i => i.appointment.Status == AppointmentStatus.CheckIn.ToString() ? 1
                                          : i.appointment.Status == AppointmentStatus.Closed.ToString() ? 2
                                          : 3
                 );

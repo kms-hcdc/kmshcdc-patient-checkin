@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PatientChecking.Services.ServiceModels.Enum
+namespace PatientChecking.ServiceModels.Enum
 {
     public enum PatientGender
     {

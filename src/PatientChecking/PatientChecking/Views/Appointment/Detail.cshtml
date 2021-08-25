@@ -6,7 +6,22 @@
     <link href="@Url.Content("~/css/AppointmentDetails.css")" rel="stylesheet" type="text/css" />
 }
 @using PatientChecking.Services.ServiceModels.Enum
+@using PatientChecking.Helpers
+@using PatientChecking.Services.ServiceModels
+@using Newtonsoft.Json
 @model PatientChecking.Views.ViewModels.AppointmentDetailViewModel
+
+@{
+    if (!string.IsNullOrEmpty((string)TempData["Message"]))
+    {
+        var message = (ViewMessage)JsonConvert.DeserializeObject<ViewMessage>((string)TempData["Message"]);
+        if (message != null)
+        {
+            @Html.MessageAlert(message)
+        }
+    }
+}
+
 <div class="appointment-detail-container">
     <div class="appointment-detail-title">
         <span class="mt-3 mx-2 text-info h4">Appointment Details</span>
@@ -91,4 +106,7 @@
     function ViewPatientDetails() {
         window.location.href = '@Html.Raw(@Url.Action("Detail", "Patient", new { patientId = Model.PatientId }))';
     }
+    $("#alert-message").fadeTo(3000, 500).slideUp(500, function () {
+        $("#alert-message").slideUp(1000);
+    });
 </script>

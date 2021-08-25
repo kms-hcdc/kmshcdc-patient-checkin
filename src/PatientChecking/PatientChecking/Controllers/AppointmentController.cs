@@ -1,5 +1,5 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PatientChecking.Services.Repository;
 using PatientChecking.Services.ServiceModels;
 using PatientChecking.Services.ServiceModels.Enum;
@@ -15,12 +15,10 @@ namespace PatientChecking.Controllers
     public class AppointmentController : BaseController
     {
         private readonly IAppointmentService _appointmentService;
-        private readonly INotyfService _notyf;
 
-        public AppointmentController(IAppointmentService appointmentService, INotyfService notyf)
+        public AppointmentController(IAppointmentService appointmentService)
         {
             _appointmentService = appointmentService;
-            _notyf = notyf;
         }
 
         public async Task<IActionResult> Index()
@@ -102,19 +100,30 @@ namespace PatientChecking.Controllers
                 PatientId = appointmentDetailViewModel.PatientId,
                 Status = appointmentDetailViewModel.Status
             };
-            if(appointment.CheckInDate < DateTime.Now)
-            {
-                _notyf.Error("Update Appointment Failed!");
-            }
+
             var result = _appointmentService.UpdateAppointment(appointment);
+
             if(result > 0)
             {
-                _notyf.Success("Update Appointment successfully!");
+                var message = new ViewMessage
+                {
+                    MsgType = MessageType.Success,
+                    MsgText = "Update Appointment successfully!",
+                    MsgTitle = "Update Successfully"
+                };
+                TempData["Message"] = JsonConvert.SerializeObject(message);
             }
             else
             {
-                _notyf.Error("Update Appointment Failed!");
+                var message = new ViewMessage
+                {
+                    MsgType = MessageType.Error,
+                    MsgText = "Update Appointment failed!",
+                    MsgTitle = "Update Failed"
+                };
+                TempData["Message"] = JsonConvert.SerializeObject(message);
             }
+
             return RedirectToAction("Detail",new { appointmentId = appointment.AppointmentId});
         }
     }

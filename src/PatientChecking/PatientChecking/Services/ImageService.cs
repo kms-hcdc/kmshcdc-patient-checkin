@@ -23,7 +23,7 @@ namespace PatientChecking.Services
         {
             var fileExtension = Path.GetExtension(formFile.FileName).ToLower();
 
-            if (fileExtension != ".jpg" && fileExtension != ".png" && fileExtension != "jpeg")
+            if (fileExtension != ".jpg" && fileExtension != ".png" && fileExtension != ".jpeg")
             {
                 return false;
             }

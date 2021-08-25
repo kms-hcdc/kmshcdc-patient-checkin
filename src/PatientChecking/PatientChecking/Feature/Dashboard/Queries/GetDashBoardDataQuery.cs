@@ -12,29 +12,33 @@ namespace PatientChecking.Feature.Dashboard.Queries
 {
     public class GetDashBoardDataQuery : IRequest<DashboardViewModel>
     {
-        class GetDashBoardDataHandler : IRequestHandler<GetDashBoardDataQuery, DashboardViewModel>
+        public GetDashBoardDataQuery()
         {
-            private readonly IAppointmentService _appointmentService;
-            private readonly IPatientService _patientService;
+        }
+    }
 
-            public GetDashBoardDataHandler(IAppointmentService appointmentService, IPatientService patientService)
-            {
-                _appointmentService = appointmentService;
-                _patientService = patientService;
-            }
+    public class GetDashBoardDataHandler : IRequestHandler<GetDashBoardDataQuery, DashboardViewModel>
+    {
+        private readonly IAppointmentService _appointmentService;
+        private readonly IPatientService _patientService;
 
-            public async Task<DashboardViewModel> Handle(GetDashBoardDataQuery request, CancellationToken cancellationToken)
+        public GetDashBoardDataHandler(IAppointmentService appointmentService, IPatientService patientService)
+        {
+            _appointmentService = appointmentService;
+            _patientService = patientService;
+        }
+
+        public async Task<DashboardViewModel> Handle(GetDashBoardDataQuery request, CancellationToken cancellationToken)
+        {
+            var appointmentSummary = await _appointmentService.GetAppointmentSummary();
+            return new DashboardViewModel
             {
-                var appointmentSummary = await _appointmentService.GetAppointmentSummary();
-                return new DashboardViewModel
-                {
-                    NumOfAppointments = appointmentSummary.NumOfAppointments,
-                    NumOfAppointmentsInMonth = appointmentSummary.NumOfAppointmentsInMonth,
-                    NumOfAppointmentsInToday = appointmentSummary.NumOfAppointmentsInToday,
-                    NumOfPatients = await _patientService.GetPatientsSummary(),
-                    NumOfPatientsInMonth = appointmentSummary.NumOfPatientsInMonth
-                };
-            }
+                NumOfAppointments = appointmentSummary.NumOfAppointments,
+                NumOfAppointmentsInMonth = appointmentSummary.NumOfAppointmentsInMonth,
+                NumOfAppointmentsInToday = appointmentSummary.NumOfAppointmentsInToday,
+                NumOfPatients = await _patientService.GetPatientsSummary(),
+                NumOfPatientsInMonth = appointmentSummary.NumOfPatientsInMonth
+            };
         }
     }
 }

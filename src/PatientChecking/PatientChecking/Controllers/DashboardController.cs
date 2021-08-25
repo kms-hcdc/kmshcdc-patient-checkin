@@ -29,7 +29,7 @@ namespace PatientChecking.Controllers
         [HttpGet("[controller]/getDashBoard")]
         public async Task<IActionResult> GetDashBoardData()
         {
-            return  new JsonResult(await _mediator.Send(new GetDashBoardDataQuery()));
+            return new JsonResult(await _mediator.Send(new GetDashBoardDataQuery()));
         }
     }
 

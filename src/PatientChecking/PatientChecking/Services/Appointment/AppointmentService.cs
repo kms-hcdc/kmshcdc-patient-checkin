@@ -46,19 +46,19 @@ namespace PatientChecking.Services.Appointment
             var query = from appointment in _patientCheckInContext.Appointments
                         join patient in _patientCheckInContext.Patients on appointment.Patient.PatientId equals patient.PatientId
                         select new { appointment, patient };
-            if (request.SortSelection == 0)
+            if (request.SortSelection == (int)AppointmentSortSelection.Name)
             {
                 query = query.OrderBy(i => i.patient.FullName);
             }
-            else if (request.SortSelection == 1)
+            else if (request.SortSelection == (int)AppointmentSortSelection.ID)
             {
                 query = query.OrderBy(i => i.patient.PatientIdentifier);
             }
-            else if (request.SortSelection == 2)
+            else if (request.SortSelection == (int)AppointmentSortSelection.DoB)
             {
                 query = query.OrderBy(i => i.patient.DoB);
             }
-            else if (request.SortSelection == 3)
+            else if (request.SortSelection == (int)AppointmentSortSelection.CheckInDate)
             {
                 query = query.OrderByDescending(i => i.appointment.CheckInDate);
             }

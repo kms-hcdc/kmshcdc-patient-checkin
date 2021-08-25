@@ -58,7 +58,7 @@
             <div class="col-2 col-md-2">
                 <p class="m-3">@item.Status</p>
             </div>
-            <div class="col-1 col-md-1">
+            <div class="col-1 col-md-1 d-flex align-items-center">
                 <button class="btn-view-appointment" onclick="location.replace('@Html.Raw(@Url.Action("Detail", "Appointment", new {appointmentId = item.AppointmentId}))')">View</button>
             </div>
         </div>

@@ -1,4 +1,4 @@
-﻿using PatientChecking.Services.ServiceModels;
+﻿using PatientChecking.ServiceModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

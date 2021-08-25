@@ -1,6 +1,6 @@
 ﻿@model PatientChecking.Views.ViewModels.PatientDetailViewModel
 @using PatientChecking.Helpers
-@using PatientChecking.Services.ServiceModels
+@using PatientChecking.ServiceModels
 @using Newtonsoft.Json
 @{
     ViewData["Title"] = "Patient";
@@ -280,13 +280,13 @@
 <script>
     var nationality = '@Html.Raw(Model.Nationality)';
     var cityList = @Json.Serialize(Model.ProvinceCities);
+    var emptyMode = '@Html.Raw(Model.PatientId)';
 
     $(document).ready(function () {
         var hometown = '@Html.Raw(Model.HomeTown)';
         var ethnic = '@Html.Raw(Model.EthnicRace)';
         var birthplace = '@Html.Raw(Model.BirthplaceCity)';
         var issuedplace = '@Html.Raw(Model.IssuedPlace)';
-        var emptyMode = '@Html.Raw(Model.PatientId)';
 
         if (emptyMode < 0) {
             $("#btn-edit").hide();
@@ -407,7 +407,9 @@
     });
 
     $("#add-photo").click(function () {
-        $("#myModal").css("display", "block");
+        if (emptyMode > -1) {
+            $("#myModal").css("display", "block");
+        }
     });
 
     $(".close").click(function () {

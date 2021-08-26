@@ -117,11 +117,15 @@ namespace PatientChecking.Services.Patient
         {
             var patient = _patientCheckInContext.Patients.Find(patientId);
 
-            patient.AvatarLink = avatarLink;
+            if(patient != null)
+            {
+                patient.AvatarLink = avatarLink;
 
-            _patientCheckInContext.Update(patient);
+                _patientCheckInContext.Update(patient);
 
-            return await _patientCheckInContext.SaveChangesAsync();
+                return await _patientCheckInContext.SaveChangesAsync();
+            }
+            return -1;
         }
     }
 }

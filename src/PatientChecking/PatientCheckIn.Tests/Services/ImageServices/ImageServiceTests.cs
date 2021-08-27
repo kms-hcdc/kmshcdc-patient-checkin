@@ -113,13 +113,10 @@ namespace PatientCheckIn.Tests.Services.ImageServices
                 .Setup(m => m.WebRootPath)
                 .Returns("D:\\Longtdo\\PatientCheckIn\\kmshcdc-patient-checking\\src\\PatientChecking\\PatientChecking\\wwwroot");
 
-            var expected = "/Image/" + inputFile.FileName;
-
             //Act
             var imageService = new ImageService(mockEnvironment.Object);
             var actual = imageService.SaveImage(inputFile);
             var guid = actual.Substring(7, 36);
-
 
             //Assert
             Assert.Contains(inputFile.FileName, actual);
@@ -150,8 +147,6 @@ namespace PatientCheckIn.Tests.Services.ImageServices
             mockEnvironment
                 .Setup(m => m.WebRootPath)
                 .Returns("");
-
-            var expected = "/Image/" + inputFile.FileName;
 
             //Act
             var imageService = new ImageService(mockEnvironment.Object);

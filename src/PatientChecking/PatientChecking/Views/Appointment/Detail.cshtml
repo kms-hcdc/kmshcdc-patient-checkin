@@ -52,7 +52,7 @@
             </div>
             <div class="row-appointment-info">
                 <div class="col-3 col-md-3" id="check-in-date-box">
-                    <input id="check-in-date" min='@DateTime.Now.ToString("yyyy-MM-dd")' max='@(new DateTime(2050,12,31).ToString("yyyy-MM-dd"))' type="date" aria-label="Last name" name="CheckInDate" class="form-control w-75 bg-white text-center" value=@Model.CheckInDate disabled>
+                    <input id="check-in-date" min='@DateTime.Now.ToString("yyyy-MM-dd")' type="date" aria-label="Last name" name="CheckInDate" class="form-control w-75 bg-white text-center" value=@Model.CheckInDate disabled>
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>

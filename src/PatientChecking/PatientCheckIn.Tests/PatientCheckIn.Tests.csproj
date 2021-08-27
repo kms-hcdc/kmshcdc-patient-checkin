@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Feature\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
 

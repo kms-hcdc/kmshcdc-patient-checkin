@@ -294,25 +294,23 @@ namespace PatientCheckIn.Tests.Services.PatientServices
             var patients = PatientDataTest(addresses);
             var context = CreateMockContext(patients);
 
-            var modifiedPatient = new Patient
-            {
-                PatientId = 1,
-                FirstName = "Hung",
-                MiddleName = "Viet",
-                LastName = "Nguyen",
-                FullName = "Hung Viet Nguyen",
-                DoB = new DateTime(1992, 10, 09),
-                Gender = 0,
-                MaritalStatus = true,
-                Nationality = "Vietnamese",
-                EthnicRace = "Kinh",
-                HomeTown = "Soc Trang",
-                BirthplaceCity = "Can Tho",
-                IdcardNo = "201376855",
-                IssuedDate = new DateTime(2012, 01, 14),
-                IssuedPlace = "Can Tho",
-                InsuranceNo = "201329231",
-            };
+            var modifiedPatient = patients[1];
+
+            modifiedPatient.FirstName = "Hung";
+            modifiedPatient.MiddleName = "Viet";
+            modifiedPatient.LastName = "Nguyen";
+            modifiedPatient.FullName = "Hung Viet Nguyen";
+            modifiedPatient.DoB = new DateTime(1992, 10, 09);
+            modifiedPatient.Gender = 0;
+            modifiedPatient.MaritalStatus = true;
+            modifiedPatient.Nationality = "Vietnamese";
+            modifiedPatient.EthnicRace = "Kinh";
+            modifiedPatient.HomeTown = "Soc Trang";
+            modifiedPatient.BirthplaceCity = "Can Tho";
+            modifiedPatient.IdcardNo = "201376855";
+            modifiedPatient.IssuedDate = new DateTime(2012, 01, 14);
+            modifiedPatient.IssuedPlace = "Can Tho";
+            modifiedPatient.InsuranceNo = "201329231";
 
             var expected = 1;
 
@@ -321,12 +319,11 @@ namespace PatientCheckIn.Tests.Services.PatientServices
             var actual = await patientService.UpdatePatientDetail(modifiedPatient);
 
             //Assert
-            Assert.True(actual != -1);
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public async void UpdatePatientDetail_ParameterNull()
+        public async void UpdatePatientDetail_NullParameter()
         {
             //Arrange
             var addresses = AddressDataTest();
@@ -340,28 +337,6 @@ namespace PatientCheckIn.Tests.Services.PatientServices
             var actual = await patientService.UpdatePatientDetail(null);
 
             //Assert
-            Assert.True(actual == -1);
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public async void UpdatePatientDetail_PatientQueriedNull()
-        {
-            //Arrange
-            var addresses = AddressDataTest();
-            var patients = PatientDataTest(addresses);
-            var context = CreateMockContext(patients);
-
-            patients[0].PatientId = -1;
-
-            var expected = -1;
-
-            //Act
-            var patientService = new PatientService(context);
-            var actual = await patientService.UpdatePatientDetail(patients[0]);
-
-            //Assert
-            Assert.True(actual == -1);
             Assert.Equal(expected, actual);
         }
 
@@ -399,7 +374,6 @@ namespace PatientCheckIn.Tests.Services.PatientServices
             var actual = await patientService.UploadPatientImage(-1, "/Image/Profile.jpg");
 
             //Assert
-            Assert.True(actual == -1);
             Assert.Equal(expected, actual);
         }
     }

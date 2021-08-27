@@ -85,30 +85,9 @@ namespace PatientChecking.Services.Patient
         {
             if(patientDetails != null)
             {
-                var patient = _patientCheckInContext.Patients.Find(patientDetails.PatientId);
+                _patientCheckInContext.Update(patientDetails);
 
-                if(patient != null)
-                {
-                    patient.FirstName = patientDetails.FirstName;
-                    patient.MiddleName = patientDetails.MiddleName;
-                    patient.LastName = patientDetails.LastName;
-                    patient.FullName = patientDetails.FullName;
-                    patient.Gender = patientDetails.Gender;
-                    patient.MaritalStatus = patientDetails.MaritalStatus;
-                    patient.DoB = patientDetails.DoB;
-                    patient.Nationality = patientDetails.Nationality;
-                    patient.EthnicRace = patientDetails.EthnicRace;
-                    patient.HomeTown = patientDetails.HomeTown;
-                    patient.BirthplaceCity = patientDetails.BirthplaceCity;
-                    patient.InsuranceNo = patientDetails.InsuranceNo;
-                    patient.IdcardNo = patientDetails.IdcardNo;
-                    patient.IssuedDate = patientDetails.IssuedDate;
-                    patient.IssuedPlace = patientDetails.IssuedPlace;
-
-                    _patientCheckInContext.Update(patient);
-
-                    return await _patientCheckInContext.SaveChangesAsync();
-                }
+                return await _patientCheckInContext.SaveChangesAsync();
             }
             return -1;
         }

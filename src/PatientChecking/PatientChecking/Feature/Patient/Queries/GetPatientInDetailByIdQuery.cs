@@ -19,15 +19,15 @@ namespace PatientChecking.Feature.Patient.Queries
     public class GetPatientInDetailByIdQueryHandler : IRequestHandler<GetPatientInDetailByIdQuery, PatientDetailViewModel>
     {
         private readonly IPatientService _patientService;
-        private readonly IAppConfigurationService _provinceCityService;
-        public GetPatientInDetailByIdQueryHandler(IPatientService patientService, IAppConfigurationService provinceCityService)
+        private readonly IAppConfigurationService _appConfigurationService;
+        public GetPatientInDetailByIdQueryHandler(IPatientService patientService, IAppConfigurationService appConfigurationService)
         {
             _patientService = patientService;
-            _provinceCityService = provinceCityService;
+            _appConfigurationService = appConfigurationService;
         }
         public async Task<PatientDetailViewModel> Handle(GetPatientInDetailByIdQuery request, CancellationToken cancellationToken)
         {
-            var cities = await _provinceCityService.GetProvinceCities();
+            var cities = await _appConfigurationService.GetProvinceCities();
             var cityList = new List<string>();
 
             foreach (PatientCheckIn.DataAccess.Models.ProvinceCity p in cities)

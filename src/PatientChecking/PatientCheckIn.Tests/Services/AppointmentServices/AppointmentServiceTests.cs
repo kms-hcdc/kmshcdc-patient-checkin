@@ -446,12 +446,14 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
             var patients = PatientDataTest();
             var appointments = AppointmentDataTest(patients);
             var context = CreateMockContext(appointments);
+            var modifiedAppointment = appointments[0];
+            modifiedAppointment.MedicalConcerns = "Stomach";
 
             var expected = 1;
 
             //Act
             var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.UpdateAppointment(appointments[0]);
+            var actual = await apointmentService.UpdateAppointment(modifiedAppointment);
 
             //Assert
             Assert.True(actual != -1);

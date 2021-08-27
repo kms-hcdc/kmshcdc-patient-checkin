@@ -45,7 +45,13 @@ namespace PatientChecking.Controllers
         [Route("[Controller]/Index/{option}-{pageSize}/{pageIndex}")]
         public async Task<IActionResult> Index(int option, int pageSize, int pageIndex)
         {
-            return View(await _mediator.Send(new GetAppointmentPagingQuery { option = option, pageIndex = pageIndex, pageSize  = pageSize }));
+            var request = new PagingRequest
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                SortSelection = option,
+            };
+            return View(await _mediator.Send(new GetAppointmentPagingQuery { pagingRequest = request }));
         }
 
         public async Task<IActionResult> Detail(int appointmentId)
@@ -55,23 +61,6 @@ namespace PatientChecking.Controllers
 
         public async Task<IActionResult> Update(AppointmentDetailViewModel appointmentDetailViewModel)
         {
-            //Valid check in date input
-            DateTime dt;
-            string[] formats = { "yyyy-MM-dd"};
-            if (!DateTime.TryParseExact(appointmentDetailViewModel.CheckInDate, formats,
-                System.Globalization.CultureInfo.InvariantCulture,
-                DateTimeStyles.None, out dt))
-            {
-                var message = new ViewMessage
-                {
-                    MsgType = MessageType.Error,
-                    MsgText = "Please input in format mm/dd/yyyy",
-                    MsgTitle = "Update Failed"
-                };
-                TempData["Message"] = JsonConvert.SerializeObject(message);
-                return RedirectToAction("Detail", new { appointmentId = appointmentDetailViewModel.AppointmentId });
-            }
-
             var result = await _mediator.Send(new UpdateAppointmentCommand() { appointmentDetailViewModel = appointmentDetailViewModel });
 
             if (result > 0)

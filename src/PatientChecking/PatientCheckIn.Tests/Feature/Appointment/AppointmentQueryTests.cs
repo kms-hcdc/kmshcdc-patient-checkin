@@ -88,19 +88,19 @@ namespace PatientCheckIn.Tests.Feature.Appointment
         }
 
         [Fact]
-        public async void GetAppointmentByIdQuery()
+        public async void GetAppointmentByIdQuery_Ok()
         {
             //Arange
             var appointments = AppointmentDataTest();
             var expected = appointments[0];
             var appointmentServices = new Mock<IAppointmentService>();
             appointmentServices.Setup(x => x.GetAppointmentById(1)).ReturnsAsync(expected);
-            var appontment = new GetAppointmentByIdQuery { Id = 1 };
+            var appointment = new GetAppointmentByIdQuery { Id = 1 };
             var handler = new GetAppointmentByHandler(appointmentServices.Object);
             var cts = new CancellationToken();    
 
             //Act
-            var actual = await handler.Handle(appontment, cts);
+            var actual = await handler.Handle(appointment, cts);
 
             //Assert
             Assert.NotNull(actual);
@@ -109,6 +109,24 @@ namespace PatientCheckIn.Tests.Feature.Appointment
             Assert.Equal(expected.MedicalConcerns, actual.MedicalConcerns);
             Assert.Equal(expected.Status, actual.Status);
             Assert.Equal(expected.PatientId, actual.PatientId);
+        }
+
+        [Fact]
+        public async void GetAppointmentByIdQuery_NotFound()
+        {
+            //Arange
+            var appointments = AppointmentDataTest();
+            var appointmentServices = new Mock<IAppointmentService>();
+            appointmentServices.Setup(x => x.GetAppointmentById(1000)).ReturnsAsync((DataAccess.Models.Appointment)null); ;
+            var appointment = new GetAppointmentByIdQuery { Id = 1000 };
+            var handler = new GetAppointmentByHandler(appointmentServices.Object);
+            var cts = new CancellationToken();
+
+            //Act
+            var actual = await handler.Handle(appointment, cts);
+
+            //Assert
+            Assert.Null(actual);
         }
 
         [Fact]

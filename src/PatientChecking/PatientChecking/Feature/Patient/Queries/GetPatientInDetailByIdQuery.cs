@@ -35,7 +35,9 @@ namespace PatientChecking.Feature.Patient.Queries
                 cityList.Add(p.ProvinceCityName);
             }
 
-            if (request.PatientId < 0)
+            var result = await _patientService.GetPatientInDetail(request.PatientId);
+
+            if (request.PatientId < 0 || result == null)
             {
                 var emptyModel = new PatientDetailViewModel
                 {
@@ -46,8 +48,6 @@ namespace PatientChecking.Feature.Patient.Queries
                 };
                 return emptyModel;
             }
-
-            var result = await _patientService.GetPatientInDetail(request.PatientId);
 
             var model = new PatientDetailViewModel
             {

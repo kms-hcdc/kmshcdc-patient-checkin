@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using log4net;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace PatientChecking.Services.Image
@@ -12,6 +14,7 @@ namespace PatientChecking.Services.Image
     public class ImageService : IImageService
     {
         private readonly IHostingEnvironment _hostingEnvironment;
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ImageService(IHostingEnvironment hostingEnvironment)
         {
@@ -44,9 +47,10 @@ namespace PatientChecking.Services.Image
 
                 return avatarLink;
             }
-            catch (IOException)
+            catch (DirectoryNotFoundException ex)
             {
-                throw new IOException("Cannot save image to server");
+                _log.Error(ex.Message);
+                throw;
             }
         }
     }

@@ -88,7 +88,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
         }
 
         [Fact]
-        public async void GetPatientInDetailByIdQueryTest_NotEmptyModel()
+        public async void GetPatientInDetailByIdQueryTest_Ok()
         {
             //Arrange
 
@@ -125,7 +125,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
             };
 
             var mockPatientService = new Mock<IPatientService>();
-            mockPatientService.Setup(x => x.GetPatientInDetail(1)).ReturnsAsync(patient);
+            mockPatientService.Setup(x => x.GetPatientInDetail(patient.PatientId)).ReturnsAsync(patient);
 
             var mockAppConfigurationService = new Mock<IAppConfigurationService>();
             mockAppConfigurationService.Setup(x => x.GetProvinceCities()).ReturnsAsync(cities);
@@ -195,6 +195,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
             //Arrange
             var cities = ProvinceCityDataTest();
             var cityList = new List<string>();
+            var patientId = -1;
 
             foreach (ProvinceCity city in cities)
             {
@@ -202,11 +203,56 @@ namespace PatientCheckIn.Tests.Feature.Patient
             }
 
             var mockPatientService = new Mock<IPatientService>();
+            mockPatientService.Setup(x => x.GetPatientInDetail(patientId)).ReturnsAsync((DataAccess.Models.Patient) null);
 
             var mockAppConfigurationService = new Mock<IAppConfigurationService>();
             mockAppConfigurationService.Setup(x => x.GetProvinceCities()).ReturnsAsync(cities);
 
-            var query = new GetPatientInDetailByIdQuery() { PatientId = -1 };
+            var query = new GetPatientInDetailByIdQuery() { PatientId = patientId };
+            var handler = new GetPatientInDetailByIdQueryHandler(mockPatientService.Object, mockAppConfigurationService.Object);
+
+            var expected = new PatientDetailViewModel
+            {
+                PatientId = -1,
+                PatientIdentifier = "",
+                Nationality = "Vietnamese",
+                ProvinceCities = cityList
+            };
+
+            //Act
+            var actual = await handler.Handle(query, new System.Threading.CancellationToken());
+
+            //Assert
+            Assert.NotNull(actual);
+            Assert.Equal(expected.PatientId, actual.PatientId);
+            Assert.Equal(expected.PatientIdentifier, actual.PatientIdentifier);
+            Assert.Equal(expected.Nationality, actual.Nationality);
+            for (int i = 0; i < expected.ProvinceCities.Count; i++)
+            {
+                Assert.Equal(expected.ProvinceCities[i], actual.ProvinceCities[i]);
+            }
+        }
+
+        [Fact]
+        public async void GetPatientInDetailByIdQueryTest_NotFound()
+        {
+            //Arrange
+            var cities = ProvinceCityDataTest();
+            var cityList = new List<string>();
+            var patientId = 999;
+
+            foreach (ProvinceCity city in cities)
+            {
+                cityList.Add(city.ProvinceCityName);
+            }
+
+            var mockPatientService = new Mock<IPatientService>();
+            mockPatientService.Setup(x => x.GetPatientInDetail(patientId)).ReturnsAsync((DataAccess.Models.Patient)null);
+
+            var mockAppConfigurationService = new Mock<IAppConfigurationService>();
+            mockAppConfigurationService.Setup(x => x.GetProvinceCities()).ReturnsAsync(cities);
+
+            var query = new GetPatientInDetailByIdQuery() { PatientId = patientId };
             var handler = new GetPatientInDetailByIdQueryHandler(mockPatientService.Object, mockAppConfigurationService.Object);
 
             var expected = new PatientDetailViewModel
@@ -260,7 +306,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
             return provinceCities;
         }
 
-        public async Task<PatientList> DataTest()
+        private async Task<PatientList> DataTest()
         {
             var addresses = new List<Address>
             {

@@ -25,31 +25,28 @@ namespace PatientCheckIn.Tests.Services.ImageServices
         public void IsImageFile_Ok()
         {
             // Arrange.
-            var file = new Mock<IFormFile>();
-            var sourceImg = File.OpenRead(@"D:\Longtdo\avatar.jpg");
+            var fileMock = new Mock<IFormFile>();
+            //Setup mock file using a memory stream
+            var content = "This is mock of formfile";
+            var fileName = "avatar.jpg";
             var ms = new MemoryStream();
             var writer = new StreamWriter(ms);
-            writer.Write(sourceImg);
+            writer.Write(content);
             writer.Flush();
             ms.Position = 0;
-            var fileName = "avatar.jpg";
-            file.Setup(f => f.FileName).Returns(fileName).Verifiable();
-            file.Setup(_ => _.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
-                .Returns((Stream stream, CancellationToken token) => ms.CopyToAsync(stream))
-                .Verifiable();
-            var inputFile = file.Object;
+            fileMock.Setup(x => x.OpenReadStream()).Returns(ms);
+            fileMock.Setup(x => x.FileName).Returns(fileName);
+            fileMock.Setup(x => x.Length).Returns(ms.Length);
+
+            var formFile = fileMock.Object;
 
             var mockEnvironment = new Mock<IHostingEnvironment>();
-            //...Setup the mock as needed
-            mockEnvironment
-                .Setup(m => m.WebRootPath)
-                .Returns("D:\\Longtdo\\PatientCheckIn\\kmshcdc-patient-checking\\src\\PatientChecking\\PatientChecking\\wwwroot");
 
             var expected = true;
 
             //Act
             var imageService = new ImageService(mockEnvironment.Object);
-            var actual = imageService.IsImageFile(inputFile);
+            var actual = imageService.IsImageFile(formFile);
 
             //Assert
             Assert.Equal(expected, actual);
@@ -59,31 +56,28 @@ namespace PatientCheckIn.Tests.Services.ImageServices
         public void IsImageFile_NotOk()
         {
             // Arrange.
-            var file = new Mock<IFormFile>();
-            var sourceImg = File.OpenRead(@"D:\Longtdo\someFile.pdf");
+            var fileMock = new Mock<IFormFile>();
+            //Setup mock file using a memory stream
+            var content = "This is mock of formfile";
+            var fileName = "doc.pdf";
             var ms = new MemoryStream();
             var writer = new StreamWriter(ms);
-            writer.Write(sourceImg);
+            writer.Write(content);
             writer.Flush();
             ms.Position = 0;
-            var fileName = "someFile.pdf";
-            file.Setup(f => f.FileName).Returns(fileName).Verifiable();
-            file.Setup(_ => _.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
-                .Returns((Stream stream, CancellationToken token) => ms.CopyToAsync(stream))
-                .Verifiable();
-            var inputFile = file.Object;
+            fileMock.Setup(x => x.OpenReadStream()).Returns(ms);
+            fileMock.Setup(x => x.FileName).Returns(fileName);
+            fileMock.Setup(x => x.Length).Returns(ms.Length);
+
+            var formFile = fileMock.Object;
 
             var mockEnvironment = new Mock<IHostingEnvironment>();
-            //...Setup the mock as needed
-            mockEnvironment
-                .Setup(m => m.WebRootPath)
-                .Returns("D:\\Longtdo\\PatientCheckIn\\kmshcdc-patient-checking\\src\\PatientChecking\\PatientChecking\\wwwroot");
 
             var expected = false;
 
             //Act
             var imageService = new ImageService(mockEnvironment.Object);
-            var actual = imageService.IsImageFile(inputFile);
+            var actual = imageService.IsImageFile(formFile);
 
             //Assert
             Assert.Equal(expected, actual);
@@ -93,33 +87,37 @@ namespace PatientCheckIn.Tests.Services.ImageServices
         public void SaveImage_Ok()
         {
             // Arrange.
-            var file = new Mock<IFormFile>();
-            var sourceImg = File.OpenRead(@"D:\Longtdo\avatar.jpg");
+            var fileMock = new Mock<IFormFile>();
+            //Setup mock file using a memory stream
+            var content = "This is mock of formfile";
+            var fileName = "avatar.jpg";
             var ms = new MemoryStream();
             var writer = new StreamWriter(ms);
-            writer.Write(sourceImg);
+            writer.Write(content);
             writer.Flush();
             ms.Position = 0;
-            var fileName = "avatar.jpg";
-            file.Setup(f => f.FileName).Returns(fileName).Verifiable();
-            file.Setup(_ => _.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
-                .Returns((Stream stream, CancellationToken token) => ms.CopyToAsync(stream))
-                .Verifiable();
-            var inputFile = file.Object;
+            fileMock.Setup(x => x.OpenReadStream()).Returns(ms);
+            fileMock.Setup(x => x.FileName).Returns(fileName);
+            fileMock.Setup(x => x.Length).Returns(ms.Length);
+
+            var formFile = fileMock.Object;
+
+            var currentPath = Directory.GetCurrentDirectory();
+            var path = currentPath.Replace("\\PatientCheckIn.Tests\\bin\\Debug\\net5.0", "\\PatientChecking\\wwwroot");
 
             var mockEnvironment = new Mock<IHostingEnvironment>();
             //...Setup the mock as needed
             mockEnvironment
                 .Setup(m => m.WebRootPath)
-                .Returns("D:\\Longtdo\\PatientCheckIn\\kmshcdc-patient-checking\\src\\PatientChecking\\PatientChecking\\wwwroot");
+                .Returns(path);
 
             //Act
             var imageService = new ImageService(mockEnvironment.Object);
-            var actual = imageService.SaveImage(inputFile);
+            var actual = imageService.SaveImage(formFile);
             var guid = actual.Substring(7, 36);
 
             //Assert
-            Assert.Contains(inputFile.FileName, actual);
+            Assert.Contains(formFile.FileName, actual);
             Assert.Contains("/Image/", actual);
             Assert.True(IsGuid(guid));
         }
@@ -128,19 +126,20 @@ namespace PatientCheckIn.Tests.Services.ImageServices
         public void SaveImage_NotOk()
         {
             // Arrange.
-            var file = new Mock<IFormFile>();
-            var sourceImg = File.OpenRead(@"D:\Longtdo\avatar.jpg");
+            var fileMock = new Mock<IFormFile>();
+            //Setup mock file using a memory stream
+            var content = "This is mock of formfile";
+            var fileName = "avatar.jpg";
             var ms = new MemoryStream();
             var writer = new StreamWriter(ms);
-            writer.Write(sourceImg);
+            writer.Write(content);
             writer.Flush();
             ms.Position = 0;
-            var fileName = "avatar.jpg";
-            file.Setup(f => f.FileName).Returns(fileName).Verifiable();
-            file.Setup(_ => _.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
-                .Returns((Stream stream, CancellationToken token) => ms.CopyToAsync(stream))
-                .Verifiable();
-            var inputFile = file.Object;
+            fileMock.Setup(x => x.OpenReadStream()).Returns(ms);
+            fileMock.Setup(x => x.FileName).Returns(fileName);
+            fileMock.Setup(x => x.Length).Returns(ms.Length);
+
+            var formFile = fileMock.Object;
 
             var mockEnvironment = new Mock<IHostingEnvironment>();
             //...Setup the mock as needed
@@ -152,8 +151,7 @@ namespace PatientCheckIn.Tests.Services.ImageServices
             var imageService = new ImageService(mockEnvironment.Object);
 
             //Assert
-            IOException exception = Assert.Throws<IOException>(() => imageService.SaveImage(inputFile));
-            Assert.Equal("Cannot save image to server", exception.Message);
+            IOException exception = Assert.Throws<DirectoryNotFoundException>(() => imageService.SaveImage(formFile));
         }
     }
 }

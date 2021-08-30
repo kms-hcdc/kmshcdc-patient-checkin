@@ -1,47 +1,48 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PatientChecking.Services.Repository;
-using PatientChecking.Services.ServiceModels;
-using PatientChecking.Services.ServiceModels.Enum;
+using MediatR;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using PatientChecking.Feature.Patient.Queries;
+using PatientChecking.ServiceModels.Enum;
 using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using PatientChecking.ServiceModels;
+using PatientChecking.Feature.Patient.Commands;
 
 namespace PatientChecking.Controllers
 {
     public class PatientController : BaseController
     {
-
-        private readonly IPatientService _patientService;
-        private readonly IAppConfigurationService _provinceCityService;
-
-        public PatientController(IPatientService patientService, IAppConfigurationService provinceCityService)
+        private readonly IMediator _mediator;
+        public PatientController(IMediator mediator)
         {
-            _patientService = patientService;
-            _provinceCityService = provinceCityService;
+            _mediator = mediator;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return Index((int)PatientSortSelection.ID, 10, 1);
+            return await Index((int)PatientSortSelection.ID, 10, 1);
         }
 
         [Route("[Controller]/Index/{sortOption}")]
-        public IActionResult Index(int sortOption)
+        public async Task<IActionResult> Index(int sortOption)
         {
-            return Index(sortOption, 10, 1);
+            return await Index(sortOption, 10, 1);
         }
 
         [Route("[Controller]/Index/{sortOption}-{pagingOption}")]
-        public IActionResult Index(int sortOption, int pagingOption)
+        public async Task<IActionResult> Index(int sortOption, int pagingOption)
         {
-            return Index(sortOption, pagingOption, 1);
+            return await Index(sortOption, pagingOption, 1);
         }
 
         [Route("[Controller]/Index/{sortOption}-{pagingOption}/{currentPage}")]
-        public IActionResult Index(int sortOption, int pagingOption, int currentPage)
+        public async Task<IActionResult> Index(int sortOption, int pagingOption, int currentPage)
         {
             var request = new PagingRequest
             {
@@ -50,87 +51,93 @@ namespace PatientChecking.Controllers
                 SortSelection = sortOption
             };
 
-            var result = _patientService.GetListPatientPaging(request);
-
-            var patientsVm = new List<PatientViewModel>();
-
-            foreach (Patient p in result.Patients)
-            {
-                patientsVm.Add(new PatientViewModel
-                {
-                    PatientId = p.PatientId,
-                    PatientIdentifier = p.PatientIdentifier,
-                    FullName = p.FullName,
-                    Gender = p.Gender.ToString(),
-                    DoB = p.DoB.ToString("MM-dd-yyyy"),
-                    AvatarLink = p.AvatarLink,
-                    Address = p.PrimaryAddress?.StreetLine,
-                    Email = p.Email,
-                    PhoneNumber = p.PhoneNumber
-                });
-            }
-
-            var model = new PatientListViewModel
-            {
-                Patients = patientsVm,
-                SortSelection = request.SortSelection,
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                TotalCount = result.TotalCount
-            };
-
-            return View(model);
+            return View(await _mediator.Send(new GetAllPatientsPagingQuery() { requestPaging = request }));
         }
 
-        public IActionResult Detail(int patientId)
+        public async Task<IActionResult> Detail(int patientId)
         {
-            var cityResult = _provinceCityService.GetProvinceCities();
-            var cityList = new List<string>();
-                
-            foreach(ProvinceCity p in cityResult)
-            {
-                cityList.Add(p.ProvinceCityName);
-            }
+            return View(await _mediator.Send(new GetPatientInDetailByIdQuery() { PatientId = patientId }));
+        }
 
-            if(patientId < 0){
-                var emptyModel = new PatientDetailViewModel
+        [HttpPost]
+        public async Task<IActionResult> Update(PatientDetailViewModel model)
+        {
+            var result = await _mediator.Send(new UpdatePatientInformationCommand() { PatientModel = model});
+
+            if (result > 0)
+            {
+                var message = new ViewMessage
                 {
-                    PatientId = -1,
-                    PatientIdentifier = "",
-                    Nationality = "Vietnamese",
-                    ProvinceCities = cityList
+                    MsgType = MessageType.Success,
+                    MsgText = "Update Patient Information Successfully!",
+                    MsgTitle = "Update Successfully"
                 };
-                return View(emptyModel);
+                TempData["Message"] = JsonConvert.SerializeObject(message);
+            }
+            else
+            {
+                var message = new ViewMessage
+                {
+                    MsgType = MessageType.Error,
+                    MsgText = "Update Patient Information Failed!",
+                    MsgTitle = "Update Failed"
+                };
+                TempData["Message"] = JsonConvert.SerializeObject(message);
             }
 
-            var result = _patientService.GetPatientInDetail(patientId);
+            return RedirectToAction("Detail", new { patientId = model.PatientId });
+        }
 
-            var model = new PatientDetailViewModel
+        [HttpPost]
+        public async Task<IActionResult> UploadImage(int patientId, IFormFile formFile)
+        {
+            try
             {
-                PatientId = result.PatientId,
-                PatientIdentifier = result.PatientIdentifier,
-                FirstName = result.FirstName,
-                LastName = result.LastName,
-                MiddleName = result.MiddleName,
-                FullName = result.FullName,
-                Nationality = result.Nationality,
-                DoB = result.DoB.ToString("yyyy-MM-dd"),
-                MaritalStatus = (int)(result.MaritalStatus == true ? PatientMaritalStatus.Married : PatientMaritalStatus.Unmarried),
-                Gender = (int) result.Gender,
-                AvatarLink = result.AvatarLink,
-                Email = result.Email,
-                PhoneNumber = result.PhoneNumber,
-                EthnicRace = result.EthnicRace,
-                HomeTown = result.HomeTown,
-                BirthplaceCity = result.BirthplaceCity,
-                IdcardNo = result.IdcardNo,
-                IssuedDate = result.IssuedDate?.ToString("yyyy-MM-dd"),
-                IssuedPlace = result.IssuedPlace,
-                InsuranceNo = result.InsuranceNo,
-                ProvinceCities = cityList
-            };
+                var result = await _mediator.Send(new UploadPatientImageCommand() { FormFile = formFile, PatientId = patientId });
 
-            return View(model);
+                if(result == ImageUploadingStatus.IsNotImageFailed)
+                {
+                    var message = new ViewMessage
+                    {
+                        MsgType = MessageType.Error,
+                        MsgText = "Uploaded File must be Image Format! Please Try Again",
+                        MsgTitle = "Upload Failed"
+                    };
+                    TempData["Message"] = JsonConvert.SerializeObject(message);
+                }
+                else if(result == ImageUploadingStatus.UploadImageFailed)
+                {
+                    var message = new ViewMessage
+                    {
+                        MsgType = MessageType.Error,
+                        MsgText = "Upload Patient Image Failed!",
+                        MsgTitle = "Upload Failed"
+                    };
+                    TempData["Message"] = JsonConvert.SerializeObject(message);
+                }
+                else
+                {
+                    var message = new ViewMessage
+                    {
+                        MsgType = MessageType.Success,
+                        MsgText = "Upload Patient Image Successfully!",
+                        MsgTitle = "Upload Successfully"
+                    };
+                    TempData["Message"] = JsonConvert.SerializeObject(message);
+                }
+            }
+            catch (IOException)
+            {
+                var message = new ViewMessage
+                {
+                    MsgType = MessageType.Error,
+                    MsgText = "Upload Patient Image Failed!",
+                    MsgTitle = "Upload Failed"
+                };
+                TempData["Message"] = JsonConvert.SerializeObject(message);
+            }
+
+            return RedirectToAction("Detail", new { patientId = patientId });
         }
     }
 }

@@ -43,7 +43,7 @@
     {
         <div class="row-value">
             <div class="col-3 col-md-3" id="name-value">
-                <img src="~/Image/no-avatar.jpg" alt="Avatar" class="avatar-patient-inappointment">
+                <img src="@(string.IsNullOrEmpty(item.AvatarLink) ? "/Image/no-avatar.jpg" : item.AvatarLink)"  alt="Avatar" class="avatar-patient-inappointment">
                 <div id="patient-identity">
                     <p class="patient-name">@item.FullName</p>
                     <b class="patient-identifier">(@item.PatientIdentifier)</b>
@@ -58,7 +58,7 @@
             <div class="col-2 col-md-2">
                 <p class="m-3">@item.Status</p>
             </div>
-            <div class="col-1 col-md-1">
+            <div class="col-1 col-md-1 d-flex align-items-center">
                 <button class="btn-view-appointment" onclick="location.replace('@Html.Raw(@Url.Action("Detail", "Appointment", new {appointmentId = item.AppointmentId}))')">View</button>
             </div>
         </div>

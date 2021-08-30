@@ -1,4 +1,7 @@
 ﻿@model PatientChecking.Views.ViewModels.PatientDetailViewModel
+@using PatientChecking.Helpers
+@using PatientChecking.ServiceModels
+@using Newtonsoft.Json
 @{
     ViewData["Title"] = "Patient";
     ViewData["Page"] = "Patient information";
@@ -6,6 +9,16 @@
 @section css {
     <link href="@Url.Content("~/css/PatientDetail.css")" rel="stylesheet" type="text/css" />
     <script src="~/js/PatientDetail.js"></script>
+}
+@{
+    if (!string.IsNullOrEmpty((string)TempData["Message"]))
+    {
+        var message = (ViewMessage)JsonConvert.DeserializeObject<ViewMessage>((string)TempData["Message"]);
+        if (message != null)
+        {
+            @Html.MessageAlert(message)
+        }
+    }
 }
 <div class="detail-patient-container">
     <div class="search-area">
@@ -44,8 +57,12 @@
     <div class="edit-patient-info-container">
         <div class="patient-box-info">
             <div>
-                <div>
+                <div class="patient-image-box">
                     <img src="@(string.IsNullOrEmpty(Model.AvatarLink) ? "/Image/no-avatar.jpg" : Model.AvatarLink)" class="patient-avatar" />
+                    <div id="add-photo">
+                        <i class="fas fa-camera-retro"></i>
+                        <span>Upload patient photo</span>
+                    </div>
                 </div>
                 <div class="patient-name-detail">
                     <span>@Model.FullName</span>
@@ -61,14 +78,34 @@
                 <a href="#">Contact detail</a>
             </div>
         </div>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content-container">
+                <div class="modal-header">
+                    <p>Upload Patient Image</p>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="upload-image-container">
+                    @using (Html.BeginForm("UploadImage", "Patient", FormMethod.Post, new { enctype = "multipart/form-data", @class = "upload-form" }))
+                    {
+                        <img src="@(string.IsNullOrEmpty(Model.AvatarLink) ? "/Image/no-avatar.jpg" : Model.AvatarLink)" alt="Patient-image" id="uploaded-image" class="w-75 p-3 d-flex justify-content-center" />
+                        <input type="file" name="formFile" id="file" class="form-control" onchange="readURL(this)" accept="image/*" required />
+                        <input type="hidden" name="PatientId" value="@Model.PatientId">
+                        <input type="submit" value="Upload" class="submit form-control" id="uploadButton" />
+                    }
+                </div>
+            </div>
+        </div>
+
         <div class="patient-box-detail">
-            <form>
+            @using (Html.BeginForm("Update", "Patient", FormMethod.Post))
+            {
                 <div class="detail-header-container">
                     <span class="h5">Personal detail</span>
                     <a class="btn btn-primary" role="button" id="btn-edit">Edit</a>
                     <div class="edit-mode">
-                        <a class="btn btn-primary" role="button" id="btn-cancel">Cancel</a>
-                        <a class="btn btn-primary" role="button" id="btn-save">Save</a>
+                        <a class="btn btn-primary" role="button" id="btn-cancel" href="@Url.Action("Detail", "Patient", new {patientId = Model.PatientId})">Cancel</a>
+                        <button class="btn btn-primary" type="submit" id="btn-save">Save</button>
                     </div>
                 </div>
                 <div class="section-gap">
@@ -82,7 +119,8 @@
                                 <div class="form-group">
                                     <label for="firstName">First name</label>
                                     <span class="text-error">*</span>
-                                    <input type="text" class="form-control" value="@Model.FirstName">
+                                    <input type="hidden" name="PatientId" value="@Model.PatientId">
+                                    <input type="text" class="form-control" name="FirstName" value="@Model.FirstName" required>
                                 </div>
                             </div>
                         </div>
@@ -91,7 +129,7 @@
                                 <div class="form-group">
                                     <label for="lastName">Last name</label>
                                     <span class="text-error">*</span>
-                                    <input type="text" class="form-control" value="@Model.LastName">
+                                    <input type="text" class="form-control" name="LastName" value="@Model.LastName" required>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +137,7 @@
                             <div class="item">
                                 <div class="form-group">
                                     <label for="middleName">Middle name</label>
-                                    <input type="text" class="form-control" value="@Model.MiddleName">
+                                    <input type="text" class="form-control" name="MiddleName" value="@Model.MiddleName">
                                 </div>
                             </div>
                         </div>
@@ -107,7 +145,7 @@
                             <div class="item">
                                 <div class="form-group">
                                     <label for="fullName">Full name</label>
-                                    <input type="text" class="form-control" value="@Model.FullName">
+                                    <input id="fullNameInput" type="text" class="form-control" value="@Model.FullName">
                                 </div>
                             </div>
                         </div>
@@ -118,7 +156,7 @@
                                 <div class="form-group">
                                     <label for="nationality">Nationality</label>
                                     <span class="text-error">*</span>
-                                    <select class="form-select" id="nationalitySelect">
+                                    <select class="form-select" id="nationalitySelect" name="Nationality" required>
                                         <option value="Vietnamese">Vietnamese</option>
                                         <option value="American">American</option>
                                         <option value="British">British</option>
@@ -131,7 +169,7 @@
                                 <div class="form-group">
                                     <label for="DoB">Date of birth</label>
                                     <span class="text-error">*</span>
-                                    <input type="date" class="form-control" value=@Model.DoB>
+                                    <input type="date" class="form-control" name="DoB" value=@Model.DoB required max='@DateTime.Now.ToString("yyyy-MM-dd")'>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +178,7 @@
                                 <div class="form-group">
                                     <label for="maritalStatus">Marital status</label>
                                     <span class="text-error">*</span>
-                                    <select class="form-select" id="maritalSelect">
+                                    <select class="form-select" id="maritalSelect" name="MaritalStatus" required>
                                         <option value="0">Unmarried</option>
                                         <option value="1">Married</option>
                                     </select>
@@ -152,7 +190,7 @@
                                 <div class="form-group">
                                     <label for="gender">Gender</label>
                                     <span class="text-error">*</span>
-                                    <select class="form-select" id="genderSelect">
+                                    <select class="form-select" id="genderSelect" name="Gender" required>
                                         <option value="0">Male</option>
                                         <option value="1">Female</option>
                                         <option value="2">None</option>
@@ -166,8 +204,8 @@
                             <div class="item">
                                 <div class="form-group">
                                     <label for="ethnic">Ethnic race</label>
-                                    <select class="form-select" id="ethnicSelect">
-                                        <option selected>Please select</option>
+                                    <select class="form-select" id="ethnicSelect" name="EthnicRace">
+                                        <option value="None" selected>Please select</option>
                                         <option value="Kinh">Kinh</option>
                                         <option value="Hmong">Hmong</option>
                                         <option value="Tay">Tay</option>
@@ -180,7 +218,7 @@
                                 <div class="form-group">
                                     <label for="homeTown">Home town</label>
                                     <div class="autocomplete">
-                                        <input id="homeTown" type="text" name="myCountry" class="form-control" value="@Model.HomeTown">
+                                        <input id="homeTown" type="text" name="HomeTown" class="form-control" value="@Model.HomeTown">
                                     </div>
                                 </div>
                             </div>
@@ -190,7 +228,7 @@
                                 <div class="form-group">
                                     <label for="birthcity">Birthplace city</label>
                                     <div class="autocomplete">
-                                        <input id="birthplace" type="text" name="myCountry" class="form-control" value="@Model.BirthplaceCity">
+                                        <input id="birthplace" type="text" name="BirthplaceCity" class="form-control" value="@Model.BirthplaceCity">
                                     </div>
                                 </div>
                             </div>
@@ -199,7 +237,7 @@
                             <div class="item">
                                 <div class="form-group">
                                     <label for="gender">Insurance No.</label>
-                                    <input type="text" class="form-control" value="@Model.InsuranceNo">
+                                    <input type="text" class="form-control" name="InsuranceNo" value="@Model.InsuranceNo">
                                 </div>
                             </div>
                         </div>
@@ -209,7 +247,7 @@
                             <div class="item">
                                 <div class="form-group">
                                     <label for="idCardNo">ID card No.</label>
-                                    <input type="text" class="form-control" value="@Model.IdcardNo">
+                                    <input type="text" class="form-control" id="idCardNo" name="IdcardNo" value="@Model.IdcardNo">
                                 </div>
                             </div>
                         </div>
@@ -217,7 +255,7 @@
                             <div class="item">
                                 <div class="form-group">
                                     <label for="issuedDate">Issued date</label>
-                                    <input type="date" class="form-control" value=@Model.IssuedDate>
+                                    <input type="date" class="form-control" id="issuedDate" name="IssuedDate" value=@Model.IssuedDate max='@DateTime.Now.ToString("yyyy-MM-dd")'>
                                 </div>
                             </div>
                         </div>
@@ -226,7 +264,7 @@
                                 <div class="form-group">
                                     <label for="issuedPlace">Issued place</label>
                                     <div class="autocomplete">
-                                        <input id="issuedPlace" type="text" name="myCountry" class="form-control" value="@Model.IssuedPlace">
+                                        <input class="form-control" type="text" id="issuedPlace" name="IssuedPlace" value="@Model.IssuedPlace">
                                     </div>
                                 </div>
                             </div>
@@ -235,19 +273,20 @@
                         </div>
                     </div>
                 </div>
-            </form>
+            }
         </div>
     </div>
 </div>
 <script>
+    var nationality = '@Html.Raw(Model.Nationality)';
+    var cityList = @Json.Serialize(Model.ProvinceCities);
+    var emptyMode = '@Html.Raw(Model.PatientId)';
+
     $(document).ready(function () {
         var hometown = '@Html.Raw(Model.HomeTown)';
         var ethnic = '@Html.Raw(Model.EthnicRace)';
-        var nationality = '@Html.Raw(Model.Nationality)';
         var birthplace = '@Html.Raw(Model.BirthplaceCity)';
         var issuedplace = '@Html.Raw(Model.IssuedPlace)';
-        var emptyMode = '@Html.Raw(Model.PatientId)';
-        var cityList = @Json.Serialize(Model.ProvinceCities);
 
         if (emptyMode < 0) {
             $("#btn-edit").hide();
@@ -256,6 +295,11 @@
         autocomplete(document.getElementById("homeTown"), cityList);
         autocomplete(document.getElementById("birthplace"), cityList);
         autocomplete(document.getElementById("issuedPlace"), cityList);
+
+        jQuery.each(cityList, function (index, item) {
+            var option = $('<option value="' + item + '"></option>');
+            $('#issuedPlaceOptions').append(option);
+        })
 
         $("#nationalitySelect option[value='" + nationality + "']").attr("selected", "selected");
         $("#genderSelect option[value='" + @(Model.Gender) + "']").attr("selected", "selected");
@@ -276,15 +320,22 @@
         var query = $(this).val();
     });
 
-    $("#hometownSelect").change(function () {
-        var option = $(this).val();
-        console.log("hehe", option);
-    });
-
     $("#btn-edit").click(function () {
         $("#btn-edit").css("display", "none");
         $(".edit-mode").css("display", "flex");
         $(".patient-box-detail :input").prop("disabled", false);
+        $("#fullNameInput").prop("disabled", true);
+
+        if (nationality !== "Vietnamese") {
+            $("#ethnicSelect").prop("disabled", true);
+        }
+
+        var idNumber = $("#idCardNo").val();
+
+        if (idNumber === "") {
+            $("#issuedDate").prop("disabled", true);
+            $("#issuedPlace").prop("disabled", true);
+        }
     });
 
     $("#btn-cancel").click(function () {
@@ -292,4 +343,94 @@
         $(".edit-mode").css("display", "none");
         $(".patient-box-detail :input").prop("disabled", true);
     });
+
+    $("#nationalitySelect").change(function () {
+        var option = $(this).val();
+        console.log(option);
+        if (option === "Vietnamese") {
+            $("#ethnicSelect").prop("disabled", false);
+        } else {
+            $("#ethnicSelect").prop("disabled", true);
+            $("#ethnicSelect").val("None");
+        }
+    });
+
+    $("#homeTown").keydown(function (e) {
+        var homeTownOption = $("#homeTown").val();
+        if (e.keyCode === 9) {
+            if (!cityList.includes(homeTownOption)) {
+                $("#homeTown").val("Other");
+            }
+            $(".autocomplete-items").hide();
+        }
+    });
+
+    $("#birthplace").keydown(function (e) {
+        var birthplaceOption = $("#birthplace").val();
+        if (e.keyCode === 9) {
+            if (!cityList.includes(birthplaceOption)) {
+                $("#birthplace").val("Other");
+            }
+            $(".autocomplete-items").hide();
+        }
+    });
+
+    $("#issuedPlace").keydown(function (e) {
+        var issuedPlaceOption = $("#issuedPlace").val();
+        if (e.keyCode === 9) {
+            if (!cityList.includes(issuedPlaceOption)) {
+                $("#issuedPlace").val("Other");
+            }
+            $(".autocomplete-items").hide();
+        }
+    });
+
+    $("#idCardNo").focusout(function () {
+        var idValue = $(this).val();
+        if (idValue !== "") {
+            $("#issuedDate").prop("disabled", false);
+            $("#issuedPlace").prop("disabled", false);
+        } else {
+            $("#issuedDate").val("");
+            $("#issuedPlace").val("");
+            $("#issuedDate").prop("disabled", true);
+            $("#issuedPlace").prop("disabled", true);
+        }
+    });
+
+    $(".patient-image-box").mouseenter(function () {
+        $("#add-photo").css("display", "flex");
+    });
+
+    $(".patient-image-box").mouseleave(function () {
+        $("#add-photo").css("display", "none");
+    });
+
+    $("#add-photo").click(function () {
+        if (emptyMode > -1) {
+            $("#myModal").css("display", "block");
+        }
+    });
+
+    $(".close").click(function () {
+        $("#myModal").css("display", "none");
+    });
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#uploaded-image')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#alert-message").fadeTo(3000, 500).slideUp(500, function () {
+        $("#alert-message").slideUp(1000);
+    });
+
 </script>

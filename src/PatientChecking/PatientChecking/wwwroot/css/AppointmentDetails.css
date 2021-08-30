@@ -49,3 +49,13 @@
     display: none;
     width: 100px;
 }
+
+#alert-message {
+    height: 60px;
+    position: absolute;
+    right: 10px;
+    top: 60px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}

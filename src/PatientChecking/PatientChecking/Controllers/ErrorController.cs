@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PatientChecking.Models;
+using PatientChecking.ServiceModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

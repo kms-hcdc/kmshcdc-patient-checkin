@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,12 +7,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PatientCheckIn.DataAccess.Models;
-using PatientChecking.Services;
-using PatientChecking.Services.Repository;
-using PatientChecking.Services.ServiceModels;
+using PatientChecking.Services.AppConfiguration;
+using PatientChecking.Services.Appointment;
+using PatientChecking.Services.Image;
+using PatientChecking.Services.Patient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace PatientChecking
@@ -39,6 +42,10 @@ namespace PatientChecking
             services.AddScoped<IAppointmentService, AppointmentService>();
             //add ProvinceCity Dependency
             services.AddScoped<IAppConfigurationService, AppConfigurationService>();
+            //add Image Dependency
+            services.AddScoped<IImageService, ImageService>();
+            //Register all Requests and RequestHandlers 
+            services.AddMediatR(Assembly.GetExecutingAssembly());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

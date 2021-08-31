@@ -53,11 +53,8 @@ namespace PatientCheckIn.Tests.Controllers
             };
             return appointmentListViewModel;
         }
-
-        [Fact]
-        public async void Detail_Ok()
+        private AppointmentDetailViewModel AppointmentDetailViewModel()
         {
-            //Arange
             var appointmentData = new AppointmentDetailViewModel
             {
                 AppointmentId = 1,
@@ -66,6 +63,14 @@ namespace PatientCheckIn.Tests.Controllers
                 Status = "CheckIn",
                 PatientId = 1,
             };
+            return appointmentData;
+        }
+
+        [Fact]
+        public async void Detail_ReturnsDetailView()
+        {
+            //Arange
+            var appointmentData = AppointmentDetailViewModel();
             var mediator = new Mock<IMediator>();
             mediator.Setup(x => x.Send(It.IsAny<GetAppointmentByIdQuery>(), new System.Threading.CancellationToken())).ReturnsAsync(appointmentData);
             var appointmentController = new AppointmentController(mediator.Object);
@@ -85,7 +90,7 @@ namespace PatientCheckIn.Tests.Controllers
             Assert.Equal(expected.PatientId, model.PatientId);
         }
         [Fact]
-        public async void Detail_NotFound()
+        public async void Detail_NotFound_ReturnsRedirectToAction()
         {
             //Arange
             var mediator = new Mock<IMediator>();
@@ -106,7 +111,7 @@ namespace PatientCheckIn.Tests.Controllers
         }
 
         [Fact]
-        public async void Index_ThreeParams()
+        public async void Index_ThreeParams_ReturnsIndexView()
         {
             //Arange
             var data = AppointmentDataTest();
@@ -125,20 +130,14 @@ namespace PatientCheckIn.Tests.Controllers
             Assert.NotNull(model);
             Assert.Equal(expected.TotalCount, model.TotalCount);
             Assert.Equal(expected.AppointmentViewModels.Count, model.AppointmentViewModels.Count);
-            for (int i = 0; i < expected.AppointmentViewModels.Count; i++)
-            {
-                Assert.Equal(expected.AppointmentViewModels[i].AppointmentId, model.AppointmentViewModels[i].AppointmentId);
-                Assert.Equal(expected.AppointmentViewModels[i].CheckInDate, model.AppointmentViewModels[i].CheckInDate);
-                Assert.Equal(expected.AppointmentViewModels[i].DoB, model.AppointmentViewModels[i].DoB);
-                Assert.Equal(expected.AppointmentViewModels[i].FullName, model.AppointmentViewModels[i].FullName);
-                Assert.Equal(expected.AppointmentViewModels[i].PatientIdentifier, model.AppointmentViewModels[i].PatientIdentifier);
-                Assert.Equal(expected.AppointmentViewModels[i].Status, model.AppointmentViewModels[i].Status);
-                Assert.Equal(expected.AppointmentViewModels[i].AvatarLink, model.AppointmentViewModels[i].AvatarLink);
-            }
+            Assert.True(expected.AppointmentViewModels.All(x => model.AppointmentViewModels.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate == y.CheckInDate
+                                                                                                  && x.DoB == y.DoB && x.FullName == y.FullName
+                                                                                                  && x.PatientIdentifier == y.PatientIdentifier
+                                                                                                  && x.Status == y.Status && x.AvatarLink == y.AvatarLink)));
         }
 
         [Fact]
-        public async void Index_TwoParams()
+        public async void Index_TwoParams_ReturnsThreeParamsIndexAction()
         {
             //Arange
             var data = AppointmentDataTest();
@@ -157,20 +156,14 @@ namespace PatientCheckIn.Tests.Controllers
             Assert.NotNull(model);
             Assert.Equal(expected.TotalCount, model.TotalCount);
             Assert.Equal(expected.AppointmentViewModels.Count, model.AppointmentViewModels.Count);
-            for (int i = 0; i < expected.AppointmentViewModels.Count; i++)
-            {
-                Assert.Equal(expected.AppointmentViewModels[i].AppointmentId, model.AppointmentViewModels[i].AppointmentId);
-                Assert.Equal(expected.AppointmentViewModels[i].CheckInDate, model.AppointmentViewModels[i].CheckInDate);
-                Assert.Equal(expected.AppointmentViewModels[i].DoB, model.AppointmentViewModels[i].DoB);
-                Assert.Equal(expected.AppointmentViewModels[i].FullName, model.AppointmentViewModels[i].FullName);
-                Assert.Equal(expected.AppointmentViewModels[i].PatientIdentifier, model.AppointmentViewModels[i].PatientIdentifier);
-                Assert.Equal(expected.AppointmentViewModels[i].Status, model.AppointmentViewModels[i].Status);
-                Assert.Equal(expected.AppointmentViewModels[i].AvatarLink, model.AppointmentViewModels[i].AvatarLink);
-            }
+            Assert.True(expected.AppointmentViewModels.All(x => model.AppointmentViewModels.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate == y.CheckInDate
+                                                                                                  && x.DoB == y.DoB && x.FullName == y.FullName
+                                                                                                  && x.PatientIdentifier == y.PatientIdentifier
+                                                                                                  && x.Status == y.Status && x.AvatarLink == y.AvatarLink)));
         }
 
         [Fact]
-        public async void Index_OneParam()
+        public async void Index_OneParam_ReturnsThreeParamsIndexAction()
         {
             //Arange
             var data = AppointmentDataTest();
@@ -189,20 +182,14 @@ namespace PatientCheckIn.Tests.Controllers
             Assert.NotNull(model);
             Assert.Equal(expected.TotalCount, model.TotalCount);
             Assert.Equal(expected.AppointmentViewModels.Count, model.AppointmentViewModels.Count);
-            for (int i = 0; i < expected.AppointmentViewModels.Count; i++)
-            {
-                Assert.Equal(expected.AppointmentViewModels[i].AppointmentId, model.AppointmentViewModels[i].AppointmentId);
-                Assert.Equal(expected.AppointmentViewModels[i].CheckInDate, model.AppointmentViewModels[i].CheckInDate);
-                Assert.Equal(expected.AppointmentViewModels[i].DoB, model.AppointmentViewModels[i].DoB);
-                Assert.Equal(expected.AppointmentViewModels[i].FullName, model.AppointmentViewModels[i].FullName);
-                Assert.Equal(expected.AppointmentViewModels[i].PatientIdentifier, model.AppointmentViewModels[i].PatientIdentifier);
-                Assert.Equal(expected.AppointmentViewModels[i].Status, model.AppointmentViewModels[i].Status);
-                Assert.Equal(expected.AppointmentViewModels[i].AvatarLink, model.AppointmentViewModels[i].AvatarLink);
-            }
+            Assert.True(expected.AppointmentViewModels.All(x => model.AppointmentViewModels.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate == y.CheckInDate
+                                                                                                  && x.DoB == y.DoB && x.FullName == y.FullName
+                                                                                                  && x.PatientIdentifier == y.PatientIdentifier
+                                                                                                  && x.Status == y.Status && x.AvatarLink == y.AvatarLink)));
         }
 
         [Fact]
-        public async void Index_NoParam()
+        public async void Index_NoParam_ReturnsThreeParamsIndexAction()
         {
             //Arange
             var data = AppointmentDataTest();
@@ -221,30 +208,17 @@ namespace PatientCheckIn.Tests.Controllers
             Assert.NotNull(model);
             Assert.Equal(expected.TotalCount, model.TotalCount);
             Assert.Equal(expected.AppointmentViewModels.Count, model.AppointmentViewModels.Count);
-            for (int i = 0; i < expected.AppointmentViewModels.Count; i++)
-            {
-                Assert.Equal(expected.AppointmentViewModels[i].AppointmentId, model.AppointmentViewModels[i].AppointmentId);
-                Assert.Equal(expected.AppointmentViewModels[i].CheckInDate, model.AppointmentViewModels[i].CheckInDate);
-                Assert.Equal(expected.AppointmentViewModels[i].DoB, model.AppointmentViewModels[i].DoB);
-                Assert.Equal(expected.AppointmentViewModels[i].FullName, model.AppointmentViewModels[i].FullName);
-                Assert.Equal(expected.AppointmentViewModels[i].PatientIdentifier, model.AppointmentViewModels[i].PatientIdentifier);
-                Assert.Equal(expected.AppointmentViewModels[i].Status, model.AppointmentViewModels[i].Status);
-                Assert.Equal(expected.AppointmentViewModels[i].AvatarLink, model.AppointmentViewModels[i].AvatarLink);
-            }
+            Assert.True(expected.AppointmentViewModels.All(x => model.AppointmentViewModels.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate == y.CheckInDate
+                                                                                                  && x.DoB == y.DoB && x.FullName == y.FullName
+                                                                                                  && x.PatientIdentifier == y.PatientIdentifier
+                                                                                                  && x.Status == y.Status && x.AvatarLink == y.AvatarLink)));
         }
 
         [Fact]
-        public async void Update_Ok()
+        public async void Update_ExistAppointment_ReturnsDetailAppointmentView()
         {
             //Arange
-            var appointment = new AppointmentDetailViewModel
-            {
-                AppointmentId = 1,
-                MedicalConcerns = "Lung",
-                CheckInDate = new DateTime(2021, 08, 25).ToString("yyyy-MM-dd"),
-                Status = "Closed",
-                PatientId = 1,
-            };
+            var appointment = AppointmentDetailViewModel();
             var mediator = new Mock<IMediator>();
             mediator.Setup(x => x.Send(It.IsAny<UpdateAppointmentCommand>(), new System.Threading.CancellationToken())).ReturnsAsync(1);
             var provider = new Mock<Microsoft.AspNetCore.Mvc.ViewFeatures.ITempDataProvider>();
@@ -265,17 +239,11 @@ namespace PatientCheckIn.Tests.Controllers
         }
 
         [Fact]
-        public async void Update_NotOk()
+        public async void Update_AppointmentNotFound_ReturnsDetailAppointmentView()
         {
             //Arange
-            var appointment = new AppointmentDetailViewModel
-            {
-                AppointmentId = 1000,
-                MedicalConcerns = "Lung",
-                CheckInDate = new DateTime(2021, 08, 25).ToString("yyyy-MM-dd"),
-                Status = "Closed",
-                PatientId = 1,
-            };
+            var appointment = AppointmentDetailViewModel();
+            appointment.AppointmentId = 1000;
             var mediator = new Mock<IMediator>();
             mediator.Setup(x => x.Send(It.IsAny<UpdateAppointmentCommand>(), new System.Threading.CancellationToken())).ReturnsAsync(-1);
             var provider = new Mock<Microsoft.AspNetCore.Mvc.ViewFeatures.ITempDataProvider>();

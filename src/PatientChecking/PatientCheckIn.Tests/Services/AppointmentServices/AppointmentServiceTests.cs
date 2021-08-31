@@ -86,6 +86,131 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
             return patients;
         }
 
+        private AppointmentList GetDataAppointmentExpected(List<DataAccess.Models.Patient> patients,int sortOption)
+        {
+            var appoinmentListServiceModelByName = new List<PatientChecking.ServiceModels.Appointment>
+            {
+                new PatientChecking.ServiceModels.Appointment
+                {
+                    AppointmentId = 2,
+                    MedicalConcerns = "Hand",
+                    CheckInDate = new DateTime(2021, 08, 27),
+                    Status = "Cancel",
+                    PatientId = patients[1].PatientId,
+                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[1].AvatarLink, DoB = patients[1].DoB, FullName = patients[1].FullName, PatientIdentifier = patients[1].PatientIdentifier }
+                },
+
+                new PatientChecking.ServiceModels.Appointment
+                {
+                    AppointmentId = 1,
+                    MedicalConcerns = "Head",
+                    CheckInDate = new DateTime(2021, 08, 26),
+                    Status = "CheckIn",
+                    PatientId = patients[0].PatientId,
+                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[0].AvatarLink, DoB = patients[0].DoB, FullName = patients[0].FullName, PatientIdentifier = patients[0].PatientIdentifier }
+                }
+            };
+
+            var appoinmentListServiceModelByID = new List<PatientChecking.ServiceModels.Appointment>
+            {
+                new PatientChecking.ServiceModels.Appointment
+                {
+                    AppointmentId = 1,
+                    MedicalConcerns = "Head",
+                    CheckInDate = new DateTime(2021, 08, 26),
+                    Status = "CheckIn",
+                    PatientId = patients[0].PatientId,
+                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[0].AvatarLink, DoB = patients[0].DoB, FullName = patients[0].FullName, PatientIdentifier = patients[0].PatientIdentifier }
+                },
+
+                 new PatientChecking.ServiceModels.Appointment
+                {
+                    AppointmentId = 2,
+                    MedicalConcerns = "Hand",
+                    CheckInDate = new DateTime(2021, 08, 27),
+                    Status = "Cancel",
+                    PatientId = patients[1].PatientId,
+                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[1].AvatarLink, DoB = patients[1].DoB, FullName = patients[1].FullName, PatientIdentifier = patients[1].PatientIdentifier }
+                },
+            };
+
+            var appoinmentListServiceModelByDoB = new List<PatientChecking.ServiceModels.Appointment>
+            {
+                new PatientChecking.ServiceModels.Appointment
+                {
+                    AppointmentId = 3,
+                    MedicalConcerns = "Stomach",
+                    CheckInDate = new DateTime(2021, 08, 25),
+                    Status = "Closed",
+                    PatientId = patients[2].PatientId,
+                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[2].AvatarLink, DoB = patients[2].DoB, FullName = patients[2].FullName, PatientIdentifier = patients[2].PatientIdentifier }
+                },
+
+                new PatientChecking.ServiceModels.Appointment
+                {
+                    AppointmentId = 4,
+                    MedicalConcerns = "Lung",
+                    CheckInDate = new DateTime(2021, 08, 25),
+                    Status = "CheckIn",
+                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[3].AvatarLink, DoB = patients[3].DoB, FullName = patients[3].FullName, PatientIdentifier = patients[3].PatientIdentifier }
+                }
+            };
+
+            var appoinmentListServiceModelByCheckInDate = new List<PatientChecking.ServiceModels.Appointment>
+            {
+                new PatientChecking.ServiceModels.Appointment
+                {
+                    AppointmentId = 2,
+                    MedicalConcerns = "Hand",
+                    CheckInDate = new DateTime(2021, 08, 27),
+                    Status = "Cancel",
+                    PatientId = patients[1].PatientId,
+                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[1].AvatarLink, DoB = patients[1].DoB, FullName = patients[1].FullName, PatientIdentifier = patients[1].PatientIdentifier }
+                },
+
+                new PatientChecking.ServiceModels.Appointment
+                {
+                    AppointmentId = 1,
+                    MedicalConcerns = "Head",
+                    CheckInDate = new DateTime(2021, 08, 26),
+                    Status = "CheckIn",
+                    PatientId = patients[0].PatientId,
+                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[0].AvatarLink, DoB = patients[0].DoB, FullName = patients[0].FullName, PatientIdentifier = patients[0].PatientIdentifier }
+                }
+            };
+
+            var appoinmentListServiceModelStatus = new List<PatientChecking.ServiceModels.Appointment>
+            {
+                new PatientChecking.ServiceModels.Appointment
+                {
+                    AppointmentId = 1,
+                    MedicalConcerns = "Head",
+                    CheckInDate = new DateTime(2021, 08, 26),
+                    Status = "CheckIn",
+                    PatientId = patients[0].PatientId,
+                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[0].AvatarLink, DoB = patients[0].DoB, FullName = patients[0].FullName, PatientIdentifier = patients[0].PatientIdentifier }
+                },
+
+                new PatientChecking.ServiceModels.Appointment
+                {
+                    AppointmentId = 4,
+                    MedicalConcerns = "Lung",
+                    CheckInDate = new DateTime(2021, 08, 25),
+                    Status = "CheckIn",
+                    PatientId = patients[3].PatientId,
+                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[3].AvatarLink, DoB = patients[3].DoB, FullName = patients[3].FullName, PatientIdentifier = patients[3].PatientIdentifier }
+                }
+            };
+
+            var expectedData = new AppointmentList
+            {
+                Appointments = sortOption == 0 ? appoinmentListServiceModelByName : sortOption == 1 ? appoinmentListServiceModelByID : sortOption == 2 ? appoinmentListServiceModelByDoB : sortOption == 3 ? appoinmentListServiceModelByCheckInDate : appoinmentListServiceModelStatus,
+                TotalCount = 4
+            };
+
+            return expectedData;
+        }
+
         private PagingRequest PagingRequestData(int index, int pageSize, int optionSort)
         {
             var request = new PagingRequest
@@ -98,7 +223,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
         }
 
         [Fact]
-        public async void GetAppointmentSummary()
+        public async void GetAppointmentSummary_ReturnsAppointmentDashboard()
         {
             //Arrange
             var patients = PatientDataTest();
@@ -125,7 +250,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
         }
 
         [Fact]
-        public async void GetAppointmentById()
+        public async void GetAppointmentById_ExistAppoinment_ReturnAppointment()
         {
             //Arrange
             var patients = PatientDataTest();
@@ -155,7 +280,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
         }
 
         [Fact]
-        public async void GetListAppoinmentsPaging_SortByName()
+        public async void GetListAppoinmentsPaging_SortByName_ReturnsAppointmentList()
         {
             //Arrange
             var patients = PatientDataTest();
@@ -163,34 +288,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
             var context = CreateMockContext(appointments);
             var pagingRequest = PagingRequestData(1,2,0);
 
-            var appoinmentListServiceModel = new List<PatientChecking.ServiceModels.Appointment>
-            {
-                new PatientChecking.ServiceModels.Appointment
-                {
-                    AppointmentId = 2,
-                    MedicalConcerns = "Hand",
-                    CheckInDate = new DateTime(2021, 08, 27),
-                    Status = "Cancel",
-                    PatientId = patients[1].PatientId,
-                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[1].AvatarLink, DoB = patients[1].DoB, FullName = patients[1].FullName, PatientIdentifier = patients[1].PatientIdentifier }
-                },
-
-                new PatientChecking.ServiceModels.Appointment
-                {
-                    AppointmentId = 1, 
-                    MedicalConcerns = "Head", 
-                    CheckInDate = new DateTime(2021, 08, 26), 
-                    Status = "CheckIn", 
-                    PatientId = patients[0].PatientId, 
-                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[0].AvatarLink, DoB = patients[0].DoB, FullName = patients[0].FullName, PatientIdentifier = patients[0].PatientIdentifier }
-                }
-            };
-
-            var expected = new AppointmentList
-            {
-                Appointments = appoinmentListServiceModel,
-                TotalCount = 4,
-            };
+            var expected = GetDataAppointmentExpected(patients, pagingRequest.SortSelection);
 
             //Act
             var apointmentService = new AppointmentService(context);
@@ -200,54 +298,23 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
             Assert.NotNull(actual);
             Assert.Equal(expected.Appointments.Count, actual.Appointments.Count);
             Assert.Equal(expected.TotalCount, actual.TotalCount);
-            for(int i = 0; i < expected.Appointments.Count; i++)
-            {
-                Assert.Equal(expected.Appointments[i].AppointmentId, actual.Appointments[i].AppointmentId);
-                Assert.Equal(expected.Appointments[i].CheckInDate, actual.Appointments[i].CheckInDate);
-                Assert.Equal(expected.Appointments[i].Status, actual.Appointments[i].Status);
-                Assert.Equal(expected.Appointments[i].Patient.AvatarLink, actual.Appointments[i].Patient.AvatarLink);
-                Assert.Equal(expected.Appointments[i].Patient.DoB, actual.Appointments[i].Patient.DoB);
-                Assert.Equal(expected.Appointments[i].Patient.FullName, actual.Appointments[i].Patient.FullName);
-                Assert.Equal(expected.Appointments[i].Patient.PatientIdentifier, actual.Appointments[i].Patient.PatientIdentifier);
-            }
+            Assert.True(expected.Appointments.All(x => actual.Appointments.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate == y.CheckInDate
+                                                                                          && x.Patient.DoB == y.Patient.DoB && x.Patient.FullName == y.Patient.FullName
+                                                                                          && x.Patient.PatientIdentifier == y.Patient.PatientIdentifier
+                                                                                          && x.Status == y.Status && x.Patient.AvatarLink == y.Patient.AvatarLink)));
         }
 
         [Fact]
-        public async void GetListAppoinmentsPaging_SortByID()
+        public async void GetListAppoinmentsPaging_SortByID_ReturnsAppointmentList()
         {
             //Arrange
             var patients = PatientDataTest();
             var appointments = AppointmentDataTest(patients);
             var context = CreateMockContext(appointments);
             var pagingRequest = PagingRequestData(1, 2, 1);
-            var appoinmentListServiceModel = new List<PatientChecking.ServiceModels.Appointment>
-            {
-                new PatientChecking.ServiceModels.Appointment
-                {
-                    AppointmentId = 1,
-                    MedicalConcerns = "Head",
-                    CheckInDate = new DateTime(2021, 08, 26),
-                    Status = "CheckIn",
-                    PatientId = patients[0].PatientId,
-                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[0].AvatarLink, DoB = patients[0].DoB, FullName = patients[0].FullName, PatientIdentifier = patients[0].PatientIdentifier }
-                },
+            
 
-                 new PatientChecking.ServiceModels.Appointment
-                {
-                    AppointmentId = 2,
-                    MedicalConcerns = "Hand",
-                    CheckInDate = new DateTime(2021, 08, 27),
-                    Status = "Cancel",
-                    PatientId = patients[1].PatientId,
-                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[1].AvatarLink, DoB = patients[1].DoB, FullName = patients[1].FullName, PatientIdentifier = patients[1].PatientIdentifier }
-                },
-            };
-
-            var expected = new AppointmentList
-            {
-                Appointments = appoinmentListServiceModel,
-                TotalCount = 4,
-            };
+            var expected = GetDataAppointmentExpected(patients, pagingRequest.SortSelection);
 
             //Act
             var apointmentService = new AppointmentService(context);
@@ -257,53 +324,23 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
             Assert.NotNull(actual);
             Assert.Equal(expected.Appointments.Count, actual.Appointments.Count);
             Assert.Equal(expected.TotalCount, actual.TotalCount);
-            for (int i = 0; i < expected.Appointments.Count; i++)
-            {
-                Assert.Equal(expected.Appointments[i].AppointmentId, actual.Appointments[i].AppointmentId);
-                Assert.Equal(expected.Appointments[i].CheckInDate, actual.Appointments[i].CheckInDate);
-                Assert.Equal(expected.Appointments[i].Status, actual.Appointments[i].Status);
-                Assert.Equal(expected.Appointments[i].Patient.AvatarLink, actual.Appointments[i].Patient.AvatarLink);
-                Assert.Equal(expected.Appointments[i].Patient.DoB, actual.Appointments[i].Patient.DoB);
-                Assert.Equal(expected.Appointments[i].Patient.FullName, actual.Appointments[i].Patient.FullName);
-                Assert.Equal(expected.Appointments[i].Patient.PatientIdentifier, actual.Appointments[i].Patient.PatientIdentifier);
-            }
+            Assert.True(expected.Appointments.All(x => actual.Appointments.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate == y.CheckInDate
+                                                                                          && x.Patient.DoB == y.Patient.DoB && x.Patient.FullName == y.Patient.FullName
+                                                                                          && x.Patient.PatientIdentifier == y.Patient.PatientIdentifier
+                                                                                          && x.Status == y.Status && x.Patient.AvatarLink == y.Patient.AvatarLink)));
         }
 
         [Fact]
-        public async void GetListAppoinmentsPaging_SortByDoB()
+        public async void GetListAppoinmentsPaging_SortByDoB_ReturnsAppointmentList()
         {
             //Arrange
             var patients = PatientDataTest();
             var appointments = AppointmentDataTest(patients);
             var context = CreateMockContext(appointments);
             var pagingRequest = PagingRequestData(1, 2, 2);
-            var appoinmentListServiceModel = new List<PatientChecking.ServiceModels.Appointment>
-            {
-                new PatientChecking.ServiceModels.Appointment
-                {
-                    AppointmentId = 3,
-                    MedicalConcerns = "Stomach",
-                    CheckInDate = new DateTime(2021, 08, 25),
-                    Status = "Closed",
-                    PatientId = patients[2].PatientId,
-                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[2].AvatarLink, DoB = patients[2].DoB, FullName = patients[2].FullName, PatientIdentifier = patients[2].PatientIdentifier }
-                },
 
-                new PatientChecking.ServiceModels.Appointment
-                {
-                    AppointmentId = 4,
-                    MedicalConcerns = "Lung",
-                    CheckInDate = new DateTime(2021, 08, 25),
-                    Status = "CheckIn",
-                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[3].AvatarLink, DoB = patients[3].DoB, FullName = patients[3].FullName, PatientIdentifier = patients[3].PatientIdentifier }
-                }
-            };
 
-            var expected = new AppointmentList
-            {
-                Appointments = appoinmentListServiceModel,
-                TotalCount = 4,
-            };
+            var expected = GetDataAppointmentExpected(patients, pagingRequest.SortSelection);
 
             //Act
             var apointmentService = new AppointmentService(context);
@@ -313,54 +350,23 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
             Assert.NotNull(actual);
             Assert.Equal(expected.Appointments.Count, actual.Appointments.Count);
             Assert.Equal(expected.TotalCount, actual.TotalCount);
-            for (int i = 0; i < expected.Appointments.Count; i++)
-            {
-                Assert.Equal(expected.Appointments[i].AppointmentId, actual.Appointments[i].AppointmentId);
-                Assert.Equal(expected.Appointments[i].CheckInDate, actual.Appointments[i].CheckInDate);
-                Assert.Equal(expected.Appointments[i].Status, actual.Appointments[i].Status);
-                Assert.Equal(expected.Appointments[i].Patient.AvatarLink, actual.Appointments[i].Patient.AvatarLink);
-                Assert.Equal(expected.Appointments[i].Patient.DoB, actual.Appointments[i].Patient.DoB);
-                Assert.Equal(expected.Appointments[i].Patient.FullName, actual.Appointments[i].Patient.FullName);
-                Assert.Equal(expected.Appointments[i].Patient.PatientIdentifier, actual.Appointments[i].Patient.PatientIdentifier);
-            }
+            Assert.True(expected.Appointments.All(x => actual.Appointments.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate == y.CheckInDate
+                                                                                          && x.Patient.DoB == y.Patient.DoB && x.Patient.FullName == y.Patient.FullName
+                                                                                          && x.Patient.PatientIdentifier == y.Patient.PatientIdentifier
+                                                                                          && x.Status == y.Status && x.Patient.AvatarLink == y.Patient.AvatarLink)));
         }
 
         [Fact]
-        public async void GetListAppoinmentsPaging_SortByCheckInDate()
+        public async void GetListAppoinmentsPaging_SortByCheckInDate_ReturnsAppointmentList()
         {
             //Arrange
             var patients = PatientDataTest();
             var appointments = AppointmentDataTest(patients);
             var context = CreateMockContext(appointments);
             var pagingRequest = PagingRequestData(1, 2, 3);
-            var appoinmentListServiceModel = new List<PatientChecking.ServiceModels.Appointment>
-            {
-                new PatientChecking.ServiceModels.Appointment
-                {
-                    AppointmentId = 2,
-                    MedicalConcerns = "Hand",
-                    CheckInDate = new DateTime(2021, 08, 27),
-                    Status = "Cancel",
-                    PatientId = patients[1].PatientId,
-                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[1].AvatarLink, DoB = patients[1].DoB, FullName = patients[1].FullName, PatientIdentifier = patients[1].PatientIdentifier }
-                },
 
-                new PatientChecking.ServiceModels.Appointment
-                {
-                    AppointmentId = 1,
-                    MedicalConcerns = "Head",
-                    CheckInDate = new DateTime(2021, 08, 26),
-                    Status = "CheckIn",
-                    PatientId = patients[0].PatientId,
-                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[0].AvatarLink, DoB = patients[0].DoB, FullName = patients[0].FullName, PatientIdentifier = patients[0].PatientIdentifier }
-                }
-            };
 
-            var expected = new AppointmentList
-            {
-                Appointments = appoinmentListServiceModel,
-                TotalCount = 4,
-            };
+            var expected = GetDataAppointmentExpected(patients, pagingRequest.SortSelection);
 
             //Act
             var apointmentService = new AppointmentService(context);
@@ -370,54 +376,23 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
             Assert.NotNull(actual);
             Assert.Equal(expected.Appointments.Count, actual.Appointments.Count);
             Assert.Equal(expected.TotalCount, actual.TotalCount);
-            for (int i = 0; i < expected.Appointments.Count; i++)
-            {
-                Assert.Equal(expected.Appointments[i].AppointmentId, actual.Appointments[i].AppointmentId);
-                Assert.Equal(expected.Appointments[i].CheckInDate, actual.Appointments[i].CheckInDate);
-                Assert.Equal(expected.Appointments[i].Status, actual.Appointments[i].Status);
-                Assert.Equal(expected.Appointments[i].Patient.AvatarLink, actual.Appointments[i].Patient.AvatarLink);
-                Assert.Equal(expected.Appointments[i].Patient.DoB, actual.Appointments[i].Patient.DoB);
-                Assert.Equal(expected.Appointments[i].Patient.FullName, actual.Appointments[i].Patient.FullName);
-                Assert.Equal(expected.Appointments[i].Patient.PatientIdentifier, actual.Appointments[i].Patient.PatientIdentifier);
-            }
+            Assert.True(expected.Appointments.All(x => actual.Appointments.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate == y.CheckInDate
+                                                                                          && x.Patient.DoB == y.Patient.DoB && x.Patient.FullName == y.Patient.FullName
+                                                                                          && x.Patient.PatientIdentifier == y.Patient.PatientIdentifier
+                                                                                          && x.Status == y.Status && x.Patient.AvatarLink == y.Patient.AvatarLink)));
         }
 
         [Fact]
-        public async void GetListAppoinmentsPaging_SortByStatus()
+        public async void GetListAppoinmentsPaging_SortByStatus_ReturnsAppointmentList()
         {
             //Arrange
             var patients = PatientDataTest();
             var appointments = AppointmentDataTest(patients);
             var context = CreateMockContext(appointments);
             var pagingRequest = PagingRequestData(1, 2, 4);
-            var appoinmentListServiceModel = new List<PatientChecking.ServiceModels.Appointment>
-            {
-                new PatientChecking.ServiceModels.Appointment
-                {
-                    AppointmentId = 1,
-                    MedicalConcerns = "Head",
-                    CheckInDate = new DateTime(2021, 08, 26),
-                    Status = "CheckIn",
-                    PatientId = patients[0].PatientId,
-                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[0].AvatarLink, DoB = patients[0].DoB, FullName = patients[0].FullName, PatientIdentifier = patients[0].PatientIdentifier }
-                },
 
-                new PatientChecking.ServiceModels.Appointment
-                {
-                    AppointmentId = 4,
-                    MedicalConcerns = "Lung",
-                    CheckInDate = new DateTime(2021, 08, 25),
-                    Status = "CheckIn",
-                    PatientId = patients[3].PatientId,
-                    Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[3].AvatarLink, DoB = patients[3].DoB, FullName = patients[3].FullName, PatientIdentifier = patients[3].PatientIdentifier }
-                }
-            };
 
-            var expected = new AppointmentList
-            {
-                Appointments = appoinmentListServiceModel,
-                TotalCount = 4,
-            };
+            var expected = GetDataAppointmentExpected(patients, pagingRequest.SortSelection);
 
             //Act
             var apointmentService = new AppointmentService(context);
@@ -427,20 +402,14 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
             Assert.NotNull(actual);
             Assert.Equal(expected.Appointments.Count, actual.Appointments.Count);
             Assert.Equal(expected.TotalCount, actual.TotalCount);
-            for (int i = 0; i < expected.Appointments.Count; i++)
-            {
-                Assert.Equal(expected.Appointments[i].AppointmentId, actual.Appointments[i].AppointmentId);
-                Assert.Equal(expected.Appointments[i].CheckInDate, actual.Appointments[i].CheckInDate);
-                Assert.Equal(expected.Appointments[i].Status, actual.Appointments[i].Status);
-                Assert.Equal(expected.Appointments[i].Patient.AvatarLink, actual.Appointments[i].Patient.AvatarLink);
-                Assert.Equal(expected.Appointments[i].Patient.DoB, actual.Appointments[i].Patient.DoB);
-                Assert.Equal(expected.Appointments[i].Patient.FullName, actual.Appointments[i].Patient.FullName);
-                Assert.Equal(expected.Appointments[i].Patient.PatientIdentifier, actual.Appointments[i].Patient.PatientIdentifier);
-            }
+            Assert.True(expected.Appointments.All(x => actual.Appointments.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate == y.CheckInDate
+                                                                                          && x.Patient.DoB == y.Patient.DoB && x.Patient.FullName == y.Patient.FullName
+                                                                                          && x.Patient.PatientIdentifier == y.Patient.PatientIdentifier
+                                                                                          && x.Status == y.Status && x.Patient.AvatarLink == y.Patient.AvatarLink)));
         }
 
         [Fact]
-        public async void UpdateAppointment_Ok()
+        public async void UpdateAppointment_ExistAppointment_ReturnsNumberOfChangedLine()
         {
             //Arrange
             var patients = PatientDataTest();
@@ -461,7 +430,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
         }
 
         [Fact]
-        public async void UpdateAppointment_ParamNull()
+        public async void UpdateAppointment_ParamNull_ReturnsNumberOfChangedLine()
         {
             //Arrange
             var patients = PatientDataTest();

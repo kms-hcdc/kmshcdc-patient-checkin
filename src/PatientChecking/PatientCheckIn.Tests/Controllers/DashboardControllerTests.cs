@@ -16,10 +16,8 @@ namespace PatientCheckIn.Tests.Controllers
 {
     public class DashboardControllerTests
     {
-        [Fact]
-        public async void GetDashboardData()
+        private DashboardViewModel DashboardViewModel()
         {
-            //Arrage
             var dashboardData = new DashboardViewModel
             {
                 NumOfAppointments = 4,
@@ -28,8 +26,15 @@ namespace PatientCheckIn.Tests.Controllers
                 NumOfPatients = 4,
                 NumOfPatientsInMonth = 4
             };
+            return dashboardData;
+        }
+        [Fact]
+        public async void GetDashboardData_ReturnsJsonResult()
+        {
+            //Arrage
+            var dashboardData = DashboardViewModel();
 
-			var mediator = new Mock<IMediator>();
+            var mediator = new Mock<IMediator>();
             mediator.Setup(x => x.Send(It.IsAny<GetDashBoardDataQuery>(), new System.Threading.CancellationToken())).ReturnsAsync(dashboardData);
             var dashboardController = new DashboardController(mediator.Object);
 
@@ -50,7 +55,7 @@ namespace PatientCheckIn.Tests.Controllers
         }
 
         [Fact]
-        public void Home()
+        public void Home_ReturnsHomeView()
         {
             //Arrage
             var mediator = new Mock<IMediator>();

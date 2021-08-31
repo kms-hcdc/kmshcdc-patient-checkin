@@ -12,7 +12,7 @@ namespace PatientCheckIn.Tests.Services.AppConfigurationServices
 {
     public class AppConfigurationServiceTests
     {
-        private PatientCheckInContext CreateMockContext(List<DataAccess.Models.ProvinceCity> provinceCities)
+        private PatientCheckInContext CreateMockContext(List<ProvinceCity> provinceCities)
         {
             var builder = new DbContextOptionsBuilder<PatientCheckInContext>();
             builder.UseInMemoryDatabase(Guid.NewGuid().ToString());
@@ -32,27 +32,27 @@ namespace PatientCheckIn.Tests.Services.AppConfigurationServices
             return context;
         }
 
-        private List<DataAccess.Models.ProvinceCity> ProvinceCityDataTest()
+        private List<ProvinceCity> ProvinceCityDataTest()
         {
-            var provinceCities = new List<DataAccess.Models.ProvinceCity>
+            var provinceCities = new List<ProvinceCity>
             {
-                new DataAccess.Models.ProvinceCity
+                new ProvinceCity
                 {
                    ProvinceCityId = 1, ProvinceCityName = "An Giang"
                 },
-                new DataAccess.Models.ProvinceCity
+                new ProvinceCity
                 {
                    ProvinceCityId = 2, ProvinceCityName = "Bà rịa – Vung tàu"
                 },
-                new DataAccess.Models.ProvinceCity
+                new ProvinceCity
                 {
                    ProvinceCityId = 3, ProvinceCityName = "Bắc Giang"
                 },
-                new DataAccess.Models.ProvinceCity
+                new ProvinceCity
                 {
                    ProvinceCityId = 4, ProvinceCityName = "Bắc Kạn"
                 },
-                new DataAccess.Models.ProvinceCity
+                new ProvinceCity
                 {
                    ProvinceCityId = 5, ProvinceCityName = "Bạc Liêu"
                 },
@@ -61,7 +61,7 @@ namespace PatientCheckIn.Tests.Services.AppConfigurationServices
         }
 
         [Fact]
-        public async void GetProvinceCities()
+        public async void GetProvinceCities_ReturnsListProvinceCity()
         {
             //Arrange
             var provinceCities = ProvinceCityDataTest();
@@ -76,11 +76,7 @@ namespace PatientCheckIn.Tests.Services.AppConfigurationServices
             //Assert
             Assert.NotNull(actual);
             Assert.Equal(expected.Count, actual.Count);
-            for (int i = 0; i < expected.Count; i++)
-            {
-                Assert.Equal(expected[i].ProvinceCityId, actual[i].ProvinceCityId);
-                Assert.Equal(expected[i].ProvinceCityName, actual[i].ProvinceCityName);
-            }
+            Assert.True(expected.All(x => actual.Any(y => x.ProvinceCityId == y.ProvinceCityId && x.ProvinceCityName == y.ProvinceCityName)));
         }
     }
 }

@@ -27,12 +27,8 @@ namespace PatientCheckIn.Tests.Services.ImageServices
             // Arrange.
             var fileMock = new Mock<IFormFile>();
             //Setup mock file using a memory stream
-            var content = "This is mock of formfile";
             var fileName = "avatar.jpg";
             var ms = new MemoryStream();
-            var writer = new StreamWriter(ms);
-            writer.Write(content);
-            writer.Flush();
             ms.Position = 0;
             fileMock.Setup(x => x.OpenReadStream()).Returns(ms);
             fileMock.Setup(x => x.FileName).Returns(fileName);
@@ -58,12 +54,8 @@ namespace PatientCheckIn.Tests.Services.ImageServices
             // Arrange.
             var fileMock = new Mock<IFormFile>();
             //Setup mock file using a memory stream
-            var content = "This is mock of formfile";
             var fileName = "doc.pdf";
             var ms = new MemoryStream();
-            var writer = new StreamWriter(ms);
-            writer.Write(content);
-            writer.Flush();
             ms.Position = 0;
             fileMock.Setup(x => x.OpenReadStream()).Returns(ms);
             fileMock.Setup(x => x.FileName).Returns(fileName);
@@ -127,12 +119,8 @@ namespace PatientCheckIn.Tests.Services.ImageServices
             // Arrange.
             var fileMock = new Mock<IFormFile>();
             //Setup mock file using a memory stream
-            var content = "This is mock of formfile";
             var fileName = "avatar.jpg";
             var ms = new MemoryStream();
-            var writer = new StreamWriter(ms);
-            writer.Write(content);
-            writer.Flush();
             ms.Position = 0;
             fileMock.Setup(x => x.OpenReadStream()).Returns(ms);
             fileMock.Setup(x => x.FileName).Returns(fileName);

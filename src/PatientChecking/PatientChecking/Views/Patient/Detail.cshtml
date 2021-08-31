@@ -355,34 +355,28 @@
         }
     });
 
-    $("#homeTown").keydown(function (e) {
+    $("#homeTown").focusout(function (e) {
         var homeTownOption = $("#homeTown").val();
-        if (e.keyCode === 9) {
-            if (!cityList.includes(homeTownOption)) {
-                $("#homeTown").val("Other");
-            }
-            $(".autocomplete-items").hide();
+        if (!cityList.includes(homeTownOption)) {
+            $("#homeTown").val("Other");
         }
+        $(".autocomplete-items").hide();
     });
 
-    $("#birthplace").keydown(function (e) {
+    $("#birthplace").focusout(function (e) {
         var birthplaceOption = $("#birthplace").val();
-        if (e.keyCode === 9) {
-            if (!cityList.includes(birthplaceOption)) {
-                $("#birthplace").val("Other");
-            }
-            $(".autocomplete-items").hide();
+        if (!cityList.includes(birthplaceOption)) {
+            $("#birthplace").val("Other");
         }
+        $(".autocomplete-items").hide();
     });
 
-    $("#issuedPlace").keydown(function (e) {
+    $("#issuedPlace").focusout(function (e) {
         var issuedPlaceOption = $("#issuedPlace").val();
-        if (e.keyCode === 9) {
-            if (!cityList.includes(issuedPlaceOption)) {
-                $("#issuedPlace").val("Other");
-            }
-            $(".autocomplete-items").hide();
+        if (!cityList.includes(issuedPlaceOption)) {
+            $("#issuedPlace").val("Other");
         }
+        $(".autocomplete-items").hide();
     });
 
     $("#idCardNo").focusout(function () {

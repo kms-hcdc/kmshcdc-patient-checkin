@@ -62,7 +62,7 @@ namespace PatientChecking.Helpers
             var sb = new StringBuilder();
 
             sb.AppendFormat("<p>{0}</p>", msg.MsgText);
-            sb.Append("<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a>");
+            sb.Append("<a class=\"close text-decoration-none\" data-dismiss=\"alert\" href=\"#\">×</a>");
 
             ulMsg.InnerHtml = sb.ToString();
 

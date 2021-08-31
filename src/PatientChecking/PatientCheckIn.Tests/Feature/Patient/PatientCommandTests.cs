@@ -176,7 +176,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
 
             var mockImageService = new Mock<IImageService>();
             mockImageService.Setup(x => x.IsImageFile(image)).Returns(true);
-            mockImageService.Setup(x => x.SaveImage(image)).Returns(avatarLink);
+            mockImageService.Setup(x => x.SaveImage(image)).ReturnsAsync(avatarLink);
 
             var mockPatientService = new Mock<IPatientService>();
             mockPatientService.Setup(x => x.UploadPatientImage(patientId, avatarLink)).ReturnsAsync(1);
@@ -227,7 +227,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
 
             var mockImageService = new Mock<IImageService>();
             mockImageService.Setup(x => x.IsImageFile(image)).Returns(true);
-            mockImageService.Setup(x => x.SaveImage(image)).Returns(avatarLink);
+            mockImageService.Setup(x => x.SaveImage(image)).ReturnsAsync(avatarLink);
 
             var mockPatientService = new Mock<IPatientService>();
             mockPatientService.Setup(x => x.UploadPatientImage(patientId, avatarLink)).ReturnsAsync(-1);

@@ -36,7 +36,7 @@ namespace PatientChecking.Feature.Patient.Commands
                     return ImageUploadingStatus.IsNotImageFailed;
                 }
 
-                var avatarLink = _imageService.SaveImage(request.FormFile);
+                var avatarLink = await _imageService.SaveImage(request.FormFile);
 
                 var result = await _patientService.UploadPatientImage(request.PatientId, avatarLink);
 

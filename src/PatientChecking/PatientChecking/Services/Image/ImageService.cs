@@ -33,7 +33,7 @@ namespace PatientChecking.Services.Image
             return true;
         }
 
-        public string SaveImage(IFormFile formFile)
+        public async Task<string> SaveImage(IFormFile formFile)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace PatientChecking.Services.Image
                 string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(formFile.FileName);
 
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                formFile.CopyTo(new FileStream(filePath, FileMode.Create));
+                await formFile.CopyToAsync(new FileStream(filePath, FileMode.Create));
 
                 var avatarLink = "/Image/" + uniqueFileName;
 

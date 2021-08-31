@@ -84,7 +84,7 @@ namespace PatientCheckIn.Tests.Services.ImageServices
         }
 
         [Fact]
-        public void SaveImage_Ok()
+        public async void SaveImage_Ok()
         {
             // Arrange.
             var fileMock = new Mock<IFormFile>();
@@ -99,21 +99,19 @@ namespace PatientCheckIn.Tests.Services.ImageServices
             fileMock.Setup(x => x.OpenReadStream()).Returns(ms);
             fileMock.Setup(x => x.FileName).Returns(fileName);
             fileMock.Setup(x => x.Length).Returns(ms.Length);
+            fileMock.Setup(f => f.CopyToAsync(It.IsAny<FileStream>(), CancellationToken.None)).Returns(Task.CompletedTask);
 
             var formFile = fileMock.Object;
-
-            var currentPath = Directory.GetCurrentDirectory();
-            var path = currentPath.Replace("\\PatientCheckIn.Tests\\bin\\Debug\\net5.0", "\\PatientChecking\\wwwroot");
 
             var mockEnvironment = new Mock<IHostingEnvironment>();
             //...Setup the mock as needed
             mockEnvironment
                 .Setup(m => m.WebRootPath)
-                .Returns(path);
+                .Returns("");
 
             //Act
             var imageService = new ImageService(mockEnvironment.Object);
-            var actual = imageService.SaveImage(formFile);
+            var actual = await imageService.SaveImage(formFile);
             var guid = actual.Substring(7, 36);
 
             //Assert
@@ -123,7 +121,7 @@ namespace PatientCheckIn.Tests.Services.ImageServices
         }
 
         [Fact]
-        public void SaveImage_NotOk()
+        public async void SaveImage_NotOk()
         {
             // Arrange.
             var fileMock = new Mock<IFormFile>();
@@ -151,7 +149,7 @@ namespace PatientCheckIn.Tests.Services.ImageServices
             var imageService = new ImageService(mockEnvironment.Object);
 
             //Assert
-            IOException exception = Assert.Throws<DirectoryNotFoundException>(() => imageService.SaveImage(formFile));
+            IOException exception = await Assert.ThrowsAsync<DirectoryNotFoundException>(() => imageService.SaveImage(formFile));
         }
     }
 }

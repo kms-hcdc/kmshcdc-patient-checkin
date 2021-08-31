@@ -15,12 +15,6 @@ namespace PatientCheckIn.Tests.Services.ImageServices
 {
     public class ImageServiceTests
     {
-        public static bool IsGuid(string value)
-        {
-            Guid x;
-            return Guid.TryParse(value, out x);
-        }
-
         [Fact]
         public void IsImageFile_Ok()
         {
@@ -110,7 +104,7 @@ namespace PatientCheckIn.Tests.Services.ImageServices
             //Assert
             Assert.Contains(formFile.FileName, actual);
             Assert.Contains("/Image/", actual);
-            Assert.True(IsGuid(guid));
+            Assert.True(Guid.TryParse(guid, out Guid x));
         }
 
         [Fact]

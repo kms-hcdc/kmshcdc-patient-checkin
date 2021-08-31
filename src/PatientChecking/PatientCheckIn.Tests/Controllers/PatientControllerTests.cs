@@ -25,7 +25,7 @@ namespace PatientCheckIn.Tests.Controllers
     public class PatientControllerTests
     {
         [Fact]
-        public async void Index_ThreeParams()
+        public async void Index_ThreeParams_ReturnsIndexView()
         {
             //Arrange 
             var data = DataTest();
@@ -45,22 +45,18 @@ namespace PatientCheckIn.Tests.Controllers
             Assert.Equal(expected.SortSelection, model.SortSelection);
             Assert.Equal(expected.PageIndex, model.PageIndex);
             Assert.Equal(expected.PageSize, model.PageSize);
-            for(int i = 0; i < expected.Patients.Count; i++)
-            {
-                Assert.Equal(expected.Patients[i].PatientId, model.Patients[i].PatientId);
-                Assert.Equal(expected.Patients[i].PatientIdentifier, model.Patients[i].PatientIdentifier);
-                Assert.Equal(expected.Patients[i].FullName, model.Patients[i].FullName);
-                Assert.Equal(expected.Patients[i].Gender, model.Patients[i].Gender);
-                Assert.Equal(expected.Patients[i].DoB, model.Patients[i].DoB);
-                Assert.Equal(expected.Patients[i].AvatarLink, model.Patients[i].AvatarLink);
-                Assert.Equal(expected.Patients[i].Address, model.Patients[i].Address);
-                Assert.Equal(expected.Patients[i].Email, model.Patients[i].Email);
-                Assert.Equal(expected.Patients[i].PhoneNumber, model.Patients[i].PhoneNumber);
-            }
+            Assert.True(expected.Patients.All(x => model.Patients.Any(y => x.PatientId == y.PatientId
+                                                                         && x.PatientIdentifier == y.PatientIdentifier
+                                                                         && x.FullName == y.FullName
+                                                                         && x.DoB == y.DoB
+                                                                         && x.Gender == y.Gender
+                                                                         && x.Address == y.Address
+                                                                         && x.PhoneNumber == y.PhoneNumber
+                                                                         && x.Email == y.Email)));
         }
 
         [Fact]
-        public async void Index_TwoParams()
+        public async void Index_TwoParams_ReturnsThreeParamsIndexAction()
         {
             //Arrange 
             var data = DataTest();
@@ -80,22 +76,18 @@ namespace PatientCheckIn.Tests.Controllers
             Assert.Equal(expected.SortSelection, model.SortSelection);
             Assert.Equal(expected.PageIndex, model.PageIndex);
             Assert.Equal(expected.PageSize, model.PageSize);
-            for (int i = 0; i < expected.Patients.Count; i++)
-            {
-                Assert.Equal(expected.Patients[i].PatientId, model.Patients[i].PatientId);
-                Assert.Equal(expected.Patients[i].PatientIdentifier, model.Patients[i].PatientIdentifier);
-                Assert.Equal(expected.Patients[i].FullName, model.Patients[i].FullName);
-                Assert.Equal(expected.Patients[i].Gender, model.Patients[i].Gender);
-                Assert.Equal(expected.Patients[i].DoB, model.Patients[i].DoB);
-                Assert.Equal(expected.Patients[i].AvatarLink, model.Patients[i].AvatarLink);
-                Assert.Equal(expected.Patients[i].Address, model.Patients[i].Address);
-                Assert.Equal(expected.Patients[i].Email, model.Patients[i].Email);
-                Assert.Equal(expected.Patients[i].PhoneNumber, model.Patients[i].PhoneNumber);
-            }
+            Assert.True(expected.Patients.All(x => model.Patients.Any(y => x.PatientId == y.PatientId
+                                                                         && x.PatientIdentifier == y.PatientIdentifier
+                                                                         && x.FullName == y.FullName
+                                                                         && x.DoB == y.DoB
+                                                                         && x.Gender == y.Gender
+                                                                         && x.Address == y.Address
+                                                                         && x.PhoneNumber == y.PhoneNumber
+                                                                         && x.Email == y.Email)));
         }
 
         [Fact]
-        public async void Index_OneParam()
+        public async void Index_OneParam_ReturnsThreeParamsIndexAction()
         {
             //Arrange 
             var data = DataTest();
@@ -115,22 +107,18 @@ namespace PatientCheckIn.Tests.Controllers
             Assert.Equal(expected.SortSelection, model.SortSelection);
             Assert.Equal(expected.PageIndex, model.PageIndex);
             Assert.Equal(expected.PageSize, model.PageSize);
-            for (int i = 0; i < expected.Patients.Count; i++)
-            {
-                Assert.Equal(expected.Patients[i].PatientId, model.Patients[i].PatientId);
-                Assert.Equal(expected.Patients[i].PatientIdentifier, model.Patients[i].PatientIdentifier);
-                Assert.Equal(expected.Patients[i].FullName, model.Patients[i].FullName);
-                Assert.Equal(expected.Patients[i].Gender, model.Patients[i].Gender);
-                Assert.Equal(expected.Patients[i].DoB, model.Patients[i].DoB);
-                Assert.Equal(expected.Patients[i].AvatarLink, model.Patients[i].AvatarLink);
-                Assert.Equal(expected.Patients[i].Address, model.Patients[i].Address);
-                Assert.Equal(expected.Patients[i].Email, model.Patients[i].Email);
-                Assert.Equal(expected.Patients[i].PhoneNumber, model.Patients[i].PhoneNumber);
-            }
+            Assert.True(expected.Patients.All(x => model.Patients.Any(y => x.PatientId == y.PatientId
+                                                                         && x.PatientIdentifier == y.PatientIdentifier
+                                                                         && x.FullName == y.FullName
+                                                                         && x.DoB == y.DoB
+                                                                         && x.Gender == y.Gender
+                                                                         && x.Address == y.Address
+                                                                         && x.PhoneNumber == y.PhoneNumber
+                                                                         && x.Email == y.Email)));
         }
 
         [Fact]
-        public async void Index_NoParam()
+        public async void Index_NoParam_ReturnsThreeParamsIndexAction()
         {
             //Arrange 
             var data = DataTest();
@@ -150,22 +138,18 @@ namespace PatientCheckIn.Tests.Controllers
             Assert.Equal(expected.SortSelection, model.SortSelection);
             Assert.Equal(expected.PageIndex, model.PageIndex);
             Assert.Equal(expected.PageSize, model.PageSize);
-            for (int i = 0; i < expected.Patients.Count; i++)
-            {
-                Assert.Equal(expected.Patients[i].PatientId, model.Patients[i].PatientId);
-                Assert.Equal(expected.Patients[i].PatientIdentifier, model.Patients[i].PatientIdentifier);
-                Assert.Equal(expected.Patients[i].FullName, model.Patients[i].FullName);
-                Assert.Equal(expected.Patients[i].Gender, model.Patients[i].Gender);
-                Assert.Equal(expected.Patients[i].DoB, model.Patients[i].DoB);
-                Assert.Equal(expected.Patients[i].AvatarLink, model.Patients[i].AvatarLink);
-                Assert.Equal(expected.Patients[i].Address, model.Patients[i].Address);
-                Assert.Equal(expected.Patients[i].Email, model.Patients[i].Email);
-                Assert.Equal(expected.Patients[i].PhoneNumber, model.Patients[i].PhoneNumber);
-            }
+            Assert.True(expected.Patients.All(x => model.Patients.Any(y => x.PatientId == y.PatientId
+                                                                         && x.PatientIdentifier == y.PatientIdentifier
+                                                                         && x.FullName == y.FullName
+                                                                         && x.DoB == y.DoB
+                                                                         && x.Gender == y.Gender
+                                                                         && x.Address == y.Address
+                                                                         && x.PhoneNumber == y.PhoneNumber
+                                                                         && x.Email == y.Email)));
         }
 
         [Fact]
-        public async void Detail()
+        public async void Detail_ReturnsDetailView()
         {
             //Arrange
             var patient = PatientDetailDataTest();
@@ -203,14 +187,11 @@ namespace PatientCheckIn.Tests.Controllers
             Assert.Equal(expected.IssuedDate, model.IssuedDate);
             Assert.Equal(expected.IssuedPlace, model.IssuedPlace);
             Assert.Equal(expected.InsuranceNo, model.InsuranceNo);
-            for (int i = 0; i < expected.ProvinceCities.Count; i++)
-            {
-                Assert.Equal(expected.ProvinceCities[i], model.ProvinceCities[i]);
-            }
+            Assert.True(expected.ProvinceCities.All(x => model.ProvinceCities.Any(y => x == y)));
         }
 
         [Fact]
-        public async void Update_Ok()
+        public async void Update_Ok_ReturnsRedirectToDetailAction()
         {
             //Arrange 
             var patient = PatientDetailDataTest();
@@ -233,11 +214,11 @@ namespace PatientCheckIn.Tests.Controllers
             var redirectToAction = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Detail", redirectToAction.ActionName);
             Assert.True(redirectToAction.RouteValues.Keys.Contains("patientId"));
-            Assert.True(redirectToAction.RouteValues.Values.Contains(patient.PatientId));
+            Assert.True(redirectToAction.RouteValues.Values.Contains(patient.PatientId)); 
         }
 
         [Fact]
-        public async void Update_NotOk()
+        public async void Update_NotOk_ReturnsRedirectToDetailAction()
         {
             //Arrange 
             var patient = PatientDetailDataTest();

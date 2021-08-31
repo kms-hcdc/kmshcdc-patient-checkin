@@ -41,7 +41,8 @@ namespace PatientChecking.Services.Image
                 string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(formFile.FileName);
 
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                await formFile.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                var fileStream = FromFileStream(filePath);
+                await formFile.CopyToAsync(fileStream);
 
                 var avatarLink = "/Image/" + uniqueFileName;
 
@@ -52,6 +53,10 @@ namespace PatientChecking.Services.Image
                 _log.Error(ex.Message);
                 throw;
             }
+        }
+        public virtual Stream FromFileStream(string path)
+        {
+            return new FileStream(path, FileMode.Create);
         }
     }
 }

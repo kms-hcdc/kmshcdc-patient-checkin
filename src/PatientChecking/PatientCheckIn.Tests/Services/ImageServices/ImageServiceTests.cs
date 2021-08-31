@@ -88,30 +88,31 @@ namespace PatientCheckIn.Tests.Services.ImageServices
         {
             // Arrange.
             var fileMock = new Mock<IFormFile>();
+            
+            var mockEnvironment = new Mock<IHostingEnvironment>();
+
             //Setup mock file using a memory stream
-            var content = "This is mock of formfile";
             var fileName = "avatar.jpg";
             var ms = new MemoryStream();
-            var writer = new StreamWriter(ms);
-            writer.Write(content);
-            writer.Flush();
+
             ms.Position = 0;
             fileMock.Setup(x => x.OpenReadStream()).Returns(ms);
             fileMock.Setup(x => x.FileName).Returns(fileName);
             fileMock.Setup(x => x.Length).Returns(ms.Length);
-            fileMock.Setup(f => f.CopyToAsync(It.IsAny<FileStream>(), CancellationToken.None)).Returns(Task.CompletedTask);
-
-            var formFile = fileMock.Object;
-
-            var mockEnvironment = new Mock<IHostingEnvironment>();
+            fileMock.Setup(f =>  f.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(true));
+            var formFile = fileMock.Object; 
             //...Setup the mock as needed
             mockEnvironment
                 .Setup(m => m.WebRootPath)
                 .Returns("");
+            
+            var mockService = new Mock<ImageService>(mockEnvironment.Object);
+            mockService.Setup(x => x.FromFileStream(It.IsAny<string>())).Returns(FileStream.Null);
+            var service = mockService.Object;
 
             //Act
-            var imageService = new ImageService(mockEnvironment.Object);
-            var actual = await imageService.SaveImage(formFile);
+            var actual = await service.SaveImage(formFile);
             var guid = actual.Substring(7, 36);
 
             //Assert

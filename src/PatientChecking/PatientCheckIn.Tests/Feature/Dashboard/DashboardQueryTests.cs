@@ -35,8 +35,8 @@ namespace PatientCheckIn.Tests.Feature.Dashboard
             var data = AppointmentDashboardData();
             var appointmentServices = new Mock<IAppointmentService>();
             var patientServices = new Mock<IPatientService>();
-            appointmentServices.Setup(x => x.GetAppointmentSummary()).ReturnsAsync(data);
-            patientServices.Setup(x => x.GetPatientsSummary()).ReturnsAsync(5);
+            appointmentServices.Setup(x => x.GetAppointmentSummaryAsync()).ReturnsAsync(data);
+            patientServices.Setup(x => x.GetPatientsSummaryAsync()).ReturnsAsync(5);
             var request = new GetDashBoardDataQuery();
             var handler = new GetDashBoardDataHandler(appointmentServices.Object, patientServices.Object);
             var cts = new CancellationToken();

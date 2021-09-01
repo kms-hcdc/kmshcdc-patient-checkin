@@ -280,7 +280,7 @@ namespace PatientCheckIn.Tests.Services.PatientServices
 
             //Act
             var patientService = new PatientService(context);
-            var actual = await patientService.GetPatientsSummary();
+            var actual = await patientService.GetPatientsSummaryAsync();
 
             //Assert
             Assert.Equal(expected, actual);

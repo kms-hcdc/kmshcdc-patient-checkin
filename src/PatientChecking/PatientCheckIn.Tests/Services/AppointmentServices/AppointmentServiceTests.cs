@@ -239,7 +239,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
 
             //Act
             var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.GetAppointmentSummary();
+            var actual = await apointmentService.GetAppointmentSummaryAsync();
 
             //Assert
             Assert.NotNull(actual);
@@ -268,7 +268,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
 
             //Act
             var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.GetAppointmentById(3);
+            var actual = await apointmentService.GetAppointmentByIdAsync(3);
 
             //Assert
             Assert.NotNull(actual);
@@ -292,7 +292,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
 
             //Act
             var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.GetListAppoinmentsPaging(pagingRequest);
+            var actual = await apointmentService.GetListAppoinmentsPagingAsync(pagingRequest);
 
             //Assert
             Assert.NotNull(actual);
@@ -318,7 +318,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
 
             //Act
             var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.GetListAppoinmentsPaging(pagingRequest);
+            var actual = await apointmentService.GetListAppoinmentsPagingAsync(pagingRequest);
 
             //Assert
             Assert.NotNull(actual);
@@ -344,7 +344,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
 
             //Act
             var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.GetListAppoinmentsPaging(pagingRequest);
+            var actual = await apointmentService.GetListAppoinmentsPagingAsync(pagingRequest);
 
             //Assert
             Assert.NotNull(actual);
@@ -370,7 +370,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
 
             //Act
             var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.GetListAppoinmentsPaging(pagingRequest);
+            var actual = await apointmentService.GetListAppoinmentsPagingAsync(pagingRequest);
 
             //Assert
             Assert.NotNull(actual);
@@ -396,7 +396,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
 
             //Act
             var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.GetListAppoinmentsPaging(pagingRequest);
+            var actual = await apointmentService.GetListAppoinmentsPagingAsync(pagingRequest);
 
             //Assert
             Assert.NotNull(actual);
@@ -422,7 +422,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
 
             //Act
             var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.UpdateAppointment(modifiedAppointment);
+            var actual = await apointmentService.UpdateAppointmentAsync(modifiedAppointment);
 
             //Assert
             Assert.True(actual != -1);
@@ -441,7 +441,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
 
             //Act
             var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.UpdateAppointment(null);
+            var actual = await apointmentService.UpdateAppointmentAsync(null);
 
             //Assert
             Assert.True(actual == -1);

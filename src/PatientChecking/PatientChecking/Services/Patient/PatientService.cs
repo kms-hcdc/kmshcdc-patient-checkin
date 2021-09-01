@@ -75,7 +75,7 @@ namespace PatientChecking.Services.Patient
             return patient;
         }
 
-        public async Task<int> GetPatientsSummary()
+        public async Task<int> GetPatientsSummaryAsync()
         {
             var NumberOfPatients = await _patientCheckInContext.Patients.ToListAsync();
             return NumberOfPatients.Count();

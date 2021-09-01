@@ -105,7 +105,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
             var appointments = AppointmentDataTest();
             var expected = appointments[0];
             var appointmentServices = new Mock<IAppointmentService>();
-            appointmentServices.Setup(x => x.GetAppointmentById(1)).ReturnsAsync(expected);
+            appointmentServices.Setup(x => x.GetAppointmentByIdAsync(1)).ReturnsAsync(expected);
             var appointment = new GetAppointmentByIdQuery { Id = 1 };
             var handler = new GetAppointmentByHandler(appointmentServices.Object);
             var cts = new CancellationToken();    
@@ -128,7 +128,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
             //Arange
             var appointments = AppointmentDataTest();
             var appointmentServices = new Mock<IAppointmentService>();
-            appointmentServices.Setup(x => x.GetAppointmentById(1000)).ReturnsAsync((DataAccess.Models.Appointment)null); ;
+            appointmentServices.Setup(x => x.GetAppointmentByIdAsync(1000)).ReturnsAsync((DataAccess.Models.Appointment)null); ;
             var appointment = new GetAppointmentByIdQuery { Id = 1000 };
             var handler = new GetAppointmentByHandler(appointmentServices.Object);
             var cts = new CancellationToken();
@@ -149,7 +149,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
             var expected = PagingData(patients);
 
             var mockAppointmentServices = new Mock<IAppointmentService>();
-            mockAppointmentServices.Setup(x => x.GetListAppoinmentsPaging(request)).ReturnsAsync(expected);
+            mockAppointmentServices.Setup(x => x.GetListAppoinmentsPagingAsync(request)).ReturnsAsync(expected);
             var query = new GetAppointmentPagingQuery
             {
                 pagingRequest = request

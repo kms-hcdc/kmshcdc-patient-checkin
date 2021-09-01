@@ -49,8 +49,8 @@ namespace PatientCheckIn.Tests.Feature.Appointment
             };
             var appointment = AppointmentDataAccess();
             var appointmentServices = new Mock<IAppointmentService>();
-            appointmentServices.Setup(x => x.GetAppointmentById(command.appointmentDetailViewModel.AppointmentId)).ReturnsAsync(appointment);
-            appointmentServices.Setup(x => x.UpdateAppointment(appointment)).ReturnsAsync(1);
+            appointmentServices.Setup(x => x.GetAppointmentByIdAsync(command.appointmentDetailViewModel.AppointmentId)).ReturnsAsync(appointment);
+            appointmentServices.Setup(x => x.UpdateAppointmentAsync(appointment)).ReturnsAsync(1);
             var handler = new UpdateAppointmentCommandHandler(appointmentServices.Object);
             var cts = new CancellationToken();
 
@@ -72,7 +72,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
                 appointmentDetailViewModel = AppointmentDataTest()
             };
             var appointmentServices = new Mock<IAppointmentService>();
-            appointmentServices.Setup(x => x.GetAppointmentById(-1)).ReturnsAsync((DataAccess.Models.Appointment)null);
+            appointmentServices.Setup(x => x.GetAppointmentByIdAsync(-1)).ReturnsAsync((DataAccess.Models.Appointment)null);
             var handler = new UpdateAppointmentCommandHandler(appointmentServices.Object);
             var cts = new CancellationToken();
 
@@ -98,7 +98,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
             var appointment = AppointmentDataAccess();
 
             var appointmentServices = new Mock<IAppointmentService>();
-            appointmentServices.Setup(x => x.GetAppointmentById(command.appointmentDetailViewModel.AppointmentId)).ReturnsAsync(appointment);
+            appointmentServices.Setup(x => x.GetAppointmentByIdAsync(command.appointmentDetailViewModel.AppointmentId)).ReturnsAsync(appointment);
             var handler = new UpdateAppointmentCommandHandler(appointmentServices.Object);
             var cts = new CancellationToken();
 

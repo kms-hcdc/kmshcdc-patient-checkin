@@ -30,13 +30,13 @@ namespace PatientChecking.Feature.Dashboard.Queries
 
         public async Task<DashboardViewModel> Handle(GetDashBoardDataQuery request, CancellationToken cancellationToken)
         {
-            var appointmentSummary = await _appointmentService.GetAppointmentSummary();
+            var appointmentSummary = await _appointmentService.GetAppointmentSummaryAsync();
             return new DashboardViewModel
             {
                 NumOfAppointments = appointmentSummary.NumOfAppointments,
                 NumOfAppointmentsInMonth = appointmentSummary.NumOfAppointmentsInMonth,
                 NumOfAppointmentsInToday = appointmentSummary.NumOfAppointmentsInToday,
-                NumOfPatients = await _patientService.GetPatientsSummary(),
+                NumOfPatients = await _patientService.GetPatientsSummaryAsync(),
                 NumOfPatientsInMonth = appointmentSummary.NumOfPatientsInMonth
             };
         }

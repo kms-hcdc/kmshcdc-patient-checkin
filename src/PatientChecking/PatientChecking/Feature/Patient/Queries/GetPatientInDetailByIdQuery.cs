@@ -27,7 +27,7 @@ namespace PatientChecking.Feature.Patient.Queries
         }
         public async Task<PatientDetailViewModel> Handle(GetPatientInDetailByIdQuery request, CancellationToken cancellationToken)
         {
-            var cities = await _appConfigurationService.GetProvinceCities();
+            var cities = await _appConfigurationService.GetProvinceCitiesAsync();
             var cityList = new List<string>();
 
             foreach (PatientCheckIn.DataAccess.Models.ProvinceCity p in cities)

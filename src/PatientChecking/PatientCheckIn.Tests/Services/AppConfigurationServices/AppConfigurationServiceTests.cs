@@ -71,7 +71,7 @@ namespace PatientCheckIn.Tests.Services.AppConfigurationServices
 
             //Act
             var appConfigurationService = new AppConfigurationService(context);
-            var actual = await appConfigurationService.GetProvinceCities();
+            var actual = await appConfigurationService.GetProvinceCitiesAsync();
 
             //Assert
             Assert.NotNull(actual);

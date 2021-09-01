@@ -24,7 +24,7 @@ namespace PatientChecking.Feature.Appointment.Queries
 
         public async Task<AppointmentDetailViewModel> Handle(GetAppointmentByIdQuery request, CancellationToken cancellationToken)
         {
-            var appointment = await _appointmentService.GetAppointmentById(request.Id);
+            var appointment = await _appointmentService.GetAppointmentByIdAsync(request.Id);
             if (appointment != null) 
             {
                 return new AppointmentDetailViewModel

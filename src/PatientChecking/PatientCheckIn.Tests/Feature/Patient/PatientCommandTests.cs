@@ -19,70 +19,31 @@ namespace PatientCheckIn.Tests.Feature.Patient
     public class PatientCommandTests
     {
         [Fact]
-        public async void UpdatePatientInformationCommandTest_Ok()
+        public async Task UpdatePatientInformationCommand_Ok_ReturnsNumberOfEffectedRow()
         {
             //Arrange
-            var model = new PatientDetailViewModel
-            {
-                PatientId = 1,
-                FirstName = "Harry",
-                MiddleName = "James",
-                LastName = "Potter",
-                FullName = "Harry James Potter",
-                DoB = "1990-07-31",
-                Gender = 0,
-                MaritalStatus = 1,
-                Nationality = "American",
-                EthnicRace = null,
-                HomeTown = "Los Angeles",
-                BirthplaceCity = "San Diego",
-                IdcardNo = "201863654",
-                IssuedDate = "2013-08-12",
-                IssuedPlace = "Los Angeles",
-                InsuranceNo = "200753645",
-            };
+            var model = ModelDataTest();
 
-            var data = new DataAccess.Models.Patient
-            {
-                PatientId = 1,
-                FirstName = "Long",
-                MiddleName = "Thanh",
-                LastName = "Do",
-                FullName = "Long Thanh Do",
-                DoB = new DateTime(1999, 11, 09),
-                Gender = 0,
-                MaritalStatus = false,
-                Nationality = "Vietnamese",
-                EthnicRace = "Kinh",
-                HomeTown = "Da Nang",
-                BirthplaceCity = "Ho Chi Minh",
-                IdcardNo = "201754622",
-                IssuedDate = new DateTime(2014, 09, 14),
-                IssuedPlace = "Da Nang",
-                InsuranceNo = "201329231"
-            };
+            var data = GetPatientData();
 
             var mockPatientService = new Mock<IPatientService>();
 
-            mockPatientService.Setup(x => x.GetPatientInDetail(model.PatientId)).ReturnsAsync(data);
+            mockPatientService.Setup(x => x.GetPatientInDetailAsync(model.PatientId)).ReturnsAsync(data);
 
-            mockPatientService.Setup(x => x.UpdatePatientDetail(data)).ReturnsAsync(1);
+            mockPatientService.Setup(x => x.UpdatePatientDetailAsync(data)).ReturnsAsync(1);
 
-            var command = new UpdatePatientInformationCommand() { PatientModel = model };
+            var command = new UpdatePatientInformationCommand() { Demographic = model };
             var handler = new UpdatePatientInformationCommandHandler(mockPatientService.Object);
-
-            var expected = 1;
 
             //Act
             var actual = await handler.Handle(command, new CancellationToken());
 
             //Assert
-            Assert.True(actual != -1);
-            Assert.Equal(expected, actual);
+            Assert.True(actual == 1);
         }
 
         [Fact]
-        public async void UpdatePatientInformationCommandTest_NotFoundPatient()
+        public async Task UpdatePatientInformationCommand_NotFoundPatient_ReturnsNumberOfEffectedRow()
         {
             //Arrange
             var model = new PatientDetailViewModel
@@ -92,82 +53,20 @@ namespace PatientCheckIn.Tests.Feature.Patient
 
             var mockPatientService = new Mock<IPatientService>();
 
-            mockPatientService.Setup(x => x.GetPatientInDetail(model.PatientId)).ReturnsAsync((DataAccess.Models.Patient)null);
+            mockPatientService.Setup(x => x.GetPatientInDetailAsync(model.PatientId)).ReturnsAsync((DataAccess.Models.Patient)null);
 
-            var command = new UpdatePatientInformationCommand() { PatientModel = model };
+            var command = new UpdatePatientInformationCommand() { Demographic = model };
             var handler = new UpdatePatientInformationCommandHandler(mockPatientService.Object);
-
-            var expected = -1;
 
             //Act
             var actual = await handler.Handle(command, new CancellationToken());
 
             //Assert
-            Assert.Equal(expected, actual);
+            Assert.True(actual == -1);
         }
 
         [Fact]
-        public async void UpdatePatientInformationCommandTest_Exception()
-        {
-            //Arrange
-            var model = new PatientDetailViewModel
-            {
-                PatientId = 1,
-                FirstName = "Harry",
-                MiddleName = "James",
-                LastName = "Potter",
-                FullName = "Harry James Potter",
-                DoB = "DoB", //cause exception
-                Gender = 0,
-                MaritalStatus = 1,
-                Nationality = "American",
-                EthnicRace = null,
-                HomeTown = "Los Angeles",
-                BirthplaceCity = "San Diego",
-                IdcardNo = "201863654",
-                IssuedDate = "2013-08-12",
-                IssuedPlace = "Los Angeles",
-                InsuranceNo = "200753645",
-            };
-
-            var data = new DataAccess.Models.Patient
-            {
-                PatientId = 1,
-                FirstName = "Long",
-                MiddleName = "Thanh",
-                LastName = "Do",
-                FullName = "Long Thanh Do",
-                DoB = new DateTime(1999, 11, 09),
-                Gender = 0,
-                MaritalStatus = false,
-                Nationality = "Vietnamese",
-                EthnicRace = "Kinh",
-                HomeTown = "Da Nang",
-                BirthplaceCity = "Ho Chi Minh",
-                IdcardNo = "201754622",
-                IssuedDate = new DateTime(2014, 09, 14),
-                IssuedPlace = "Da Nang",
-                InsuranceNo = "201329231"
-            };
-
-            var mockPatientService = new Mock<IPatientService>();
-
-            mockPatientService.Setup(x => x.GetPatientInDetail(model.PatientId)).ReturnsAsync(data);
-
-            var command = new UpdatePatientInformationCommand() { PatientModel = model };
-            var handler = new UpdatePatientInformationCommandHandler(mockPatientService.Object);
-
-            var expected = -1;
-
-            //Act
-            var actual = await handler.Handle(command, new CancellationToken());
-
-            //Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public async void UploadPatientImageCommandTest_UploadSuccessfully()
+        public async Task UploadPatientImageCommand_UploadSuccessfully_ReturnsImageUploadingStatus()
         {
             //Arrange
             var patientId = 1;
@@ -176,10 +75,10 @@ namespace PatientCheckIn.Tests.Feature.Patient
 
             var mockImageService = new Mock<IImageService>();
             mockImageService.Setup(x => x.IsImageFile(image)).Returns(true);
-            mockImageService.Setup(x => x.SaveImage(image)).Returns(avatarLink);
+            mockImageService.Setup(x => x.SaveImageAsync(image)).ReturnsAsync(avatarLink);
 
             var mockPatientService = new Mock<IPatientService>();
-            mockPatientService.Setup(x => x.UploadPatientImage(patientId, avatarLink)).ReturnsAsync(1);
+            mockPatientService.Setup(x => x.UploadPatientImageAsync(patientId, avatarLink)).ReturnsAsync(1);
 
             var command = new UploadPatientImageCommand() { PatientId = patientId, FormFile = image };
             var handler = new UploadPatientImageCommandHandler(mockPatientService.Object, mockImageService.Object); 
@@ -194,7 +93,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
         }
 
         [Fact]
-        public async void UploadPatientImageCommandTest_IsNotImageFailed()
+        public async Task UploadPatientImageCommand_IsNotImageFailed_ReturnsImageUploadingStatus()
         {
             //Arrange
             var patientId = 1;
@@ -218,7 +117,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
         }
 
         [Fact]
-        public async void UploadPatientImageCommandTest_UploadFailed()
+        public async Task UploadPatientImageCommand_UploadFailed_ReturnsImageUploadingStatus()
         {
             //Arrange
             var patientId = -1;
@@ -227,10 +126,10 @@ namespace PatientCheckIn.Tests.Feature.Patient
 
             var mockImageService = new Mock<IImageService>();
             mockImageService.Setup(x => x.IsImageFile(image)).Returns(true);
-            mockImageService.Setup(x => x.SaveImage(image)).Returns(avatarLink);
+            mockImageService.Setup(x => x.SaveImageAsync(image)).ReturnsAsync(avatarLink);
 
             var mockPatientService = new Mock<IPatientService>();
-            mockPatientService.Setup(x => x.UploadPatientImage(patientId, avatarLink)).ReturnsAsync(-1);
+            mockPatientService.Setup(x => x.UploadPatientImageAsync(patientId, avatarLink)).ReturnsAsync(-1);
 
             var command = new UploadPatientImageCommand() { PatientId = patientId, FormFile = image };
             var handler = new UploadPatientImageCommandHandler(mockPatientService.Object, mockImageService.Object);
@@ -245,7 +144,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
         }
 
         [Fact]
-        public async void UploadPatientImageCommandTest_ImageNull()
+        public async Task UploadPatientImageCommand_ImageNull_ReturnsImageUploadingStatus()
         {
             //Arrange
             var patientId = 1;
@@ -264,6 +163,56 @@ namespace PatientCheckIn.Tests.Feature.Patient
 
             //Assert
             Assert.Equal(expected, actual);
+        }
+
+        private PatientDetailViewModel ModelDataTest()
+        {
+            var model = new PatientDetailViewModel
+            {
+                PatientId = 1,
+                FirstName = "Harry",
+                MiddleName = "James",
+                LastName = "Potter",
+                FullName = "Harry James Potter",
+                DoB = "1990-07-31",
+                Gender = 0,
+                MaritalStatus = 1,
+                Nationality = "American",
+                EthnicRace = null,
+                HomeTown = "Los Angeles",
+                BirthplaceCity = "San Diego",
+                IdcardNo = "201863654",
+                IssuedDate = "2013-08-12",
+                IssuedPlace = "Los Angeles",
+                InsuranceNo = "200753645",
+            };
+
+            return model;
+        }
+
+        private DataAccess.Models.Patient GetPatientData()
+        {
+            var data = new DataAccess.Models.Patient
+            {
+                PatientId = 1,
+                FirstName = "Long",
+                MiddleName = "Thanh",
+                LastName = "Do",
+                FullName = "Long Thanh Do",
+                DoB = new DateTime(1999, 11, 09),
+                Gender = 0,
+                MaritalStatus = false,
+                Nationality = "Vietnamese",
+                EthnicRace = "Kinh",
+                HomeTown = "Da Nang",
+                BirthplaceCity = "Ho Chi Minh",
+                IdcardNo = "201754622",
+                IssuedDate = new DateTime(2014, 09, 14),
+                IssuedPlace = "Da Nang",
+                InsuranceNo = "201329231"
+            };
+
+            return data;
         }
     }
 }

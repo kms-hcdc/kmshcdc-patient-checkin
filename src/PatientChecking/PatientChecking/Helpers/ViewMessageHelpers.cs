@@ -36,7 +36,6 @@ namespace PatientChecking.Helpers
             var ulMsg = new System.Web.Mvc.TagBuilder("div");
 
             ulMsg.MergeAttribute("role", "alert");
-            ulMsg.MergeAttribute("id", "alert-message");
 
             switch (msg.MsgType)
             {

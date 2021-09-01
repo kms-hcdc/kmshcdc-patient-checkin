@@ -12,7 +12,7 @@ namespace PatientChecking.Feature.Patient.Commands
 {
     public class UpdatePatientInformationCommand : IRequest<int>
     {
-        public PatientDetailViewModel PatientModel { get; set; }
+        public PatientDetailViewModel Demographic { get; set; }
     }
 
     public class UpdatePatientInformationCommandHandler : IRequestHandler<UpdatePatientInformationCommand, int>
@@ -24,38 +24,32 @@ namespace PatientChecking.Feature.Patient.Commands
         }
         public async Task<int> Handle(UpdatePatientInformationCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var patientDetails = await _patientService.GetPatientInDetail(request.PatientModel.PatientId);
+            var patientDetails = await _patientService.GetPatientInDetailAsync(request.Demographic.PatientId);
 
-                if (patientDetails != null)
-                {
-                    patientDetails.FirstName = request.PatientModel.FirstName;
-                    patientDetails.MiddleName = request.PatientModel.MiddleName;
-                    patientDetails.LastName = request.PatientModel.LastName;
-                    patientDetails.FullName = string.IsNullOrEmpty(request.PatientModel.MiddleName) ? request.PatientModel.FirstName + " " + request.PatientModel.LastName : request.PatientModel.FirstName + " " + request.PatientModel.MiddleName + " " + request.PatientModel.LastName;
-                    patientDetails.Nationality = request.PatientModel.Nationality;
-                    patientDetails.DoB = DateTime.Parse(request.PatientModel.DoB);
-                    patientDetails.MaritalStatus = request.PatientModel.MaritalStatus == (int)PatientMaritalStatus.Married;
-                    patientDetails.Gender = request.PatientModel.Gender;
-                    patientDetails.EthnicRace = request.PatientModel.Nationality == PatientNationality.Vietnamese.ToString() ? request.PatientModel.EthnicRace : null;
-                    patientDetails.HomeTown = request.PatientModel.HomeTown;
-                    patientDetails.BirthplaceCity = request.PatientModel.BirthplaceCity;
-                    patientDetails.InsuranceNo = request.PatientModel.InsuranceNo;
-                    patientDetails.IdcardNo = request.PatientModel.IdcardNo;
-                    patientDetails.IssuedDate = !string.IsNullOrEmpty(request.PatientModel.IssuedDate) ? DateTime.Parse(request.PatientModel.IssuedDate) : null;
-                    patientDetails.IssuedPlace = request.PatientModel.IssuedPlace;
-
-                    var result = await _patientService.UpdatePatientDetail(patientDetails);
-
-                    return result;
-                }
-                return -1;
-            }
-            catch (FormatException)
+            if (patientDetails == null)
             {
                 return -1;
             }
+
+            patientDetails.FirstName = request.Demographic.FirstName;
+            patientDetails.MiddleName = request.Demographic.MiddleName;
+            patientDetails.LastName = request.Demographic.LastName;
+            patientDetails.FullName = string.IsNullOrEmpty(request.Demographic.MiddleName) ? String.Format("{0} {1}", request.Demographic.FirstName, request.Demographic.LastName) : String.Format("{0} {1} {2}", request.Demographic.FirstName, request.Demographic.MiddleName, request.Demographic.LastName);
+            patientDetails.Nationality = request.Demographic.Nationality;
+            patientDetails.DoB = DateTime.Parse(request.Demographic.DoB);
+            patientDetails.MaritalStatus = request.Demographic.MaritalStatus == (int)PatientMaritalStatus.Married;
+            patientDetails.Gender = request.Demographic.Gender;
+            patientDetails.EthnicRace = request.Demographic.Nationality == PatientNationality.Vietnamese.ToString() ? request.Demographic.EthnicRace : null;
+            patientDetails.HomeTown = request.Demographic.HomeTown;
+            patientDetails.BirthplaceCity = request.Demographic.BirthplaceCity;
+            patientDetails.InsuranceNo = request.Demographic.InsuranceNo;
+            patientDetails.IdcardNo = request.Demographic.IdcardNo;
+            patientDetails.IssuedDate = !string.IsNullOrEmpty(request.Demographic.IssuedDate) ? DateTime.Parse(request.Demographic.IssuedDate) : null;
+            patientDetails.IssuedPlace = request.Demographic.IssuedPlace;
+
+            var result = await _patientService.UpdatePatientDetailAsync(patientDetails);
+
+            return result;
         }
     }
 }

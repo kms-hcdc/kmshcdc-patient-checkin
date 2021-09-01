@@ -7,9 +7,9 @@ namespace PatientChecking.Services.Patient
     public interface IPatientService
     {
         Task<int> GetPatientsSummaryAsync();
-        Task<PatientList> GetListPatientPaging(PagingRequest request);
-        Task<PatientCheckIn.DataAccess.Models.Patient> GetPatientInDetail(int patientId);
-        Task<int> UpdatePatientDetail(PatientCheckIn.DataAccess.Models.Patient patientDetails);
-        Task<int> UploadPatientImage(int patientId, string avatarLink);
+        Task<PatientList> GetListPatientPagingAsync(PagingRequest request);
+        Task<PatientCheckIn.DataAccess.Models.Patient> GetPatientInDetailAsync(int patientId);
+        Task<int> UpdatePatientDetailAsync(PatientCheckIn.DataAccess.Models.Patient patientDetails);
+        Task<int> UploadPatientImageAsync(int patientId, string avatarLink);
     }
 }

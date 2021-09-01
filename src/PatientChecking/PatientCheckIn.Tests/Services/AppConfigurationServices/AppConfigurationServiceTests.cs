@@ -32,27 +32,27 @@ namespace PatientCheckIn.Tests.Services.AppConfigurationServices
             return context;
         }
 
-        private List<ProvinceCity> ProvinceCityDataTest()
+        private List<DataAccess.Models.ProvinceCity> ProvinceCityDataTest()
         {
-            var provinceCities = new List<ProvinceCity>
+            var provinceCities = new List<DataAccess.Models.ProvinceCity>
             {
-                new ProvinceCity
+                new DataAccess.Models.ProvinceCity
                 {
                    ProvinceCityId = 1, ProvinceCityName = "An Giang"
                 },
-                new ProvinceCity
+                new DataAccess.Models.ProvinceCity
                 {
                    ProvinceCityId = 2, ProvinceCityName = "Bà rịa – Vung tàu"
                 },
-                new ProvinceCity
+                new DataAccess.Models.ProvinceCity
                 {
                    ProvinceCityId = 3, ProvinceCityName = "Bắc Giang"
                 },
-                new ProvinceCity
+                new DataAccess.Models.ProvinceCity
                 {
                    ProvinceCityId = 4, ProvinceCityName = "Bắc Kạn"
                 },
-                new ProvinceCity
+                new DataAccess.Models.ProvinceCity
                 {
                    ProvinceCityId = 5, ProvinceCityName = "Bạc Liêu"
                 },
@@ -61,11 +61,12 @@ namespace PatientCheckIn.Tests.Services.AppConfigurationServices
         }
 
         [Fact]
-        public async Task GetProvinceCities_ReturnsListProvinceCity()
+        public async void GetProvinceCities()
         {
             //Arrange
-            var provinceCities = ProvinceCityDataTest();
-            var context = CreateMockContext(provinceCities);
+            var data = ProvinceCityDataTest();
+            var provinceCities = ProvinceCityDataTest().Select(x => x.ProvinceCityName).ToList();
+            var context = CreateMockContext(data);
 
             var expected = provinceCities;
 
@@ -76,7 +77,10 @@ namespace PatientCheckIn.Tests.Services.AppConfigurationServices
             //Assert
             Assert.NotNull(actual);
             Assert.Equal(expected.Count, actual.Count);
-            Assert.True(expected.All(x => actual.Any(y => x.ProvinceCityId == y.ProvinceCityId && x.ProvinceCityName == y.ProvinceCityName)));
+            for (int i = 0; i < expected.Count; i++)
+            {
+                Assert.Equal(expected[i], actual[i]);
+            }
         }
     }
 }

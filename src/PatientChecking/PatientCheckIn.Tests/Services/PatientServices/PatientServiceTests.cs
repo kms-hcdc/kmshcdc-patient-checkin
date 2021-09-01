@@ -13,6 +13,233 @@ namespace PatientCheckIn.Tests.Services.PatientServices
 {
     public class PatientServiceTests
     {
+        [Fact]
+        public async Task GetListPatientPaging_SortByID_ReturnsPatientList()
+        {
+            //Arrange
+            var addresses = AddressDataTest();
+            var patients = PatientDataTest(addresses);
+            var context = CreateMockContext(patients);
+            var request = PagingDataTest(1, 2, 0);
+
+            var expected = GetPatientListDataExpected(patients, addresses, request.SortSelection);
+
+            //Act
+            var patientService = new PatientService(context);
+            var actual = await patientService.GetListPatientPagingAsync(request);
+
+            //Assert
+            Assert.NotNull(actual);
+            Assert.Equal(expected.Patients.Count, actual.Patients.Count);
+            Assert.Equal(expected.TotalCount, actual.TotalCount);
+            Assert.True(expected.Patients.All(x => actual.Patients.Any(y => x.PatientId == y.PatientId
+                                                                         && x.PatientIdentifier == y.PatientIdentifier
+                                                                         && x.FullName == y.FullName
+                                                                         && x.DoB == y.DoB
+                                                                         && x.Gender == y.Gender
+                                                                         && x.PrimaryAddress.StreetLine == y.PrimaryAddress.StreetLine
+                                                                         && x.PhoneNumber == y.PhoneNumber
+                                                                         && x.Email == y.Email
+                                                                         && x.AvatarLink == y.AvatarLink)));
+        }
+
+        [Fact]
+        public async Task GetListPatientPaging_SortByName_ReturnsPatientList()
+        {
+            //Arrange
+            var addresses = AddressDataTest();
+            var patients = PatientDataTest(addresses);
+            var context = CreateMockContext(patients);
+            var request = PagingDataTest(1, 2, 1);
+
+            var expected = GetPatientListDataExpected(patients, addresses, request.SortSelection);
+
+            //Act
+            var patientService = new PatientService(context);
+            var actual = await patientService.GetListPatientPagingAsync(request);
+
+            //Assert
+            Assert.NotNull(actual);
+            Assert.Equal(expected.Patients.Count, actual.Patients.Count);
+            Assert.Equal(expected.TotalCount, actual.TotalCount);
+            Assert.True(expected.Patients.All(x => actual.Patients.Any(y => x.PatientId == y.PatientId
+                                                                         && x.PatientIdentifier == y.PatientIdentifier
+                                                                         && x.FullName == y.FullName
+                                                                         && x.DoB == y.DoB
+                                                                         && x.Gender == y.Gender
+                                                                         && x.PrimaryAddress.StreetLine == y.PrimaryAddress.StreetLine
+                                                                         && x.PhoneNumber == y.PhoneNumber
+                                                                         && x.Email == y.Email
+                                                                         && x.AvatarLink == y.AvatarLink)));
+        }
+
+        [Fact]
+        public async Task GetListPatientPaging_SortByDoB_ReturnsPatientList()
+        {
+            //Arrange
+            var addresses = AddressDataTest();
+            var patients = PatientDataTest(addresses);
+            var context = CreateMockContext(patients);
+            var request = PagingDataTest(1, 2, 2);
+
+            var expected = GetPatientListDataExpected(patients, addresses, request.SortSelection);
+
+            //Act
+            var patientService = new PatientService(context);
+            var actual = await patientService.GetListPatientPagingAsync(request);
+
+            //Assert
+            Assert.NotNull(actual);
+            Assert.Equal(expected.Patients.Count, actual.Patients.Count);
+            Assert.Equal(expected.TotalCount, actual.TotalCount);
+            Assert.True(expected.Patients.All(x => actual.Patients.Any(y => x.PatientId == y.PatientId
+                                                                         && x.PatientIdentifier == y.PatientIdentifier
+                                                                         && x.FullName == y.FullName
+                                                                         && x.DoB == y.DoB
+                                                                         && x.Gender == y.Gender
+                                                                         && x.PrimaryAddress.StreetLine == y.PrimaryAddress.StreetLine
+                                                                         && x.PhoneNumber == y.PhoneNumber
+                                                                         && x.Email == y.Email
+                                                                         && x.AvatarLink == y.AvatarLink)));
+        }
+
+        [Fact]
+        public async Task GetPatientInDetail_ReturnsPatient()
+        {
+            //Arrange
+            var addresses = AddressDataTest();
+            var patients = PatientDataTest(addresses);
+            var context = CreateMockContext(patients);
+
+            var expected = patients[3];
+
+            //Act
+            var patientService = new PatientService(context);
+            var actual = await patientService.GetPatientInDetailAsync(2);
+
+            //Assert
+            Assert.NotNull(actual);
+            Assert.Equal(expected.PatientId, actual.PatientId);
+            Assert.Equal(expected.PatientIdentifier, actual.PatientIdentifier);
+            Assert.Equal(expected.FirstName, actual.FirstName);
+            Assert.Equal(expected.MiddleName, actual.MiddleName);
+            Assert.Equal(expected.LastName, actual.LastName);
+            Assert.Equal(expected.FullName, actual.FullName);
+            Assert.Equal(expected.DoB, actual.DoB);
+            Assert.Equal(expected.Gender, actual.Gender);
+            Assert.Equal(expected.PhoneNumber, actual.PhoneNumber);
+            Assert.Equal(expected.Email, actual.Email);
+            Assert.Equal(expected.MaritalStatus, actual.MaritalStatus);
+            Assert.Equal(expected.Nationality, actual.Nationality);
+            Assert.Equal(expected.EthnicRace, actual.EthnicRace);
+            Assert.Equal(expected.HomeTown, actual.HomeTown);
+            Assert.Equal(expected.BirthplaceCity, actual.BirthplaceCity);
+            Assert.Equal(expected.IdcardNo, actual.IdcardNo);
+            Assert.Equal(expected.IssuedPlace, actual.IssuedPlace);
+            Assert.Equal(expected.IssuedDate, actual.IssuedDate);
+            Assert.Equal(expected.InsuranceNo, actual.InsuranceNo);
+        }
+
+        [Fact]
+        public async Task GetPatientsSummary_ReturnsNumberOfPatients()
+        {
+            //Arrange
+            var addresses = AddressDataTest();
+            var patients = PatientDataTest(addresses);
+            var context = CreateMockContext(patients);
+
+            var expected = patients.Count;
+
+            //Act
+            var patientService = new PatientService(context);
+            var actual = await patientService.GetPatientsSummaryAsync();
+
+            //Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task UpdatePatientDetail_Ok_ReturnsNumberOfEffectedRow()
+        {
+            //Arrange
+            var addresses = AddressDataTest();
+            var patients = PatientDataTest(addresses);
+            var context = CreateMockContext(patients);
+
+            var modifiedPatient = patients[1];
+
+            modifiedPatient.FirstName = "Hung";
+            modifiedPatient.MiddleName = "Viet";
+            modifiedPatient.LastName = "Nguyen";
+            modifiedPatient.FullName = "Hung Viet Nguyen";
+            modifiedPatient.DoB = new DateTime(1992, 10, 09);
+            modifiedPatient.Gender = 0;
+            modifiedPatient.MaritalStatus = true;
+            modifiedPatient.Nationality = "Vietnamese";
+            modifiedPatient.EthnicRace = "Kinh";
+            modifiedPatient.HomeTown = "Soc Trang";
+            modifiedPatient.BirthplaceCity = "Can Tho";
+            modifiedPatient.IdcardNo = "201376855";
+            modifiedPatient.IssuedDate = new DateTime(2012, 01, 14);
+            modifiedPatient.IssuedPlace = "Can Tho";
+            modifiedPatient.InsuranceNo = "201329231";
+
+            //Act
+            var patientService = new PatientService(context);
+            var actual = await patientService.UpdatePatientDetailAsync(modifiedPatient);
+
+            //Assert
+            Assert.True(actual == 1);
+        }
+
+        [Fact]
+        public async Task UpdatePatientDetail_NullParameter_ReturnsNumberOfEffectedRow()
+        {
+            //Arrange
+            var addresses = AddressDataTest();
+            var patients = PatientDataTest(addresses);
+            var context = CreateMockContext(patients);
+
+            //Act
+            var patientService = new PatientService(context);
+            var actual = await patientService.UpdatePatientDetailAsync(null);
+
+            //Assert
+            Assert.True(actual == -1);
+        }
+
+        [Fact]
+        public async Task UploadPatientImage_Ok_ReturnsNumberOfEffectedRow()
+        {
+            //Arrange
+            var addresses = AddressDataTest();
+            var patients = PatientDataTest(addresses);
+            var context = CreateMockContext(patients);
+
+            //Act
+            var patientService = new PatientService(context);
+            var actual = await patientService.UploadPatientImageAsync(patients[0].PatientId, "/Image/Profile.jpg");
+
+            //Assert
+            Assert.True(actual == 1);
+        }
+
+        [Fact]
+        public async Task UploadPatientImage_NotOk_ReturnsNumberOfEffectedRow()
+        {
+            //Arrange
+            var addresses = AddressDataTest();
+            var patients = PatientDataTest(addresses);
+            var context = CreateMockContext(patients);
+
+            //Act
+            var patientService = new PatientService(context);
+            var actual = await patientService.UploadPatientImageAsync(-1, "/Image/Profile.jpg");
+
+            //Assert
+            Assert.True(actual == -1);
+        }
+
         private PatientCheckInContext CreateMockContext(List<Patient> patients)
         {
             var builder = new DbContextOptionsBuilder<PatientCheckInContext>();
@@ -90,16 +317,9 @@ namespace PatientCheckIn.Tests.Services.PatientServices
             return request;
         }
 
-        [Fact]
-        public async void GetListPatientPaging_SortByID()
+        private PatientChecking.ServiceModels.PatientList GetPatientListDataExpected(List<Patient> patients, List<Address> addresses, int sortOption)
         {
-            //Arrange
-            var addresses = AddressDataTest();
-            var patients = PatientDataTest(addresses);
-            var context = CreateMockContext(patients);
-            var request = PagingDataTest(1, 2, 0);
-
-            var patientsServiceModel = new List<PatientChecking.ServiceModels.Patient>
+            var patientsServiceModelSortById = new List<PatientChecking.ServiceModels.Patient>
             {
                 new PatientChecking.ServiceModels.Patient { PatientId = 1, PatientIdentifier = "KMS.0001", FullName = "Long Thanh Do", DoB = new DateTime(1999,11,09),
                                                             Gender = 0, Email = "longtdo@kms-technology.com", PhoneNumber = "0905512324", AvatarLink = "/Image/avatar.jpg",
@@ -109,44 +329,7 @@ namespace PatientCheckIn.Tests.Services.PatientServices
                                                             PrimaryAddress = addresses[1]}
             };
 
-            var expected = new PatientChecking.ServiceModels.PatientList
-            {
-                Patients = patientsServiceModel,
-                TotalCount = patients.Count
-            };
-
-            //Act
-            var patientService = new PatientService(context);
-            var actual = await patientService.GetListPatientPaging(request);
-
-            //Assert
-            Assert.NotNull(actual);
-            Assert.Equal(expected.Patients.Count, actual.Patients.Count);
-            Assert.Equal(expected.TotalCount, actual.TotalCount);
-            for (int i = 0; i < expected.Patients.Count; i++)
-            {
-                Assert.Equal(expected.Patients[i].PatientId, actual.Patients[i].PatientId);
-                Assert.Equal(expected.Patients[i].PatientIdentifier, actual.Patients[i].PatientIdentifier);
-                Assert.Equal(expected.Patients[i].FullName, actual.Patients[i].FullName);
-                Assert.Equal(expected.Patients[i].DoB, actual.Patients[i].DoB);
-                Assert.Equal(expected.Patients[i].Gender, actual.Patients[i].Gender);
-                Assert.Equal(expected.Patients[i].Email, actual.Patients[i].Email);
-                Assert.Equal(expected.Patients[i].PhoneNumber, actual.Patients[i].PhoneNumber);
-                Assert.Equal(expected.Patients[i].AvatarLink, actual.Patients[i].AvatarLink);
-                Assert.Equal(expected.Patients[i].PrimaryAddress.StreetLine, actual.Patients[i].PrimaryAddress.StreetLine);
-            }
-        }
-
-        [Fact]
-        public async void GetListPatientPaging_SortByName()
-        {
-            //Arrange
-            var addresses = AddressDataTest();
-            var patients = PatientDataTest(addresses);
-            var context = CreateMockContext(patients);
-            var request = PagingDataTest(1, 2, 1);
-
-            var patientsServiceModel = new List<PatientChecking.ServiceModels.Patient>
+            var patientsServiceModelSortByName = new List<PatientChecking.ServiceModels.Patient>
             {
                 new PatientChecking.ServiceModels.Patient { PatientId = 2, PatientIdentifier = "KMS.0002", FullName = "Duc Van Tran", DoB = new DateTime(1999,05,10),
                                                             Gender = 0, Email = "ducvant@kms-technology.com", PhoneNumber = "0905879123", AvatarLink = "",
@@ -156,44 +339,7 @@ namespace PatientCheckIn.Tests.Services.PatientServices
                                                             PrimaryAddress = addresses[0]}
             };
 
-            var expected = new PatientChecking.ServiceModels.PatientList
-            {
-                Patients = patientsServiceModel,
-                TotalCount = patients.Count
-            };
-
-            //Act
-            var patientService = new PatientService(context);
-            var actual = await patientService.GetListPatientPaging(request);
-
-            //Assert
-            Assert.NotNull(actual);
-            Assert.Equal(expected.Patients.Count, actual.Patients.Count);
-            Assert.Equal(expected.TotalCount, actual.TotalCount);
-            for (int i = 0; i < expected.Patients.Count; i++)
-            {
-                Assert.Equal(expected.Patients[i].PatientId, actual.Patients[i].PatientId);
-                Assert.Equal(expected.Patients[i].PatientIdentifier, actual.Patients[i].PatientIdentifier);
-                Assert.Equal(expected.Patients[i].FullName, actual.Patients[i].FullName);
-                Assert.Equal(expected.Patients[i].DoB, actual.Patients[i].DoB);
-                Assert.Equal(expected.Patients[i].Gender, actual.Patients[i].Gender);
-                Assert.Equal(expected.Patients[i].Email, actual.Patients[i].Email);
-                Assert.Equal(expected.Patients[i].PhoneNumber, actual.Patients[i].PhoneNumber);
-                Assert.Equal(expected.Patients[i].AvatarLink, actual.Patients[i].AvatarLink);
-                Assert.Equal(expected.Patients[i].PrimaryAddress.StreetLine, actual.Patients[i].PrimaryAddress.StreetLine);
-            }
-        }
-
-        [Fact]
-        public async void GetListPatientPaging_SortByDoB()
-        {
-            //Arrange
-            var addresses = AddressDataTest();
-            var patients = PatientDataTest(addresses);
-            var context = CreateMockContext(patients);
-            var request = PagingDataTest(1, 2, 2);
-
-            var patientsServiceModel = new List<PatientChecking.ServiceModels.Patient>
+            var patientsServiceModelSortByDob = new List<PatientChecking.ServiceModels.Patient>
             {
                 new PatientChecking.ServiceModels.Patient { PatientId = 3, PatientIdentifier = "KMS.0003", FullName = "Phien Minh Le", DoB = new DateTime(1987,06,12),
                                                             Gender = 0, Email = "phienle@kms-technology.com", PhoneNumber = "0905879425", AvatarLink = "/Image/PhienProfile.jpg",
@@ -205,176 +351,11 @@ namespace PatientCheckIn.Tests.Services.PatientServices
 
             var expected = new PatientChecking.ServiceModels.PatientList
             {
-                Patients = patientsServiceModel,
+                Patients = sortOption == 0 ? patientsServiceModelSortById : sortOption == 1 ? patientsServiceModelSortByName : patientsServiceModelSortByDob,
                 TotalCount = patients.Count
             };
 
-            //Act
-            var patientService = new PatientService(context);
-            var actual = await patientService.GetListPatientPaging(request);
-
-            //Assert
-            Assert.NotNull(actual);
-            Assert.Equal(expected.Patients.Count, actual.Patients.Count);
-            Assert.Equal(expected.TotalCount, actual.TotalCount);
-            for (int i = 0; i < expected.Patients.Count; i++)
-            {
-                Assert.Equal(expected.Patients[i].PatientId, actual.Patients[i].PatientId);
-                Assert.Equal(expected.Patients[i].PatientIdentifier, actual.Patients[i].PatientIdentifier);
-                Assert.Equal(expected.Patients[i].FullName, actual.Patients[i].FullName);
-                Assert.Equal(expected.Patients[i].DoB, actual.Patients[i].DoB);
-                Assert.Equal(expected.Patients[i].Gender, actual.Patients[i].Gender);
-                Assert.Equal(expected.Patients[i].Email, actual.Patients[i].Email);
-                Assert.Equal(expected.Patients[i].PhoneNumber, actual.Patients[i].PhoneNumber);
-                Assert.Equal(expected.Patients[i].AvatarLink, actual.Patients[i].AvatarLink);
-                Assert.Equal(expected.Patients[i].PrimaryAddress.StreetLine, actual.Patients[i].PrimaryAddress.StreetLine);
-            }
-        }
-
-        [Fact]
-        public async void GetPatientInDetail()
-        {
-            //Arrange
-            var addresses = AddressDataTest();
-            var patients = PatientDataTest(addresses);
-            var context = CreateMockContext(patients);
-
-            var expected = patients[3];
-
-            //Act
-            var patientService = new PatientService(context);
-            var actual = await patientService.GetPatientInDetail(2);
-
-            //Assert
-            Assert.NotNull(actual);
-            Assert.Equal(expected.PatientId, actual.PatientId);
-            Assert.Equal(expected.PatientIdentifier, actual.PatientIdentifier);
-            Assert.Equal(expected.FirstName, actual.FirstName);
-            Assert.Equal(expected.MiddleName, actual.MiddleName);
-            Assert.Equal(expected.LastName, actual.LastName);
-            Assert.Equal(expected.FullName, actual.FullName);
-            Assert.Equal(expected.DoB, actual.DoB);
-            Assert.Equal(expected.Gender, actual.Gender);
-            Assert.Equal(expected.PhoneNumber, actual.PhoneNumber);
-            Assert.Equal(expected.Email, actual.Email);
-            Assert.Equal(expected.MaritalStatus, actual.MaritalStatus);
-            Assert.Equal(expected.Nationality, actual.Nationality);
-            Assert.Equal(expected.EthnicRace, actual.EthnicRace);
-            Assert.Equal(expected.HomeTown, actual.HomeTown);
-            Assert.Equal(expected.BirthplaceCity, actual.BirthplaceCity);
-            Assert.Equal(expected.IdcardNo, actual.IdcardNo);
-            Assert.Equal(expected.IssuedPlace, actual.IssuedPlace);
-            Assert.Equal(expected.IssuedDate, actual.IssuedDate);
-            Assert.Equal(expected.InsuranceNo, actual.InsuranceNo);
-        }
-
-        [Fact]
-        public async void GetPatientsSummary()
-        {
-            //Arrange
-            var addresses = AddressDataTest();
-            var patients = PatientDataTest(addresses);
-            var context = CreateMockContext(patients);
-
-            var expected = patients.Count;
-
-            //Act
-            var patientService = new PatientService(context);
-            var actual = await patientService.GetPatientsSummaryAsync();
-
-            //Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public async void UpdatePatientDetail_Ok()
-        {
-            //Arrange
-            var addresses = AddressDataTest();
-            var patients = PatientDataTest(addresses);
-            var context = CreateMockContext(patients);
-
-            var modifiedPatient = patients[1];
-
-            modifiedPatient.FirstName = "Hung";
-            modifiedPatient.MiddleName = "Viet";
-            modifiedPatient.LastName = "Nguyen";
-            modifiedPatient.FullName = "Hung Viet Nguyen";
-            modifiedPatient.DoB = new DateTime(1992, 10, 09);
-            modifiedPatient.Gender = 0;
-            modifiedPatient.MaritalStatus = true;
-            modifiedPatient.Nationality = "Vietnamese";
-            modifiedPatient.EthnicRace = "Kinh";
-            modifiedPatient.HomeTown = "Soc Trang";
-            modifiedPatient.BirthplaceCity = "Can Tho";
-            modifiedPatient.IdcardNo = "201376855";
-            modifiedPatient.IssuedDate = new DateTime(2012, 01, 14);
-            modifiedPatient.IssuedPlace = "Can Tho";
-            modifiedPatient.InsuranceNo = "201329231";
-
-            var expected = 1;
-
-            //Act
-            var patientService = new PatientService(context);
-            var actual = await patientService.UpdatePatientDetail(modifiedPatient);
-
-            //Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public async void UpdatePatientDetail_NullParameter()
-        {
-            //Arrange
-            var addresses = AddressDataTest();
-            var patients = PatientDataTest(addresses);
-            var context = CreateMockContext(patients);
-
-            var expected = -1;
-
-            //Act
-            var patientService = new PatientService(context);
-            var actual = await patientService.UpdatePatientDetail(null);
-
-            //Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public async void UploadPatientImage_Ok()
-        {
-            //Arrange
-            var addresses = AddressDataTest();
-            var patients = PatientDataTest(addresses);
-            var context = CreateMockContext(patients);
-
-            var expected = 1;
-
-            //Act
-            var patientService = new PatientService(context);
-            var actual = await patientService.UploadPatientImage(patients[0].PatientId, "/Image/Profile.jpg");
-
-            //Assert
-            Assert.True(actual != -1);
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public async void UploadPatientImage_NotOk()
-        {
-            //Arrange
-            var addresses = AddressDataTest();
-            var patients = PatientDataTest(addresses);
-            var context = CreateMockContext(patients);
-
-            var expected = -1;
-
-            //Act
-            var patientService = new PatientService(context);
-            var actual = await patientService.UploadPatientImage(-1, "/Image/Profile.jpg");
-
-            //Assert
-            Assert.Equal(expected, actual);
+            return expected;
         }
     }
 }

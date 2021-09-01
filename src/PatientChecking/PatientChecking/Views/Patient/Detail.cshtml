@@ -281,6 +281,26 @@
     var nationality = '@Html.Raw(Model.Nationality)';
     var cityList = @Json.Serialize(Model.ProvinceCities);
     var emptyMode = '@Html.Raw(Model.PatientId)';
+    var btnEdit = $("#btn-edit");
+    var searchInput = $("#search-input");
+    var homeTown = $("#homeTown");
+    var issuedPlace = $("#issuedPlace");
+    var issuedDate = $("#issuedDate");
+    var birthPlace = $("#birthplace");
+    var addPhoto = $("#add-photo");
+
+    var searchResultContainer = $(".search-result-container");
+    var autoCompleteItems = $(".autocomplete-items");
+    var ethnicSelect = $("#ethnicSelect");
+    var patientImageBox = $(".patient-image-box");
+    var idCardNo = $("#idCardNo");
+    var myModal = $("#myModal");
+    var editMode = $(".edit-mode");
+    var nationalitySelect = $("#nationalitySelect");
+    var btnCancel = $("#btn-cancel");
+    var btnCloseModel = $(".close");
+    var alertMessage = $(".alert");
+    var fullNameInput = $("#fullNameInput");
 
     $(document).ready(function () {
         var hometown = '@Html.Raw(Model.HomeTown)';
@@ -289,17 +309,12 @@
         var issuedplace = '@Html.Raw(Model.IssuedPlace)';
 
         if (emptyMode < 0) {
-            $("#btn-edit").hide();
+            btnEdit.hide();
         }
 
         autocomplete(document.getElementById("homeTown"), cityList);
         autocomplete(document.getElementById("birthplace"), cityList);
         autocomplete(document.getElementById("issuedPlace"), cityList);
-
-        jQuery.each(cityList, function (index, item) {
-            var option = $('<option value="' + item + '"></option>');
-            $('#issuedPlaceOptions').append(option);
-        })
 
         $("#nationalitySelect option[value='" + nationality + "']").attr("selected", "selected");
         $("#genderSelect option[value='" + @(Model.Gender) + "']").attr("selected", "selected");
@@ -308,112 +323,106 @@
         $(".patient-box-detail :input").prop("disabled", true);
     });
 
-    $("#search-input").focus(function () {
-        $(".search-result-container").css("display", "flex");
+    searchInput.focus(function () {
+        searchResultContainer.css("display", "flex");
     });
 
     $(".search-result-container ul li a").click(function () {
-        $(".search-result-container").css("display", "none");
+        searchResultContainer.css("display", "none");
     });
 
-    $("#search-input").change(function () {
+    searchInput.change(function () {
         var query = $(this).val();
     });
 
-    $("#btn-edit").click(function () {
-        $("#btn-edit").css("display", "none");
-        $(".edit-mode").css("display", "flex");
+    btnEdit.click(function () {
+        btnEdit.css("display", "none");
+        editMode.css("display", "flex");
         $(".patient-box-detail :input").prop("disabled", false);
-        $("#fullNameInput").prop("disabled", true);
+        fullNameInput.prop("disabled", true);
 
         if (nationality !== "Vietnamese") {
-            $("#ethnicSelect").prop("disabled", true);
+            ethnicSelect.prop("disabled", true);
         }
 
-        var idNumber = $("#idCardNo").val();
+        var idNumber = idCardNo.val();
 
         if (idNumber === "") {
-            $("#issuedDate").prop("disabled", true);
-            $("#issuedPlace").prop("disabled", true);
+            issuedDate.prop("disabled", true);
+            issuedPlace.prop("disabled", true);
         }
     });
 
-    $("#btn-cancel").click(function () {
-        $("#btn-edit").css("display", "inherit");
-        $(".edit-mode").css("display", "none");
+    btnCancel.click(function () {
+        btnEdit.css("display", "inherit");
+        editMode.css("display", "none");
         $(".patient-box-detail :input").prop("disabled", true);
     });
 
-    $("#nationalitySelect").change(function () {
+    nationalitySelect.change(function () {
         var option = $(this).val();
         console.log(option);
         if (option === "Vietnamese") {
-            $("#ethnicSelect").prop("disabled", false);
+            ethnicSelect.prop("disabled", false);
         } else {
-            $("#ethnicSelect").prop("disabled", true);
-            $("#ethnicSelect").val("None");
+            ethnicSelect.prop("disabled", true);
+            ethnicSelect.val("None");
         }
     });
 
-    $("#homeTown").keydown(function (e) {
-        var homeTownOption = $("#homeTown").val();
-        if (e.keyCode === 9) {
-            if (!cityList.includes(homeTownOption)) {
-                $("#homeTown").val("Other");
-            }
-            $(".autocomplete-items").hide();
+    homeTown.focusout(function (e) {
+        var homeTownOption = homeTown.val();
+        if (!cityList.includes(homeTownOption)) {
+            homeTown.val("Other");
         }
+        autoCompleteItems.hide();
     });
 
-    $("#birthplace").keydown(function (e) {
-        var birthplaceOption = $("#birthplace").val();
-        if (e.keyCode === 9) {
-            if (!cityList.includes(birthplaceOption)) {
-                $("#birthplace").val("Other");
-            }
-            $(".autocomplete-items").hide();
+    birthPlace.focusout(function (e) {
+        var birthplaceOption = birthPlace.val();
+        if (!cityList.includes(birthplaceOption)) {
+            birthPlace.val("Other");
         }
+        autoCompleteItems.hide();
     });
 
-    $("#issuedPlace").keydown(function (e) {
-        var issuedPlaceOption = $("#issuedPlace").val();
-        if (e.keyCode === 9) {
-            if (!cityList.includes(issuedPlaceOption)) {
-                $("#issuedPlace").val("Other");
-            }
-            $(".autocomplete-items").hide();
+    issuedPlace.focusout(function (e) {
+        var issuedPlaceOption = issuedPlace.val();
+        if (!cityList.includes(issuedPlaceOption)) {
+            issuedPlace.val("Other");
         }
+        autoCompleteItems.hide();
     });
 
-    $("#idCardNo").focusout(function () {
+    idCardNo.focusout(function () {
         var idValue = $(this).val();
         if (idValue !== "") {
-            $("#issuedDate").prop("disabled", false);
-            $("#issuedPlace").prop("disabled", false);
+            issuedDate.prop("disabled", false);
+            issuedPlace.prop("disabled", false);
         } else {
-            $("#issuedDate").val("");
-            $("#issuedPlace").val("");
-            $("#issuedDate").prop("disabled", true);
-            $("#issuedPlace").prop("disabled", true);
+            issuedDate.val("");
+            issuedPlace.val("");
+            issuedDate.prop("disabled", true);
+            issuedPlace.prop("disabled", true);
         }
     });
 
-    $(".patient-image-box").mouseenter(function () {
-        $("#add-photo").css("display", "flex");
+    patientImageBox.mouseenter(function () {
+        addPhoto.css("display", "flex");
     });
 
-    $(".patient-image-box").mouseleave(function () {
-        $("#add-photo").css("display", "none");
+    patientImageBox.mouseleave(function () {
+        addPhoto.css("display", "none");
     });
 
-    $("#add-photo").click(function () {
+    addPhoto.click(function () {
         if (emptyMode > -1) {
-            $("#myModal").css("display", "block");
+            myModal.css("display", "block");
         }
     });
 
-    $(".close").click(function () {
-        $("#myModal").css("display", "none");
+    btnCloseModel.click(function () {
+        myModal.css("display", "none");
     });
 
     function readURL(input) {
@@ -429,8 +438,9 @@
         }
     }
 
-    $("#alert-message").fadeTo(3000, 500).slideUp(500, function () {
-        $("#alert-message").slideUp(1000);
+    alertMessage.fadeTo(3000, 500).slideUp(500, function () {
+        alertMessage.slideUp(1000);
+        alertMessage.attr("class", "");
     });
 
 </script>

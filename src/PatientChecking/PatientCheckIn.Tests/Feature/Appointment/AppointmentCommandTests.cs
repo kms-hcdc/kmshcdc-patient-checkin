@@ -26,6 +26,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
             };
             return appointment;
         }
+
         private DataAccess.Models.Appointment AppointmentDataAccess()
         {
             var appointment = new DataAccess.Models.Appointment
@@ -96,7 +97,6 @@ namespace PatientCheckIn.Tests.Feature.Appointment
             command.appointmentDetailViewModel.CheckInDate = "2021123-08-25"; //Invalid Date
 
             var appointment = AppointmentDataAccess();
-
             var appointmentServices = new Mock<IAppointmentService>();
             appointmentServices.Setup(x => x.GetAppointmentByIdAsync(command.appointmentDetailViewModel.AppointmentId)).ReturnsAsync(appointment);
             var handler = new UpdateAppointmentCommandHandler(appointmentServices.Object);

@@ -24,9 +24,10 @@ namespace PatientChecking.Feature.Appointment.Commands
 
         public async Task<int> Handle(UpdateAppointmentCommand request, CancellationToken cancellationToken)
         {
-            try
+            DateTime temp;
+            var appointment = await _appointmentService.GetAppointmentById(request.appointmentDetailViewModel.AppointmentId);
+            if(DateTime.TryParse(request.appointmentDetailViewModel.CheckInDate,out temp))
             {
-                var appointment = await _appointmentService.GetAppointmentById(request.appointmentDetailViewModel.AppointmentId);
                 if (appointment != null)
                 {
                     appointment.CheckInDate = DateTime.Parse(request.appointmentDetailViewModel.CheckInDate);
@@ -34,12 +35,8 @@ namespace PatientChecking.Feature.Appointment.Commands
                     appointment.Status = request.appointmentDetailViewModel.Status;
                     return await _appointmentService.UpdateAppointment(appointment);
                 }
-                return -1;
             }
-            catch(FormatException) 
-            {
-                return -1;
-            }
+            return -1;
         }
     }
 

@@ -223,7 +223,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
         }
 
         [Fact]
-        public async void GetAppointmentSummary_ReturnsAppointmentDashboard()
+        public async Task GetAppointmentSummary_ReturnsAppointmentDashboard()
         {
             //Arrange
             var patients = PatientDataTest();
@@ -234,7 +234,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
                 NumOfAppointments = 4,
                 NumOfAppointmentsInMonth = context.Appointments.Where(x => x.CheckInDate.Date.Year == DateTime.Now.Year && x.CheckInDate.Date.Month == DateTime.Now.Month).Count(),
                 NumOfAppointmentsInToday = context.Appointments.Where(x => x.CheckInDate.Date == DateTime.Today && x.Status == AppointmentStatus.CheckIn.ToString()).Count(),
-                NumOfPatientsInMonth = 4,
+                NumOfPatientsInMonth = 0,
             };
 
             //Act
@@ -250,7 +250,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
         }
 
         [Fact]
-        public async void GetAppointmentById_ExistAppoinment_ReturnAppointment()
+        public async Task GetAppointmentById_ExistAppoinment_ReturnAppointment()
         {
             //Arrange
             var patients = PatientDataTest();
@@ -280,7 +280,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
         }
 
         [Fact]
-        public async void GetListAppoinmentsPaging_SortByName_ReturnsAppointmentList()
+        public async Task GetListAppoinmentsPaging_SortByName_ReturnsAppointmentList()
         {
             //Arrange
             var patients = PatientDataTest();
@@ -305,7 +305,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
         }
 
         [Fact]
-        public async void GetListAppoinmentsPaging_SortByID_ReturnsAppointmentList()
+        public async Task GetListAppoinmentsPaging_SortByID_ReturnsAppointmentList()
         {
             //Arrange
             var patients = PatientDataTest();
@@ -331,7 +331,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
         }
 
         [Fact]
-        public async void GetListAppoinmentsPaging_SortByDoB_ReturnsAppointmentList()
+        public async Task GetListAppoinmentsPaging_SortByDoB_ReturnsAppointmentList()
         {
             //Arrange
             var patients = PatientDataTest();
@@ -357,7 +357,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
         }
 
         [Fact]
-        public async void GetListAppoinmentsPaging_SortByCheckInDate_ReturnsAppointmentList()
+        public async Task GetListAppoinmentsPaging_SortByCheckInDate_ReturnsAppointmentList()
         {
             //Arrange
             var patients = PatientDataTest();
@@ -383,7 +383,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
         }
 
         [Fact]
-        public async void GetListAppoinmentsPaging_SortByStatus_ReturnsAppointmentList()
+        public async Task GetListAppoinmentsPaging_SortByStatus_ReturnsAppointmentList()
         {
             //Arrange
             var patients = PatientDataTest();
@@ -409,7 +409,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
         }
 
         [Fact]
-        public async void UpdateAppointment_ExistAppointment_ReturnsNumberOfChangedLine()
+        public async Task UpdateAppointment_ExistAppointment_ReturnsNumberOfChangedLine()
         {
             //Arrange
             var patients = PatientDataTest();
@@ -430,7 +430,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
         }
 
         [Fact]
-        public async void UpdateAppointment_ParamNull_ReturnsNumberOfChangedLine()
+        public async Task UpdateAppointment_ParamNull_ReturnsNumberOfChangedLine()
         {
             //Arrange
             var patients = PatientDataTest();

@@ -99,7 +99,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
         }
 
         [Fact]
-        public async void GetAppointmentByIdQuery_ExsitAppointment_ReturnsAppointmentDetailViewModel()
+        public async Task GetAppointmentByIdQuery_ExsitAppointment_ReturnsAppointmentDetailViewModel()
         {
             //Arange
             var appointments = AppointmentDataTest();
@@ -123,7 +123,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
         }
 
         [Fact]
-        public async void GetAppointmentByIdQuery_AppointmentNotFound_ReturnsNull()
+        public async Task GetAppointmentByIdQuery_AppointmentNotFound_ReturnsNull()
         {
             //Arange
             var appointments = AppointmentDataTest();
@@ -141,7 +141,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
         }
 
         [Fact]
-        public async void GetAppointmentPagingQuery_PagingRequest_ReturnsAppointmentListViewModel()
+        public async Task GetAppointmentPagingQuery_PagingRequest_ReturnsAppointmentListViewModel()
         {
             //Arange
             var patients = PatientDataTest();

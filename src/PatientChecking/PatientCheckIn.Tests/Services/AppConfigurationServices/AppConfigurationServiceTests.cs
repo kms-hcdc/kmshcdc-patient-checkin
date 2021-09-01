@@ -61,7 +61,7 @@ namespace PatientCheckIn.Tests.Services.AppConfigurationServices
         }
 
         [Fact]
-        public async void GetProvinceCities_ReturnsListProvinceCity()
+        public async Task GetProvinceCities_ReturnsListProvinceCity()
         {
             //Arrange
             var provinceCities = ProvinceCityDataTest();

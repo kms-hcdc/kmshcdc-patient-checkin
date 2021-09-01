@@ -40,7 +40,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
         }
 
         [Fact]
-        public async void UpdateAppointmentCommand_ExistAppointment_ReturnNumberOfChangedLine()
+        public async Task UpdateAppointmentCommand_ExistAppointment_ReturnNumberOfChangedLine()
         {
             //Arange
             var command = new UpdateAppointmentCommand
@@ -64,7 +64,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
         }
 
         [Fact]
-        public async void UpdateAppointmentCommand_NotFoundAppointment_ReturnNumberOfChangedLine()
+        public async Task UpdateAppointmentCommand_NotFoundAppointment_ReturnNumberOfChangedLine()
         {
             //Arange
             var command = new UpdateAppointmentCommand
@@ -86,7 +86,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
         }
 
         [Fact]
-        public async void UpdateAppointmentCommand_InvalidCheckInDate_ReturnNumberOfChangedLine()
+        public async Task UpdateAppointmentCommand_InvalidCheckInDate_ReturnNumberOfChangedLine()
         {
             //Arange
             var command = new UpdateAppointmentCommand

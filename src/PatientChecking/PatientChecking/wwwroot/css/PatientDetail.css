@@ -348,13 +348,3 @@
     background: #14b1e7;
     color: white;
 }
-
-#alert-message {
-    height: 60px;
-    position: absolute;
-    right: 10px;
-    top: 60px;
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-}

@@ -57,8 +57,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
         {
             //Arrange
 
-            var cities = ProvinceCityDataTest();
-            var cityList = cities.Select(x => x.ProvinceCityName).ToList();
+            var cities = ProvinceCityDataTest().Select(x => x.ProvinceCityName).ToList();
 
             var patient = PatientDetailDataTest();
 
@@ -71,7 +70,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
             var query = new GetPatientInDetailByIdQuery() {PatientId = 1};
             var handler = new GetPatientInDetailByIdQueryHandler(mockPatientService.Object, mockAppConfigurationService.Object);
 
-            var expected = GetPatientDetailDataExpected(patient, cityList);
+            var expected = GetPatientDetailDataExpected(patient, cities);
 
             //Act
             var actual = await handler.Handle(query, new System.Threading.CancellationToken());
@@ -105,8 +104,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
         public async Task GetPatientInDetailByIdQuery_PatientDetailEmptyForm_ReturnsPatientDetailViewModel()
         {
             //Arrange
-            var cities = ProvinceCityDataTest();
-            var cityList = cities.Select(x => x.ProvinceCityName).ToList();
+            var cities = ProvinceCityDataTest().Select(x => x.ProvinceCityName).ToList();
             var patientId = -1;
 
             var mockPatientService = new Mock<IPatientService>();
@@ -118,7 +116,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
             var query = new GetPatientInDetailByIdQuery() { PatientId = patientId };
             var handler = new GetPatientInDetailByIdQueryHandler(mockPatientService.Object, mockAppConfigurationService.Object);
 
-            var expected = GetPatientDetailEmptyModelDataExpected(cityList);
+            var expected = GetPatientDetailEmptyModelDataExpected(cities);
 
             //Act
             var actual = await handler.Handle(query, new System.Threading.CancellationToken());
@@ -135,8 +133,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
         public async Task GetPatientInDetailByIdQuery_PatientNotFound_ReturnsPatientDetailViewModel()
         {
             //Arrange
-            var cities = ProvinceCityDataTest();
-            var cityList = cities.Select(x => x.ProvinceCityName).ToList();
+            var cities = ProvinceCityDataTest().Select(x => x.ProvinceCityName).ToList();
             var patientId = 999;
 
             var mockPatientService = new Mock<IPatientService>();
@@ -148,7 +145,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
             var query = new GetPatientInDetailByIdQuery() { PatientId = patientId };
             var handler = new GetPatientInDetailByIdQueryHandler(mockPatientService.Object, mockAppConfigurationService.Object);
 
-            var expected = GetPatientDetailEmptyModelDataExpected(cityList);
+            var expected = GetPatientDetailEmptyModelDataExpected(cities);
 
             //Act
             var actual = await handler.Handle(query, new System.Threading.CancellationToken());

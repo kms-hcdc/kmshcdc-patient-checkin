@@ -100,7 +100,7 @@ namespace PatientChecking.Services.Patient
             {
                 patient.AvatarLink = avatarLink;
 
-                _patientCheckInContext.Update(patient);
+                _patientCheckInContext.Entry(patient).Property("AvatarLink").IsModified = true;
 
                 return await _patientCheckInContext.SaveChangesAsync();
             }

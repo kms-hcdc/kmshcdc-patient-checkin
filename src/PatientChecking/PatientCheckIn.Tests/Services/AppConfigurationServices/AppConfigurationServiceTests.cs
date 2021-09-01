@@ -12,7 +12,7 @@ namespace PatientCheckIn.Tests.Services.AppConfigurationServices
 {
     public class AppConfigurationServiceTests
     {
-        private PatientCheckInContext CreateMockContext(List<DataAccess.Models.ProvinceCity> provinceCities)
+        private PatientCheckInContext CreateMockContext(List<ProvinceCity> provinceCities)
         {
             var builder = new DbContextOptionsBuilder<PatientCheckInContext>();
             builder.UseInMemoryDatabase(Guid.NewGuid().ToString());
@@ -64,8 +64,9 @@ namespace PatientCheckIn.Tests.Services.AppConfigurationServices
         public async void GetProvinceCities()
         {
             //Arrange
-            var provinceCities = ProvinceCityDataTest();
-            var context = CreateMockContext(provinceCities);
+            var data = ProvinceCityDataTest();
+            var provinceCities = ProvinceCityDataTest().Select(x => x.ProvinceCityName).ToList();
+            var context = CreateMockContext(data);
 
             var expected = provinceCities;
 
@@ -78,8 +79,7 @@ namespace PatientCheckIn.Tests.Services.AppConfigurationServices
             Assert.Equal(expected.Count, actual.Count);
             for (int i = 0; i < expected.Count; i++)
             {
-                Assert.Equal(expected[i].ProvinceCityId, actual[i].ProvinceCityId);
-                Assert.Equal(expected[i].ProvinceCityName, actual[i].ProvinceCityName);
+                Assert.Equal(expected[i], actual[i]);
             }
         }
     }

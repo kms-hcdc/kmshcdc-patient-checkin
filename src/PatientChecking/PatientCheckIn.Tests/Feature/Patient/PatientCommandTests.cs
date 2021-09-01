@@ -32,7 +32,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
 
             mockPatientService.Setup(x => x.UpdatePatientDetailAsync(data)).ReturnsAsync(1);
 
-            var command = new UpdatePatientInformationCommand() { PatientModel = model };
+            var command = new UpdatePatientInformationCommand() { Demographic = model };
             var handler = new UpdatePatientInformationCommandHandler(mockPatientService.Object);
 
             //Act
@@ -55,30 +55,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
 
             mockPatientService.Setup(x => x.GetPatientInDetailAsync(model.PatientId)).ReturnsAsync((DataAccess.Models.Patient)null);
 
-            var command = new UpdatePatientInformationCommand() { PatientModel = model };
-            var handler = new UpdatePatientInformationCommandHandler(mockPatientService.Object);
-
-            //Act
-            var actual = await handler.Handle(command, new CancellationToken());
-
-            //Assert
-            Assert.True(actual == -1);
-        }
-
-        [Fact]
-        public async Task UpdatePatientInformationCommand_FormatException_ReturnsNumberOfEffectedRow()
-        {
-            //Arrange
-            var model = ModelDataTest();
-            model.DoB = "DoB"; //Cause Exception
-
-            var patient = GetPatientData();
-
-            var mockPatientService = new Mock<IPatientService>();
-
-            mockPatientService.Setup(x => x.GetPatientInDetailAsync(model.PatientId)).ReturnsAsync(patient);
-
-            var command = new UpdatePatientInformationCommand() { PatientModel = model };
+            var command = new UpdatePatientInformationCommand() { Demographic = model };
             var handler = new UpdatePatientInformationCommandHandler(mockPatientService.Object);
 
             //Act

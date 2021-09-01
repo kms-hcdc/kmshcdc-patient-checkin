@@ -15,9 +15,9 @@ namespace PatientChecking.Services.AppConfiguration
         {
             _patientCheckInContext = patientCheckInContext;
         }
-        public async Task<List<ProvinceCity>> GetProvinceCitiesAsync()
+        public async Task<List<string>> GetProvinceCitiesAsync()
         {
-            var result = await _patientCheckInContext.ProvinceCities.ToListAsync();
+            var result = await _patientCheckInContext.ProvinceCities.Select(x=>x.ProvinceCityName).ToListAsync();
             return result;
         }
     }

@@ -450,13 +450,7 @@ namespace PatientCheckIn.Tests.Controllers
 
         private PatientDetailViewModel PatientDetailDataTest()
         {
-            var cities = ProvinceCityDataTest();
-            var cityList = new List<string>();
-
-            foreach (ProvinceCity city in cities)
-            {
-                cityList.Add(city.ProvinceCityName);
-            }
+            var cities = ProvinceCityDataTest().Select(x => x.ProvinceCityName).ToList();
 
             var patient = new PatientDetailViewModel
             {
@@ -480,7 +474,7 @@ namespace PatientCheckIn.Tests.Controllers
                 IssuedDate = "2013-08-06",
                 IssuedPlace = "Da Nang",
                 InsuranceNo = "2030455663",
-                ProvinceCities = cityList
+                ProvinceCities = cities
             };
             return patient;
         }

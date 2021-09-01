@@ -296,6 +296,11 @@
     var idCardNo = $("#idCardNo");
     var myModal = $("#myModal");
     var editMode = $(".edit-mode");
+    var nationalitySelect = $("#nationalitySelect");
+    var btnCancel = $("#btn-cancel");
+    var btnCloseModel = $(".close");
+    var alertMessage = $(".alert");
+    var fullNameInput = $("#fullNameInput");
 
     $(document).ready(function () {
         var hometown = '@Html.Raw(Model.HomeTown)';
@@ -310,11 +315,6 @@
         autocomplete(document.getElementById("homeTown"), cityList);
         autocomplete(document.getElementById("birthplace"), cityList);
         autocomplete(document.getElementById("issuedPlace"), cityList);
-
-        jQuery.each(cityList, function (index, item) {
-            var option = $('<option value="' + item + '"></option>');
-            $('#issuedPlaceOptions').append(option);
-        })
 
         $("#nationalitySelect option[value='" + nationality + "']").attr("selected", "selected");
         $("#genderSelect option[value='" + @(Model.Gender) + "']").attr("selected", "selected");
@@ -339,7 +339,7 @@
         btnEdit.css("display", "none");
         editMode.css("display", "flex");
         $(".patient-box-detail :input").prop("disabled", false);
-        $("#fullNameInput").prop("disabled", true);
+        fullNameInput.prop("disabled", true);
 
         if (nationality !== "Vietnamese") {
             ethnicSelect.prop("disabled", true);
@@ -353,13 +353,13 @@
         }
     });
 
-    $("#btn-cancel").click(function () {
+    btnCancel.click(function () {
         btnEdit.css("display", "inherit");
         editMode.css("display", "none");
         $(".patient-box-detail :input").prop("disabled", true);
     });
 
-    $("#nationalitySelect").change(function () {
+    nationalitySelect.change(function () {
         var option = $(this).val();
         console.log(option);
         if (option === "Vietnamese") {
@@ -421,7 +421,7 @@
         }
     });
 
-    $(".close").click(function () {
+    btnCloseModel.click(function () {
         myModal.css("display", "none");
     });
 
@@ -438,8 +438,9 @@
         }
     }
 
-    $("#alert-message").fadeTo(3000, 500).slideUp(500, function () {
-        $("#alert-message").slideUp(1000);
+    alertMessage.fadeTo(3000, 500).slideUp(500, function () {
+        alertMessage.slideUp(1000);
+        alertMessage.attr("class", "");
     });
 
 </script>

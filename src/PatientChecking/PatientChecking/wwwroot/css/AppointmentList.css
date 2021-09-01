@@ -123,13 +123,3 @@
 .pagination {
     margin: 3px 0;
 }
-
-#alert-message {
-    height: 60px;
-    position: absolute;
-    right: 10px;
-    top: 60px;
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-}

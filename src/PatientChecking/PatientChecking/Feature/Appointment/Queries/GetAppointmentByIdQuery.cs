@@ -14,10 +14,10 @@ namespace PatientChecking.Feature.Appointment.Queries
         public int Id { get; set; }      
     }
 
-    public class GetPatientByIdHandler : IRequestHandler<GetAppointmentByIdQuery, AppointmentDetailViewModel>
+    public class GetAppointmentByHandler : IRequestHandler<GetAppointmentByIdQuery, AppointmentDetailViewModel>
     {
         private readonly IAppointmentService _appointmentService;
-        public GetPatientByIdHandler(IAppointmentService appointmentService)
+        public GetAppointmentByHandler(IAppointmentService appointmentService)
         {
             _appointmentService = appointmentService;
         }

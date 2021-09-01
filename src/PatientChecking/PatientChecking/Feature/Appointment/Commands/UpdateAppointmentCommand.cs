@@ -22,17 +22,24 @@ namespace PatientChecking.Feature.Appointment.Commands
             _appointmentService = appointmentService;
         }
 
-        public Task<int> Handle(UpdateAppointmentCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(UpdateAppointmentCommand request, CancellationToken cancellationToken)
         {
-            var appointment = new PatientCheckIn.DataAccess.Models.Appointment
+            try
             {
-                AppointmentId = request.appointmentDetailViewModel.AppointmentId,
-                CheckInDate = DateTime.Parse(request.appointmentDetailViewModel.CheckInDate),
-                MedicalConcerns = request.appointmentDetailViewModel.MedicalConcerns,
-                PatientId = request.appointmentDetailViewModel.PatientId,
-                Status = request.appointmentDetailViewModel.Status
-            };
-            return _appointmentService.UpdateAppointment(appointment);
+                var appointment = await _appointmentService.GetAppointmentById(request.appointmentDetailViewModel.AppointmentId);
+                if (appointment != null)
+                {
+                    appointment.CheckInDate = DateTime.Parse(request.appointmentDetailViewModel.CheckInDate);
+                    appointment.MedicalConcerns = request.appointmentDetailViewModel.MedicalConcerns;
+                    appointment.Status = request.appointmentDetailViewModel.Status;
+                    return await _appointmentService.UpdateAppointment(appointment);
+                }
+                return -1;
+            }
+            catch(FormatException) 
+            {
+                return -1;
+            }
         }
     }
 

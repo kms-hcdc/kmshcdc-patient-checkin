@@ -12,6 +12,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using PatientChecking.Feature.Appointment.Commands;
+using System.Globalization;
 
 namespace PatientChecking.Controllers
 {
@@ -44,7 +45,13 @@ namespace PatientChecking.Controllers
         [Route("[Controller]/Index/{option}-{pageSize}/{pageIndex}")]
         public async Task<IActionResult> Index(int option, int pageSize, int pageIndex)
         {
-            return View(await _mediator.Send(new GetAppointmentPagingQuery { option = option, pageIndex = pageIndex, pageSize  = pageSize }));
+            var request = new PagingRequest
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                SortSelection = option,
+            };
+            return View(await _mediator.Send(new GetAppointmentPagingQuery { pagingRequest = request }));
         }
 
         public async Task<IActionResult> Detail(int appointmentId)

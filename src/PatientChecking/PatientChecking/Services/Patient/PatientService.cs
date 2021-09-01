@@ -19,7 +19,7 @@ namespace PatientChecking.Services.Patient
             _patientCheckInContext = patientCheckInContext;
         }
 
-        public async Task<PatientList> GetListPatientPaging(PagingRequest request)
+        public async Task<PatientList> GetListPatientPagingAsync(PagingRequest request)
         {
             var query = from patient in _patientCheckInContext.Patients
                         join address in _patientCheckInContext.Addresses on patient.PatientId equals address.PatientId into pa
@@ -69,52 +69,42 @@ namespace PatientChecking.Services.Patient
             return result;
         }
 
-        public async Task<PatientCheckIn.DataAccess.Models.Patient> GetPatientInDetail(int patientId)
+        public async Task<PatientCheckIn.DataAccess.Models.Patient> GetPatientInDetailAsync(int patientId)
         {
             var patient = await _patientCheckInContext.Patients.FindAsync(patientId);
             return patient;
         }
 
-        public async Task<int> GetPatientsSummary()
+        public async Task<int> GetPatientsSummaryAsync()
         {
             var NumberOfPatients = await _patientCheckInContext.Patients.ToListAsync();
             return NumberOfPatients.Count();
         }
 
-        public async Task<int> UpdatePatientDetail(PatientCheckIn.DataAccess.Models.Patient patientDetails)
+        public async Task<int> UpdatePatientDetailAsync(PatientCheckIn.DataAccess.Models.Patient patientDetails)
         {
-            var patient = _patientCheckInContext.Patients.Find(patientDetails.PatientId);
+            if(patientDetails != null)
+            {
+                _patientCheckInContext.Update(patientDetails);
 
-            patient.FirstName = patientDetails.FirstName;
-            patient.MiddleName = patientDetails.MiddleName;
-            patient.LastName = patientDetails.LastName;
-            patient.FullName = patientDetails.FullName;
-            patient.Gender = patientDetails.Gender;
-            patient.MaritalStatus = patientDetails.MaritalStatus;
-            patient.DoB = patientDetails.DoB;
-            patient.Nationality = patientDetails.Nationality;
-            patient.EthnicRace = patientDetails.EthnicRace;
-            patient.HomeTown = patientDetails.HomeTown;
-            patient.BirthplaceCity = patientDetails.BirthplaceCity;
-            patient.InsuranceNo = patientDetails.InsuranceNo;
-            patient.IdcardNo = patientDetails.IdcardNo;
-            patient.IssuedDate = patientDetails.IssuedDate;
-            patient.IssuedPlace = patientDetails.IssuedPlace;
-
-            _patientCheckInContext.Update(patient);
-
-            return await _patientCheckInContext.SaveChangesAsync();
+                return await _patientCheckInContext.SaveChangesAsync();
+            }
+            return -1;
         }
 
-        public async Task<int> UploadPatientImage(int patientId, string avatarLink)
+        public async Task<int> UploadPatientImageAsync(int patientId, string avatarLink)
         {
             var patient = _patientCheckInContext.Patients.Find(patientId);
 
-            patient.AvatarLink = avatarLink;
+            if(patient != null)
+            {
+                patient.AvatarLink = avatarLink;
 
-            _patientCheckInContext.Update(patient);
+                _patientCheckInContext.Entry(patient).Property("AvatarLink").IsModified = true;
 
-            return await _patientCheckInContext.SaveChangesAsync();
+                return await _patientCheckInContext.SaveChangesAsync();
+            }
+            return -1;
         }
     }
 }

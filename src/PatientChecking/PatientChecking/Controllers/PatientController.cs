@@ -62,7 +62,7 @@ namespace PatientChecking.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(PatientDetailViewModel model)
         {
-            var result = await _mediator.Send(new UpdatePatientInformationCommand() { PatientModel = model});
+            var result = await _mediator.Send(new UpdatePatientInformationCommand() { Demographic = model});
 
             if (result > 0)
             {

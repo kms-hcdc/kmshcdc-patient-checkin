@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using log4net;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace PatientChecking.Services.Image
@@ -12,6 +14,7 @@ namespace PatientChecking.Services.Image
     public class ImageService : IImageService
     {
         private readonly IHostingEnvironment _hostingEnvironment;
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ImageService(IHostingEnvironment hostingEnvironment)
         {
@@ -30,7 +33,7 @@ namespace PatientChecking.Services.Image
             return true;
         }
 
-        public string SaveImage(IFormFile formFile)
+        public async Task<string> SaveImageAsync(IFormFile formFile)
         {
             try
             {
@@ -38,16 +41,22 @@ namespace PatientChecking.Services.Image
                 string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(formFile.FileName);
 
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                formFile.CopyTo(new FileStream(filePath, FileMode.Create));
+                var fileStream = FromFileStream(filePath);
+                await formFile.CopyToAsync(fileStream);
 
                 var avatarLink = "/Image/" + uniqueFileName;
 
                 return avatarLink;
             }
-            catch (IOException)
+            catch (DirectoryNotFoundException ex)
             {
-                throw new IOException("Cannot save image to server");
+                _log.Error(ex.Message);
+                throw;
             }
+        }
+        public virtual Stream FromFileStream(string path)
+        {
+            return new FileStream(path, FileMode.Create);
         }
     }
 }

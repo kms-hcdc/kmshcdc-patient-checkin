@@ -36,7 +36,7 @@ namespace PatientChecking.Feature.Dashboard.Queries
                 NumOfAppointments = appointmentSummary.NumOfAppointments,
                 NumOfAppointmentsInMonth = appointmentSummary.NumOfAppointmentsInMonth,
                 NumOfAppointmentsInToday = appointmentSummary.NumOfAppointmentsInToday,
-                NumOfPatients = await _patientService.GetPatientsSummary(),
+                NumOfPatients = await _patientService.GetPatientsSummaryAsync(),
                 NumOfPatientsInMonth = appointmentSummary.NumOfPatientsInMonth
             };
         }

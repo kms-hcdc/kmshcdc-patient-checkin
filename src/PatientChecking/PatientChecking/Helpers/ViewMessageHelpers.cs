@@ -36,24 +36,23 @@ namespace PatientChecking.Helpers
             var ulMsg = new System.Web.Mvc.TagBuilder("div");
 
             ulMsg.MergeAttribute("role", "alert");
-            ulMsg.MergeAttribute("id", "alert-message");
 
             switch (msg.MsgType)
             {
                 case MessageType.Information:
-                    ulMsg.MergeAttribute("class", "alert alert-info");
+                    ulMsg.MergeAttribute("class", "alert alert-info position-absolute d-flex justify-content-between align-items-center top-5 end-0");
                     break;
 
                 case MessageType.Warning:
-                    ulMsg.MergeAttribute("class", "alert alert-warning");
+                    ulMsg.MergeAttribute("class", "alert alert-warning position-absolute d-flex justify-content-between align-items-center top-5 end-0");
                     break;
 
                 case MessageType.Success:
-                    ulMsg.MergeAttribute("class", "alert alert-success");
+                    ulMsg.MergeAttribute("class", "alert alert-success position-absolute d-flex justify-content-between align-items-center top-5 end-0");
                     break;
 
                 default:
-                    ulMsg.MergeAttribute("class", "alert alert-danger");
+                    ulMsg.MergeAttribute("class", "alert alert-danger position-absolute d-flex justify-content-between align-items-center top-5 end-0");
                     break;
             }
 
@@ -62,7 +61,7 @@ namespace PatientChecking.Helpers
             var sb = new StringBuilder();
 
             sb.AppendFormat("<p>{0}</p>", msg.MsgText);
-            sb.Append("<a class=\"close\" data-dismiss=\"alert\" href=\"#\">×</a>");
+            sb.Append("<a class=\"close text-decoration-none\" data-dismiss=\"alert\" href=\"#\">×</a>");
 
             ulMsg.InnerHtml = sb.ToString();
 

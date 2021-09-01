@@ -70,7 +70,7 @@ namespace PatientCheckIn.Tests.Services.ImageServices
         }
 
         [Fact]
-        public async void SaveImage_Ok()
+        public async Task SaveImage_Ok()
         {
             // Arrange.
             var fileMock = new Mock<IFormFile>();
@@ -98,7 +98,7 @@ namespace PatientCheckIn.Tests.Services.ImageServices
             var service = mockService.Object;
 
             //Act
-            var actual = await service.SaveImage(formFile);
+            var actual = await service.SaveImageAsync(formFile);
             var guid = actual.Substring(7, 36);
 
             //Assert
@@ -108,7 +108,7 @@ namespace PatientCheckIn.Tests.Services.ImageServices
         }
 
         [Fact]
-        public async void SaveImage_NotOk()
+        public async Task SaveImage_NotOk()
         {
             // Arrange.
             var fileMock = new Mock<IFormFile>();
@@ -132,7 +132,7 @@ namespace PatientCheckIn.Tests.Services.ImageServices
             var imageService = new ImageService(mockEnvironment.Object);
 
             //Assert
-            IOException exception = await Assert.ThrowsAsync<DirectoryNotFoundException>(() => imageService.SaveImage(formFile));
+            IOException exception = await Assert.ThrowsAsync<DirectoryNotFoundException>(() => imageService.SaveImageAsync(formFile));
         }
     }
 }

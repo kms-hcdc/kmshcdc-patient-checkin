@@ -14,7 +14,7 @@ namespace PatientCheckIn.Tests.Services.PatientServices
     public class PatientServiceTests
     {
         [Fact]
-        public async void GetListPatientPaging_SortByID_ReturnsPatientList()
+        public async Task GetListPatientPaging_SortByID_ReturnsPatientList()
         {
             //Arrange
             var addresses = AddressDataTest();
@@ -26,7 +26,7 @@ namespace PatientCheckIn.Tests.Services.PatientServices
 
             //Act
             var patientService = new PatientService(context);
-            var actual = await patientService.GetListPatientPaging(request);
+            var actual = await patientService.GetListPatientPagingAsync(request);
 
             //Assert
             Assert.NotNull(actual);
@@ -44,7 +44,7 @@ namespace PatientCheckIn.Tests.Services.PatientServices
         }
 
         [Fact]
-        public async void GetListPatientPaging_SortByName_ReturnsPatientList()
+        public async Task GetListPatientPaging_SortByName_ReturnsPatientList()
         {
             //Arrange
             var addresses = AddressDataTest();
@@ -56,7 +56,7 @@ namespace PatientCheckIn.Tests.Services.PatientServices
 
             //Act
             var patientService = new PatientService(context);
-            var actual = await patientService.GetListPatientPaging(request);
+            var actual = await patientService.GetListPatientPagingAsync(request);
 
             //Assert
             Assert.NotNull(actual);
@@ -74,7 +74,7 @@ namespace PatientCheckIn.Tests.Services.PatientServices
         }
 
         [Fact]
-        public async void GetListPatientPaging_SortByDoB_ReturnsPatientList()
+        public async Task GetListPatientPaging_SortByDoB_ReturnsPatientList()
         {
             //Arrange
             var addresses = AddressDataTest();
@@ -86,7 +86,7 @@ namespace PatientCheckIn.Tests.Services.PatientServices
 
             //Act
             var patientService = new PatientService(context);
-            var actual = await patientService.GetListPatientPaging(request);
+            var actual = await patientService.GetListPatientPagingAsync(request);
 
             //Assert
             Assert.NotNull(actual);
@@ -104,7 +104,7 @@ namespace PatientCheckIn.Tests.Services.PatientServices
         }
 
         [Fact]
-        public async void GetPatientInDetail_ReturnsPatient()
+        public async Task GetPatientInDetail_ReturnsPatient()
         {
             //Arrange
             var addresses = AddressDataTest();
@@ -115,7 +115,7 @@ namespace PatientCheckIn.Tests.Services.PatientServices
 
             //Act
             var patientService = new PatientService(context);
-            var actual = await patientService.GetPatientInDetail(2);
+            var actual = await patientService.GetPatientInDetailAsync(2);
 
             //Assert
             Assert.NotNull(actual);
@@ -141,7 +141,7 @@ namespace PatientCheckIn.Tests.Services.PatientServices
         }
 
         [Fact]
-        public async void GetPatientsSummary_ReturnsNumberOfPatients()
+        public async Task GetPatientsSummary_ReturnsNumberOfPatients()
         {
             //Arrange
             var addresses = AddressDataTest();
@@ -152,14 +152,14 @@ namespace PatientCheckIn.Tests.Services.PatientServices
 
             //Act
             var patientService = new PatientService(context);
-            var actual = await patientService.GetPatientsSummary();
+            var actual = await patientService.GetPatientsSummaryAsync();
 
             //Assert
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public async void UpdatePatientDetail_Ok_ReturnsNumberOfEffectedRow()
+        public async Task UpdatePatientDetail_Ok_ReturnsNumberOfEffectedRow()
         {
             //Arrange
             var addresses = AddressDataTest();
@@ -186,14 +186,14 @@ namespace PatientCheckIn.Tests.Services.PatientServices
 
             //Act
             var patientService = new PatientService(context);
-            var actual = await patientService.UpdatePatientDetail(modifiedPatient);
+            var actual = await patientService.UpdatePatientDetailAsync(modifiedPatient);
 
             //Assert
             Assert.True(actual == 1);
         }
 
         [Fact]
-        public async void UpdatePatientDetail_NullParameter_ReturnsNumberOfEffectedRow()
+        public async Task UpdatePatientDetail_NullParameter_ReturnsNumberOfEffectedRow()
         {
             //Arrange
             var addresses = AddressDataTest();
@@ -202,14 +202,14 @@ namespace PatientCheckIn.Tests.Services.PatientServices
 
             //Act
             var patientService = new PatientService(context);
-            var actual = await patientService.UpdatePatientDetail(null);
+            var actual = await patientService.UpdatePatientDetailAsync(null);
 
             //Assert
             Assert.True(actual == -1);
         }
 
         [Fact]
-        public async void UploadPatientImage_Ok_ReturnsNumberOfEffectedRow()
+        public async Task UploadPatientImage_Ok_ReturnsNumberOfEffectedRow()
         {
             //Arrange
             var addresses = AddressDataTest();
@@ -218,14 +218,14 @@ namespace PatientCheckIn.Tests.Services.PatientServices
 
             //Act
             var patientService = new PatientService(context);
-            var actual = await patientService.UploadPatientImage(patients[0].PatientId, "/Image/Profile.jpg");
+            var actual = await patientService.UploadPatientImageAsync(patients[0].PatientId, "/Image/Profile.jpg");
 
             //Assert
             Assert.True(actual == 1);
         }
 
         [Fact]
-        public async void UploadPatientImage_NotOk_ReturnsNumberOfEffectedRow()
+        public async Task UploadPatientImage_NotOk_ReturnsNumberOfEffectedRow()
         {
             //Arrange
             var addresses = AddressDataTest();
@@ -234,7 +234,7 @@ namespace PatientCheckIn.Tests.Services.PatientServices
 
             //Act
             var patientService = new PatientService(context);
-            var actual = await patientService.UploadPatientImage(-1, "/Image/Profile.jpg");
+            var actual = await patientService.UploadPatientImageAsync(-1, "/Image/Profile.jpg");
 
             //Assert
             Assert.True(actual == -1);

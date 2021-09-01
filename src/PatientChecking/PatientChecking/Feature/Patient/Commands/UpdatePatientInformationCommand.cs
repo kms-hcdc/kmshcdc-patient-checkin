@@ -26,7 +26,7 @@ namespace PatientChecking.Feature.Patient.Commands
         {
             try
             {
-                var patientDetails = await _patientService.GetPatientInDetail(request.PatientModel.PatientId);
+                var patientDetails = await _patientService.GetPatientInDetailAsync(request.PatientModel.PatientId);
 
                 if (patientDetails != null)
                 {
@@ -46,7 +46,7 @@ namespace PatientChecking.Feature.Patient.Commands
                     patientDetails.IssuedDate = !string.IsNullOrEmpty(request.PatientModel.IssuedDate) ? DateTime.Parse(request.PatientModel.IssuedDate) : null;
                     patientDetails.IssuedPlace = request.PatientModel.IssuedPlace;
 
-                    var result = await _patientService.UpdatePatientDetail(patientDetails);
+                    var result = await _patientService.UpdatePatientDetailAsync(patientDetails);
 
                     return result;
                 }

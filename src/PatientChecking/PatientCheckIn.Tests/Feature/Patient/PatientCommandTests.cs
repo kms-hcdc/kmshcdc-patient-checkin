@@ -19,7 +19,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
     public class PatientCommandTests
     {
         [Fact]
-        public async void UpdatePatientInformationCommand_Ok_ReturnsNumberOfEffectedRow()
+        public async Task UpdatePatientInformationCommand_Ok_ReturnsNumberOfEffectedRow()
         {
             //Arrange
             var model = ModelDataTest();
@@ -28,9 +28,9 @@ namespace PatientCheckIn.Tests.Feature.Patient
 
             var mockPatientService = new Mock<IPatientService>();
 
-            mockPatientService.Setup(x => x.GetPatientInDetail(model.PatientId)).ReturnsAsync(data);
+            mockPatientService.Setup(x => x.GetPatientInDetailAsync(model.PatientId)).ReturnsAsync(data);
 
-            mockPatientService.Setup(x => x.UpdatePatientDetail(data)).ReturnsAsync(1);
+            mockPatientService.Setup(x => x.UpdatePatientDetailAsync(data)).ReturnsAsync(1);
 
             var command = new UpdatePatientInformationCommand() { PatientModel = model };
             var handler = new UpdatePatientInformationCommandHandler(mockPatientService.Object);
@@ -43,7 +43,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
         }
 
         [Fact]
-        public async void UpdatePatientInformationCommand_NotFoundPatient_ReturnsNumberOfEffectedRow()
+        public async Task UpdatePatientInformationCommand_NotFoundPatient_ReturnsNumberOfEffectedRow()
         {
             //Arrange
             var model = new PatientDetailViewModel
@@ -53,7 +53,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
 
             var mockPatientService = new Mock<IPatientService>();
 
-            mockPatientService.Setup(x => x.GetPatientInDetail(model.PatientId)).ReturnsAsync((DataAccess.Models.Patient)null);
+            mockPatientService.Setup(x => x.GetPatientInDetailAsync(model.PatientId)).ReturnsAsync((DataAccess.Models.Patient)null);
 
             var command = new UpdatePatientInformationCommand() { PatientModel = model };
             var handler = new UpdatePatientInformationCommandHandler(mockPatientService.Object);
@@ -66,7 +66,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
         }
 
         [Fact]
-        public async void UpdatePatientInformationCommand_FormatException_ReturnsNumberOfEffectedRow()
+        public async Task UpdatePatientInformationCommand_FormatException_ReturnsNumberOfEffectedRow()
         {
             //Arrange
             var model = ModelDataTest();
@@ -76,7 +76,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
 
             var mockPatientService = new Mock<IPatientService>();
 
-            mockPatientService.Setup(x => x.GetPatientInDetail(model.PatientId)).ReturnsAsync(patient);
+            mockPatientService.Setup(x => x.GetPatientInDetailAsync(model.PatientId)).ReturnsAsync(patient);
 
             var command = new UpdatePatientInformationCommand() { PatientModel = model };
             var handler = new UpdatePatientInformationCommandHandler(mockPatientService.Object);
@@ -89,7 +89,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
         }
 
         [Fact]
-        public async void UploadPatientImageCommand_UploadSuccessfully_ReturnsImageUploadingStatus()
+        public async Task UploadPatientImageCommand_UploadSuccessfully_ReturnsImageUploadingStatus()
         {
             //Arrange
             var patientId = 1;
@@ -98,10 +98,10 @@ namespace PatientCheckIn.Tests.Feature.Patient
 
             var mockImageService = new Mock<IImageService>();
             mockImageService.Setup(x => x.IsImageFile(image)).Returns(true);
-            mockImageService.Setup(x => x.SaveImage(image)).ReturnsAsync(avatarLink);
+            mockImageService.Setup(x => x.SaveImageAsync(image)).ReturnsAsync(avatarLink);
 
             var mockPatientService = new Mock<IPatientService>();
-            mockPatientService.Setup(x => x.UploadPatientImage(patientId, avatarLink)).ReturnsAsync(1);
+            mockPatientService.Setup(x => x.UploadPatientImageAsync(patientId, avatarLink)).ReturnsAsync(1);
 
             var command = new UploadPatientImageCommand() { PatientId = patientId, FormFile = image };
             var handler = new UploadPatientImageCommandHandler(mockPatientService.Object, mockImageService.Object); 
@@ -116,7 +116,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
         }
 
         [Fact]
-        public async void UploadPatientImageCommand_IsNotImageFailed_ReturnsImageUploadingStatus()
+        public async Task UploadPatientImageCommand_IsNotImageFailed_ReturnsImageUploadingStatus()
         {
             //Arrange
             var patientId = 1;
@@ -140,7 +140,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
         }
 
         [Fact]
-        public async void UploadPatientImageCommand_UploadFailed_ReturnsImageUploadingStatus()
+        public async Task UploadPatientImageCommand_UploadFailed_ReturnsImageUploadingStatus()
         {
             //Arrange
             var patientId = -1;
@@ -149,10 +149,10 @@ namespace PatientCheckIn.Tests.Feature.Patient
 
             var mockImageService = new Mock<IImageService>();
             mockImageService.Setup(x => x.IsImageFile(image)).Returns(true);
-            mockImageService.Setup(x => x.SaveImage(image)).ReturnsAsync(avatarLink);
+            mockImageService.Setup(x => x.SaveImageAsync(image)).ReturnsAsync(avatarLink);
 
             var mockPatientService = new Mock<IPatientService>();
-            mockPatientService.Setup(x => x.UploadPatientImage(patientId, avatarLink)).ReturnsAsync(-1);
+            mockPatientService.Setup(x => x.UploadPatientImageAsync(patientId, avatarLink)).ReturnsAsync(-1);
 
             var command = new UploadPatientImageCommand() { PatientId = patientId, FormFile = image };
             var handler = new UploadPatientImageCommandHandler(mockPatientService.Object, mockImageService.Object);
@@ -167,7 +167,7 @@ namespace PatientCheckIn.Tests.Feature.Patient
         }
 
         [Fact]
-        public async void UploadPatientImageCommand_ImageNull_ReturnsImageUploadingStatus()
+        public async Task UploadPatientImageCommand_ImageNull_ReturnsImageUploadingStatus()
         {
             //Arrange
             var patientId = 1;

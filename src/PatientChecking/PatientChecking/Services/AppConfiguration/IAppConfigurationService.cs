@@ -8,6 +8,6 @@ namespace PatientChecking.Services.AppConfiguration
 {
     public interface IAppConfigurationService
     {
-        Task<List<ProvinceCity>> GetProvinceCities();
+        Task<List<ProvinceCity>> GetProvinceCitiesAsync();
     }
 }

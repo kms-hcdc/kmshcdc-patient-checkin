@@ -33,7 +33,7 @@ namespace PatientChecking.Services.Image
             return true;
         }
 
-        public async Task<string> SaveImage(IFormFile formFile)
+        public async Task<string> SaveImageAsync(IFormFile formFile)
         {
             try
             {

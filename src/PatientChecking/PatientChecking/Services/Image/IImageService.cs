@@ -8,7 +8,7 @@ namespace PatientChecking.Services.Image
 {
     public interface IImageService
     {
-        Task<string> SaveImage(IFormFile formFile);
+        Task<string> SaveImageAsync(IFormFile formFile);
         bool IsImageFile(IFormFile formFile);
     }
 }

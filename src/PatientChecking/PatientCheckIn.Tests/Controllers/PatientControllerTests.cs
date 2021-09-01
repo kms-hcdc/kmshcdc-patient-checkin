@@ -25,7 +25,7 @@ namespace PatientCheckIn.Tests.Controllers
     public class PatientControllerTests
     {
         [Fact]
-        public async void Index_ThreeParams_ReturnsIndexView()
+        public async Task Index_ThreeParams_ReturnsIndexView()
         {
             //Arrange 
             var data = DataTest();
@@ -56,7 +56,7 @@ namespace PatientCheckIn.Tests.Controllers
         }
 
         [Fact]
-        public async void Index_TwoParams_ReturnsThreeParamsIndexAction()
+        public async Task Index_TwoParams_ReturnsThreeParamsIndexAction()
         {
             //Arrange 
             var data = DataTest();
@@ -87,7 +87,7 @@ namespace PatientCheckIn.Tests.Controllers
         }
 
         [Fact]
-        public async void Index_OneParam_ReturnsThreeParamsIndexAction()
+        public async Task Index_OneParam_ReturnsThreeParamsIndexAction()
         {
             //Arrange 
             var data = DataTest();
@@ -118,7 +118,7 @@ namespace PatientCheckIn.Tests.Controllers
         }
 
         [Fact]
-        public async void Index_NoParam_ReturnsThreeParamsIndexAction()
+        public async Task Index_NoParam_ReturnsThreeParamsIndexAction()
         {
             //Arrange 
             var data = DataTest();
@@ -149,7 +149,7 @@ namespace PatientCheckIn.Tests.Controllers
         }
 
         [Fact]
-        public async void Detail_ReturnsDetailView()
+        public async Task Detail_ReturnsDetailView()
         {
             //Arrange
             var patient = PatientDetailDataTest();
@@ -191,7 +191,7 @@ namespace PatientCheckIn.Tests.Controllers
         }
 
         [Fact]
-        public async void Update_Ok_ReturnsRedirectToDetailAction()
+        public async Task Update_Ok_ReturnsRedirectToDetailAction()
         {
             //Arrange 
             var patient = PatientDetailDataTest();
@@ -218,7 +218,7 @@ namespace PatientCheckIn.Tests.Controllers
         }
 
         [Fact]
-        public async void Update_NotOk_ReturnsRedirectToDetailAction()
+        public async Task Update_NotOk_ReturnsRedirectToDetailAction()
         {
             //Arrange 
             var patient = PatientDetailDataTest();
@@ -245,7 +245,7 @@ namespace PatientCheckIn.Tests.Controllers
         }
 
         [Fact]
-        public async void UploadImage_IsNotImageFailed()
+        public async Task UploadImage_IsNotImageFailed()
         {
             //Arrange 
             var patient = PatientDetailDataTest();
@@ -273,7 +273,7 @@ namespace PatientCheckIn.Tests.Controllers
         }
 
         [Fact]
-        public async void UploadImage_UploadImageFailed()
+        public async Task UploadImage_UploadImageFailed()
         {
             //Arrange 
             var patient = PatientDetailDataTest();
@@ -301,7 +301,7 @@ namespace PatientCheckIn.Tests.Controllers
         }
 
         [Fact]
-        public async void UploadImage_UploadImageSuccessfully()
+        public async Task UploadImage_UploadImageSuccessfully()
         {
             //Arrange 
             var patient = PatientDetailDataTest();

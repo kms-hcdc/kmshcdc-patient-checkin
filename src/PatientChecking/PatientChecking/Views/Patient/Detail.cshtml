@@ -316,6 +316,11 @@
         autocomplete(document.getElementById("birthplace"), cityList);
         autocomplete(document.getElementById("issuedPlace"), cityList);
 
+        jQuery.each(cityList, function (index, item) {
+            var option = $('<option value="' + item + '"></option>');
+            $('#issuedPlaceOptions').append(option);
+        })
+
         $("#nationalitySelect option[value='" + nationality + "']").attr("selected", "selected");
         $("#genderSelect option[value='" + @(Model.Gender) + "']").attr("selected", "selected");
         $("#maritalSelect option[value='" + @(Model.MaritalStatus) + "']").attr("selected", "selected");

@@ -1,4 +1,4 @@
-﻿using log4net;
+using log4net;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;

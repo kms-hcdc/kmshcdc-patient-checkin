@@ -11,9 +11,7 @@ namespace PatientChecking.Feature.Appointment.Queries
 {
     public class GetAppointmentPagingQuery : IRequest<AppointmentListViewModel>
     {
-        public int option { get; set; }
-        public int pageSize { get; set; }
-        public int pageIndex { get; set; }        
+        public PagingRequest pagingRequest { get; set; }
     }
 
     public class GetAppointmentPagingHandler : IRequestHandler<GetAppointmentPagingQuery, AppointmentListViewModel>
@@ -27,7 +25,7 @@ namespace PatientChecking.Feature.Appointment.Queries
 
         public async Task<AppointmentListViewModel> Handle(GetAppointmentPagingQuery request, CancellationToken cancellationToken)
         {
-            var pagedResult = await _appointmentService.GetListAppoinmentsPaging(new PagingRequest { PageIndex = request.pageIndex, PageSize = request.pageSize, SortSelection = request.option });
+            var pagedResult = await _appointmentService.GetListAppoinmentsPagingAsync(request.pagingRequest);
             var appointmentViewModels = new List<AppointmentViewModel>();
 
             foreach (ServiceModels.Appointment appointment in pagedResult.Appointments)
@@ -47,9 +45,9 @@ namespace PatientChecking.Feature.Appointment.Queries
             var myModel = new AppointmentListViewModel
             {
                 AppointmentViewModels = appointmentViewModels,
-                PageIndex = request.pageIndex,
-                PageSize = request.pageSize,
-                SortSelection = request.option,
+                PageIndex = request.pagingRequest.PageIndex,
+                PageSize = request.pagingRequest.PageSize,
+                SortSelection = request.pagingRequest.SortSelection,
                 TotalCount = pagedResult.TotalCount
             };
 

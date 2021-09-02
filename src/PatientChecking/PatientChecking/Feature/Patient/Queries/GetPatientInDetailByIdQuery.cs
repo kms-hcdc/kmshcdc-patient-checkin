@@ -19,35 +19,29 @@ namespace PatientChecking.Feature.Patient.Queries
     public class GetPatientInDetailByIdQueryHandler : IRequestHandler<GetPatientInDetailByIdQuery, PatientDetailViewModel>
     {
         private readonly IPatientService _patientService;
-        private readonly IAppConfigurationService _provinceCityService;
-        public GetPatientInDetailByIdQueryHandler(IPatientService patientService, IAppConfigurationService provinceCityService)
+        private readonly IAppConfigurationService _appConfigurationService;
+        public GetPatientInDetailByIdQueryHandler(IPatientService patientService, IAppConfigurationService appConfigurationService)
         {
             _patientService = patientService;
-            _provinceCityService = provinceCityService;
+            _appConfigurationService = appConfigurationService;
         }
         public async Task<PatientDetailViewModel> Handle(GetPatientInDetailByIdQuery request, CancellationToken cancellationToken)
         {
-            var cities = await _provinceCityService.GetProvinceCities();
-            var cityList = new List<string>();
+            var cities = await _appConfigurationService.GetProvinceCitiesAsync();
 
-            foreach (PatientCheckIn.DataAccess.Models.ProvinceCity p in cities)
-            {
-                cityList.Add(p.ProvinceCityName);
-            }
+            var result = await _patientService.GetPatientInDetailAsync(request.PatientId);
 
-            if (request.PatientId < 0)
+            if (request.PatientId < 0 || result == null)
             {
                 var emptyModel = new PatientDetailViewModel
                 {
                     PatientId = -1,
                     PatientIdentifier = "",
                     Nationality = "Vietnamese",
-                    ProvinceCities = cityList
+                    ProvinceCities = cities
                 };
                 return emptyModel;
             }
-
-            var result = await _patientService.GetPatientInDetail(request.PatientId);
 
             var model = new PatientDetailViewModel
             {
@@ -71,7 +65,7 @@ namespace PatientChecking.Feature.Patient.Queries
                 IssuedDate = result.IssuedDate?.ToString("yyyy-MM-dd"),
                 IssuedPlace = result.IssuedPlace,
                 InsuranceNo = result.InsuranceNo,
-                ProvinceCities = cityList
+                ProvinceCities = cities
             };
 
             return model;

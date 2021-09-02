@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatientChecking", "PatientChecking\PatientChecking.csproj", "{7190067F-1A79-413C-A03D-F258F70764D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientCheckIn.DataAccess", "PatientCheckIn.DataAccess\PatientCheckIn.DataAccess.csproj", "{E20455DB-D74E-47ED-81DF-9797B9F6AE6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatientCheckIn.DataAccess", "PatientCheckIn.DataAccess\PatientCheckIn.DataAccess.csproj", "{E20455DB-D74E-47ED-81DF-9797B9F6AE6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientCheckIn.Tests", "PatientCheckIn.Tests\PatientCheckIn.Tests.csproj", "{A7672B68-E053-4F52-8650-0AA3030D7432}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{E20455DB-D74E-47ED-81DF-9797B9F6AE6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E20455DB-D74E-47ED-81DF-9797B9F6AE6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E20455DB-D74E-47ED-81DF-9797B9F6AE6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7672B68-E053-4F52-8650-0AA3030D7432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7672B68-E053-4F52-8650-0AA3030D7432}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7672B68-E053-4F52-8650-0AA3030D7432}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7672B68-E053-4F52-8650-0AA3030D7432}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

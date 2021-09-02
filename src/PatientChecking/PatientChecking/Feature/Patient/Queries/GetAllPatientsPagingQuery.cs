@@ -23,7 +23,7 @@ namespace PatientChecking.Feature.Patient.Queries
         }
         public async Task<PatientListViewModel> Handle(GetAllPatientsPagingQuery request, CancellationToken cancellationToken)
         {
-            var result = await _patientService.GetListPatientPaging(request.requestPaging);
+            var result = await _patientService.GetListPatientPagingAsync(request.requestPaging);
             var patientsVm = new List<PatientViewModel>();
 
             foreach (ServiceModels.Patient p in result.Patients)

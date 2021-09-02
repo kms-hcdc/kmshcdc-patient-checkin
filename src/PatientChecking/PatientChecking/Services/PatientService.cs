@@ -23,14 +23,10 @@ namespace PatientChecking.Services
         public PatientList GetListPatientPaging(PagingRequest request)
         {
             var query = from patient in _patientCheckInContext.Patients
-                        join contact in _patientCheckInContext.Contacts on patient.PatientId equals contact.PatientId into pc
-                        from patientContact in pc.DefaultIfEmpty()
-
-                        join address in _patientCheckInContext.Addresses on patientContact.ContactId equals address.ContactId into pa
+                        join address in _patientCheckInContext.Addresses on patient.PatientId equals address.PatientId into pa
                         from patientAddress in pa.DefaultIfEmpty()
                         where patientAddress == null || patientAddress.IsPrimary == true
-
-                        select new { patient, patientContact, patientAddress };
+                        select new { patient, patientAddress };
 
             if (request.SortSelection == (int)PatientSortSelection.ID)
             {
@@ -49,7 +45,7 @@ namespace PatientChecking.Services
 
             var data = query
                 .Skip((request.PageIndex - 1) * request.PageSize)
-                .Take(request.PageSize).Select(x => new ServiceModels.Patient()
+                .Take(request.PageSize).Select(x => new ServiceModels.Patient
                 {
                     PatientId = x.patient.PatientId,
                     PatientIdentifier = x.patient.PatientIdentifier,
@@ -57,18 +53,15 @@ namespace PatientChecking.Services
                     DoB = x.patient.DoB,
                     Gender = (PatientGender) x.patient.Gender,
                     AvatarLink = x.patient.AvatarLink != null ? x.patient.AvatarLink : "",
-                    PrimaryAddress = new ServiceModels.Address() 
+                    Email = x.patient.Email,
+                    PhoneNumber = x.patient.PhoneNumber,
+                    PrimaryAddress = new ServiceModels.Address
                     {
                         StreetLine = x.patientAddress.StreetLine
-                    },
-                    PrimaryContact = new ServiceModels.Contact()
-                    {
-                        Email = x.patientContact.Email,
-                        PhoneNumber = x.patientContact.PhoneNumber
-                    },
+                    }
                 }).ToList();
 
-            var result = new PatientList()
+            var result = new PatientList
             {
                 Patients = data,
                 TotalCount = totalRow
@@ -77,10 +70,77 @@ namespace PatientChecking.Services
             return result;
         }
 
+        public PatientDetails GetPatientInDetail(int patientId)
+        {
+            var patient = _patientCheckInContext.Patients.Find(patientId);
+
+            var patientDetail = new PatientDetails
+            {
+                PatientId = patient.PatientId,
+                PatientIdentifier = patient.PatientIdentifier,
+                FirstName = patient.FirstName,
+                LastName = patient.LastName,
+                MiddleName = patient.MiddleName,
+                FullName = patient.FullName,
+                Nationality = patient.Nationality,
+                DoB = patient.DoB,
+                MaritalStatus = patient.MaritalStatus,
+                Gender = (PatientGender) patient.Gender,
+                AvatarLink = patient.AvatarLink,
+                Email = patient.Email,
+                PhoneNumber = patient.PhoneNumber,
+                EthnicRace = patient.EthnicRace,
+                HomeTown = patient.HomeTown,
+                BirthplaceCity = patient.BirthplaceCity,
+                IdcardNo = patient.IdcardNo,
+                IssuedDate = patient.IssuedDate,
+                IssuedPlace = patient.IssuedPlace,
+                InsuranceNo = patient.InsuranceNo
+            };
+
+            return patientDetail;
+        }
+
         public async Task<int> GetPatientsSummary()
         {
             var NumberOfPatients = await _patientCheckInContext.Patients.ToListAsync();
             return NumberOfPatients.Count();
+        }
+
+        public int UpdatePatientDetail(PatientDetails patientDetails)
+        {
+            var patient = _patientCheckInContext.Patients.Find(patientDetails.PatientId);
+
+            patient.FirstName = patientDetails.FirstName;
+            patient.MiddleName = patientDetails.MiddleName;
+            patient.LastName = patientDetails.LastName;
+            patient.FullName = patientDetails.FullName;
+            patient.Gender = (int) patientDetails.Gender;
+            patient.MaritalStatus = patientDetails.MaritalStatus;
+            patient.DoB = patientDetails.DoB;
+            patient.Nationality = patientDetails.Nationality;
+            patient.EthnicRace = patientDetails.EthnicRace;
+            patient.HomeTown = patientDetails.HomeTown;
+            patient.BirthplaceCity = patientDetails.BirthplaceCity;
+            patient.InsuranceNo = patientDetails.InsuranceNo;
+            patient.IdcardNo = patientDetails.IdcardNo;
+            patient.IssuedDate = patientDetails.IssuedDate;
+            patient.IssuedPlace = patientDetails.IssuedPlace;
+
+            _patientCheckInContext.Update(patient);
+
+            return _patientCheckInContext.SaveChanges();
+        }
+
+        public int UploadPatientImage(int patientId, string avatarLink)
+        {
+            var patient = _patientCheckInContext.Patients.Find(patientId);
+
+            patient.AvatarLink = avatarLink;
+
+            _patientCheckInContext.Update(patient);
+
+            return _patientCheckInContext.SaveChanges();
         }
     }
 }

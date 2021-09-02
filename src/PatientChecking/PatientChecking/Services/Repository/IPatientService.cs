@@ -8,5 +8,8 @@ namespace PatientChecking.Services.Repository
     {
         Task<int> GetPatientsSummary();
         PatientList GetListPatientPaging(PagingRequest request);
+        PatientDetails GetPatientInDetail(int patientId);
+        int UpdatePatientDetail(PatientDetails patientDetails);
+        int UploadPatientImage(int patientId, string avatarLink);
     }
 }

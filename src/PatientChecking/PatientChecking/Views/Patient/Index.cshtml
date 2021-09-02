@@ -37,17 +37,10 @@
                 <div class="col l-4">
                     <div class="item patient-item1">
                         <div>
-                            @if (item.AvatarLink == "")
-                            {
-                                <img src="~/Image/no-avatar.jpg" alt="Avatar" class="patient-img" />
-                            }
-                            else
-                            {
-                                <img src="@item.AvatarLink" alt="Avatar" class="patient-img" />
-                            }
+                            <img src="@(string.IsNullOrEmpty(item.AvatarLink) ? "/Image/no-avatar.jpg" : @item.AvatarLink)" alt="Avatar" class="patient-img" />
                         </div>
                         <div class="patient-name">
-                            <p class="fs-6 fw-bold">@item.FullName</p>
+                            <a href="@Url.Action("Detail", "Patient", new {patientId = item.PatientId})"><p class="fs-6 fw-bold">@item.FullName</p></a>
                             <p>@item.PatientIdentifier</p>
                         </div>
                     </div>
@@ -77,7 +70,7 @@
                                 <i class="fas fa-envelope"></i>
                             </div>
                             @{
-                                if (item.Email != null)
+                                if (!string.IsNullOrEmpty(item.Email))
                                 {
                                     string[] result = item.Email.Split("@");
                                     <p class="email-link">@result[0]</p>

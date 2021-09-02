@@ -5,14 +5,14 @@ using System.Collections.Generic;
 
 namespace PatientChecking.Services.ServiceModels
 {
-    public partial class EmergencyContact
+    public class EmergencyContact
     {
         public int EmergencyId { get; set; }
         public string Relationship { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
-        public int ContactId { get; set; }
+        public int PatientId { get; set; }
 
-        public virtual Contact Contact { get; set; }
+        public virtual Patient Patient { get; set; }
     }
 }

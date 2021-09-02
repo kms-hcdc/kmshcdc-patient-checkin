@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Appointment";
+    ViewData["Page"] = "Appointment Details";
+}
+@section css {
+    <link href="@Url.Content("~/css/AppointmentDetails.css")" rel="stylesheet" type="text/css" />
+}
+@using PatientChecking.Services.ServiceModels.Enum
+@model PatientChecking.Views.ViewModels.AppointmentDetailViewModel
+<div class="appointment-detail-container">
+    <div class="appointment-detail-title">
+        <span class="mt-3 mx-2 text-info h4">Appointment Details</span>
+        <hr class="mt-4" />
+    </div>
+    @using (Html.BeginForm("Update", "Appointment", FormMethod.Post))
+    {
+        <div class="btn-edit-appoinment">
+            <button type="button" id="btn-cancel" class="btn btn-secondary rounded-pill" Onclick="CancelFormEditAppointment()">
+                Cancel
+            </button>
+            <button type="button" id="btn-edit" class="btn btn-primary rounded-pill" Onclick="ShowFormEditAppointment()">
+                Edit
+            </button>
+            <button type="submit" id="btn-save" class="btn btn-primary rounded-pill" Onclick="ShowSaveAppointment()">
+                Save
+            </button>
+        </div>
+        <div class="appointment-detail-info">
+            <div class="row-appointment-info">
+                <div class="col-3 col-md-3">
+                    <p class="m-2">Check-In Date<span class="text-danger">*</span></p>
+                </div>
+                <div class="col-9 col-md-9">
+                    <p class="m-2">Medical Concerns</p>
+                </div>
+            </div>
+            <div class="row-appointment-info">
+                <div class="col-3 col-md-3" id="check-in-date-box">
+                    <input id="check-in-date" min='@DateTime.Now.ToString("yyyy-MM-dd")' type="date" aria-label="Last name" name="CheckInDate" class="form-control w-75 bg-white text-center" value=@Model.CheckInDate disabled>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                <div class="col-9 col-md-9">
+                    <input id="medical-concerns" type="text" aria-label="Last name" name="MedicalConcerns" class="form-control bg-white" value="@Model.MedicalConcerns" disabled>
+                </div>
+                <input name="AppointmentId" value="@Model.AppointmentId" hidden />
+                <input name="PatientId" value="@Model.PatientId" hidden />
+            </div>
+            <div class="row-appointment-info mt-4">
+                <div class="col-3 col-md-3">
+                    <p class="m-2">Appointment Status</p>
+                </div>
+                <div class="col-9 col-md-9">
+                    <p class="m-2 text-info">Patient Details</p>
+                </div>
+            </div>
+            <div class="row-appointment-info">
+                <div class="col-3 col-md-3">
+                    <select id="appointment-status" class="w-75 h-100 bg-white" name="Status" disabled>
+                        <option value="CheckIn">Check-In</option>
+                        <option value="Closed">Close</option>
+                        <option value="Cancel">Cancel</option>
+                    </select>
+                </div>
+                <div class="col-6 col-md-6">
+                    <button type="button" class="btn btn-primary rounded-pill w-25" onclick="ViewPatientDetails()">
+                        View Patient
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        var appointmentStatus = '@Html.Raw(Model.Status)';
+        $("#appointment-status option[value='" + appointmentStatus + "']").attr("selected", "selected");
+    });
+    function ShowFormEditAppointment() {
+        $("#check-in-date").prop('disabled', false);
+        $("#medical-concerns").prop('disabled', false);
+        $("#appointment-status").prop('disabled', false);
+        $("#btn-cancel").show();
+        $("#btn-save").show();
+        $("#btn-edit").hide();
+    }
+    function CancelFormEditAppointment() {
+        window.location.href = '@Html.Raw(@Url.Action("Detail", "Appointment", new { appointmentId = Model.AppointmentId }))';
+    }
+    function ViewPatientDetails() {
+        window.location.href = '@Html.Raw(@Url.Action("Detail", "Patient", new { patientId = Model.PatientId }))';
+    }
+</script>

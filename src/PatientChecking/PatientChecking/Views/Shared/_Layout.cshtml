@@ -27,9 +27,9 @@
                     <a class="patient-btn">
                         <i class="fas fa-hospital-user m-1"></i>
                         Patients
-                        <span class="fas fa-caret-down first" ></span>
+                        <span class="fas fa-caret-down first"></span>
                     </a>
-                    <ul class="@(@ViewBag.Controller == "Patient" ? "patient-show show" : "patient-show") ps-0" >
+                    <ul class="@(@ViewBag.Controller == "Patient" ? "patient-show show" : "patient-show") ps-0">
                         <li class="detail @((ViewBag.Action == "Index" && @ViewBag.Controller == "Patient") ? "active" : "")">
                             <a asp-controller="Patient" asp-action="Index">
                                 <i class="fas fa-list m-1"></i>
@@ -37,7 +37,7 @@
                             </a>
                         </li>
                         <li class="detail @((ViewBag.Action == "Detail" && @ViewBag.Controller == "Patient") ? "active" : "")">
-                            <a asp-controller="Patient" asp-action="Detail">
+                            <a asp-controller="Patient" asp-action="Detail" asp-route-patientId="-1">
                                 <i class="fas fa-info-circle m-1"></i>
                                 Detail Information
                             </a>
@@ -69,6 +69,7 @@
             $("nav ul .first").toggleClass("rotate");
         });
     </script>
+    @await Component.InvokeAsync("Notyf")
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

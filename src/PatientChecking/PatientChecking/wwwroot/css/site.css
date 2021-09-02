@@ -47,7 +47,7 @@ nav ul li:last-child {
 nav ul li a {
     position: relative;
     color: white;
-    text-decoration: none !important;
+    text-decoration: none;
     font-size: 0.75rem;
     padding-left: 20px;
     display: block;
@@ -99,8 +99,8 @@ nav ul li.active ul li a {
 }
 
 nav ul ul li a:hover {
-    color: white !important;
-    background: #14b1e7 !important;
+    color: white;
+    background: #14b1e7;
 }
 
 nav ul li a span {
@@ -118,6 +118,7 @@ nav ul li a span.rotate {
 
 .main-container {
     display: flex;
+    overflow-x: clip;
 }
 
 .content {
@@ -147,9 +148,11 @@ nav ul li a span.rotate {
     align-items: center;
     display: flex;
 }
+
 .img-box > img {
     width: 65%;
 }
+
 .header {
     width: 100%;
     height: 50px;

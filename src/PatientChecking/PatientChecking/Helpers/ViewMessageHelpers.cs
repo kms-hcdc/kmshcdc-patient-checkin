@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace PatientChecking.Helpers
 {
@@ -33,7 +32,7 @@ namespace PatientChecking.Helpers
         private static IHtmlContent BuildMessageHelper(this IHtmlHelper helper, ViewMessage msg,
                                                  object attributes)
         {
-            var ulMsg = new System.Web.Mvc.TagBuilder("div");
+            var ulMsg = new TagBuilder("div");
 
             ulMsg.MergeAttribute("role", "alert");
 
@@ -63,9 +62,9 @@ namespace PatientChecking.Helpers
             sb.AppendFormat("<p>{0}</p>", msg.MsgText);
             sb.Append("<a class=\"close text-decoration-none\" data-dismiss=\"alert\" href=\"#\">×</a>");
 
-            ulMsg.InnerHtml = sb.ToString();
+            ulMsg.InnerHtml.AppendHtml(sb.ToString());
 
-            return new HtmlString(ulMsg.ToString(System.Web.Mvc.TagRenderMode.Normal));
+            return new HtmlString(ulMsg.InnerHtml.ToString());
         }
     }
 }

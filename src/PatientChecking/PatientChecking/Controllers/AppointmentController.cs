@@ -1,26 +1,28 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
-using PatientChecking.Services.Repository;
-using PatientChecking.Services.ServiceModels;
-using PatientChecking.Services.ServiceModels.Enum;
+using Newtonsoft.Json;
+using MediatR;
+using PatientChecking.Feature.Appointment.Queries;
+using PatientChecking.ServiceModels;
+using PatientChecking.ServiceModels.Enum;
+using PatientChecking.Services.Appointment;
 using PatientChecking.Views.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using PatientChecking.Feature.Appointment.Commands;
+using System.Globalization;
 
 namespace PatientChecking.Controllers
 {
     public class AppointmentController : BaseController
     {
-        private readonly IAppointmentService _appointmentService;
-        private readonly INotyfService _notyf;
+        private readonly IMediator _mediator;
 
-        public AppointmentController(IAppointmentService appointmentService, INotyfService notyf)
+        public AppointmentController(IMediator mediator)
         {
-            _appointmentService = appointmentService;
-            _notyf = notyf;
+            _mediator = mediator;
         }
 
         public async Task<IActionResult> Index()
@@ -47,75 +49,53 @@ namespace PatientChecking.Controllers
             {
                 PageIndex = pageIndex,
                 PageSize = pageSize,
-                SortSelection = option
-            };
-
-            var pagedResult = await _appointmentService.GetListAppoinmentsPaging(request);
-
-            var appointmentViewModels = new List<AppointmentViewModel>();
-
-            foreach(Appointment appointment in pagedResult.Appointments)
-            {
-                appointmentViewModels.Add(new AppointmentViewModel
-                {
-                    AppointmentId = appointment.AppointmentId,
-                    CheckInDate = appointment.CheckInDate.ToString("dd-MM-yyyy"),
-                    DoB = appointment.Patient?.DoB.ToString("dd-MM-yyyy"),
-                    FullName = appointment.Patient?.FullName,
-                    PatientIdentifier = appointment.Patient?.PatientIdentifier,
-                    Status = appointment.Status,
-                    AvatarLink = appointment.Patient?.AvatarLink,
-                });
-            }
-            var myModel = new AppointmentListViewModel
-            {
-                AppointmentViewModels = appointmentViewModels,
-                PageIndex = pageIndex,
-                PageSize = pageSize,
                 SortSelection = option,
-                TotalCount = pagedResult.TotalCount
             };
-            return View(myModel);
+            return View(await _mediator.Send(new GetAppointmentPagingQuery { pagingRequest = request }));
         }
 
         public async Task<IActionResult> Detail(int appointmentId)
         {
-            var appointment = await _appointmentService.GetAppointmentById(appointmentId);
-            var appointmentDetailViewModel = new AppointmentDetailViewModel
+            var result = await _mediator.Send(new GetAppointmentByIdQuery() { Id = appointmentId });
+            if(result != null){
+                return View(result);
+            }
+            var message = new ViewMessage
             {
-                AppointmentId = appointmentId,
-                CheckInDate = appointment.CheckInDate.ToString("yyyy-MM-dd"),
-                MedicalConcerns = appointment.MedicalConcerns,
-                Status = appointment.Status,
-                PatientId = appointment.PatientId
+                MsgType = MessageType.Error,
+                MsgText = "Appointment Not Found!",
+                MsgTitle = "Not Found"
             };
-            return View(appointmentDetailViewModel);
+            TempData["Message"] = JsonConvert.SerializeObject(message);
+            return RedirectToAction("Index", new { option = 1, pageSize = 10, pageIndex = 1});
         }
 
-        public IActionResult Update(AppointmentDetailViewModel appointmentDetailViewModel)
+        public async Task<IActionResult> Update(AppointmentDetailViewModel appointmentDetailViewModel)
         {
-            var appointment = new Appointment
+            var result = await _mediator.Send(new UpdateAppointmentCommand() { appointmentDetailViewModel = appointmentDetailViewModel });
+
+            if (result > 0)
             {
-                AppointmentId = appointmentDetailViewModel.AppointmentId,
-                CheckInDate = DateTime.Parse(appointmentDetailViewModel.CheckInDate),
-                MedicalConcerns = appointmentDetailViewModel.MedicalConcerns,
-                PatientId = appointmentDetailViewModel.PatientId,
-                Status = appointmentDetailViewModel.Status
-            };
-            if(appointment.CheckInDate < DateTime.Now)
-            {
-                _notyf.Error("Update Appointment Failed!");
-            }
-            var result = _appointmentService.UpdateAppointment(appointment);
-            if(result > 0)
-            {
-                _notyf.Success("Update Appointment successfully!");
+                var message = new ViewMessage
+                {
+                    MsgType = MessageType.Success,
+                    MsgText = "Update Appointment Successfully!",
+                    MsgTitle = "Update Successfully"
+                };
+                TempData["Message"] = JsonConvert.SerializeObject(message);
             }
             else
             {
-                _notyf.Error("Update Appointment Failed!");
+                var message = new ViewMessage
+                {
+                    MsgType = MessageType.Error,
+                    MsgText = "Update Appointment Failed!",
+                    MsgTitle = "Update Failed"
+                };
+                TempData["Message"] = JsonConvert.SerializeObject(message);
             }
-            return RedirectToAction("Detail",new { appointmentId = appointment.AppointmentId});
+
+            return RedirectToAction("Detail",new { appointmentId = appointmentDetailViewModel.AppointmentId });
         }
     }
 }

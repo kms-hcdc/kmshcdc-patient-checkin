@@ -6,6 +6,21 @@
     <link href="@Url.Content("~/css/AppointmentList.css")" rel="stylesheet" type="text/css" />
 }
 @model PatientChecking.Views.ViewModels.AppointmentListViewModel
+@using PatientChecking.Helpers
+@using PatientChecking.ServiceModels
+@using Newtonsoft.Json
+
+@{
+    if (!string.IsNullOrEmpty((string)TempData["Message"]))
+    {
+        var message = (ViewMessage)JsonConvert.DeserializeObject<ViewMessage>((string)TempData["Message"]);
+        if (message != null)
+        {
+            @Html.MessageAlert(message)
+        }
+    }
+}
+
 <div class="header-appointment">
     <div class="sort-appointment">
         <span>Sort by:</span>
@@ -43,7 +58,7 @@
     {
         <div class="row-value">
             <div class="col-3 col-md-3" id="name-value">
-                <img src="@(string.IsNullOrEmpty(item.AvatarLink) ? "/Image/no-avatar.jpg" : item.AvatarLink)"  alt="Avatar" class="avatar-patient-inappointment">
+                <img src="@(string.IsNullOrEmpty(item.AvatarLink) ? "/Image/no-avatar.jpg" : item.AvatarLink)" alt="Avatar" class="avatar-patient-inappointment">
                 <div id="patient-identity">
                     <p class="patient-name">@item.FullName</p>
                     <b class="patient-identifier">(@item.PatientIdentifier)</b>
@@ -58,7 +73,7 @@
             <div class="col-2 col-md-2">
                 <p class="m-3">@item.Status</p>
             </div>
-            <div class="col-1 col-md-1">
+            <div class="col-1 col-md-1 d-flex align-items-center">
                 <button class="btn-view-appointment" onclick="location.replace('@Html.Raw(@Url.Action("Detail", "Appointment", new {appointmentId = item.AppointmentId}))')">View</button>
             </div>
         </div>
@@ -127,13 +142,13 @@
                 }
 
             }
-                <li class="page-item @(currentPage == pageCount ? "disabled" : "")">
-                    <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = currentPage+1})" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </li>
-         }
+            <li class="page-item @(currentPage == pageCount ? "disabled" : "")">
+                <a class="page-link" href="@Url.Action("Index", "Appointment", new {option = sortOption, pageSize = pagingOption, pageIndex = currentPage+1})" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        }
 
     </ul>
 </div>
@@ -151,5 +166,9 @@
         var url = '@Html.Raw(@Url.Action("Index", "Appointment", new { option = "optionSort", pageSize = "pagingOption", pageIndex = "currentPage" }))';
         url = url.replace("optionSort", selectedSortValue).replace("pagingOption", selectedPagingValue).replace("currentPage", 1);
         window.location.href = url;
+    });
+    $("#alert-message").fadeTo(3000, 500).slideUp(500, function () {
+        $("#alert-message").slideUp(1000);
+        $("#alert-message").attr('class', '');
     });
 </script>

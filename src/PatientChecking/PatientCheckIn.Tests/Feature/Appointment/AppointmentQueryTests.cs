@@ -87,20 +87,31 @@ namespace PatientCheckIn.Tests.Feature.Appointment
             return patients;
         }
 
+        private PagingRequest DataRequest()
+        {
+            var request = new PagingRequest
+            {
+                PageIndex = 1,
+                PageSize = 2,
+                SortSelection = 1,
+            };
+            return request;
+        }
+
         [Fact]
-        public async void GetAppointmentByIdQuery()
+        public async Task GetAppointmentByIdQuery_ExsitAppointment_ReturnsAppointmentDetailViewModel()
         {
             //Arange
             var appointments = AppointmentDataTest();
             var expected = appointments[0];
             var appointmentServices = new Mock<IAppointmentService>();
-            appointmentServices.Setup(x => x.GetAppointmentById(1)).ReturnsAsync(expected);
-            var appontment = new GetAppointmentByIdQuery { Id = 1 };
+            appointmentServices.Setup(x => x.GetAppointmentByIdAsync(1)).ReturnsAsync(expected);
+            var appointment = new GetAppointmentByIdQuery { Id = 1 };
             var handler = new GetAppointmentByHandler(appointmentServices.Object);
             var cts = new CancellationToken();    
 
             //Act
-            var actual = await handler.Handle(appontment, cts);
+            var actual = await handler.Handle(appointment, cts);
 
             //Assert
             Assert.NotNull(actual);
@@ -112,20 +123,33 @@ namespace PatientCheckIn.Tests.Feature.Appointment
         }
 
         [Fact]
-        public async void GetAppointmentPagingQuery()
+        public async Task GetAppointmentByIdQuery_AppointmentNotFound_ReturnsNull()
+        {
+            //Arange
+            var appointments = AppointmentDataTest();
+            var appointmentServices = new Mock<IAppointmentService>();
+            appointmentServices.Setup(x => x.GetAppointmentByIdAsync(1000)).ReturnsAsync((DataAccess.Models.Appointment)null); ;
+            var appointment = new GetAppointmentByIdQuery { Id = 1000 };
+            var handler = new GetAppointmentByHandler(appointmentServices.Object);
+            var cts = new CancellationToken();
+
+            //Act
+            var actual = await handler.Handle(appointment, cts);
+
+            //Assert
+            Assert.Null(actual);
+        }
+
+        [Fact]
+        public async Task GetAppointmentPagingQuery_PagingRequest_ReturnsAppointmentListViewModel()
         {
             //Arange
             var patients = PatientDataTest();
-            var request = new PagingRequest
-            {
-                PageIndex = 1,
-                PageSize = 2,
-                SortSelection = 1,
-            };
+            var request = DataRequest();
             var expected = PagingData(patients);
 
             var mockAppointmentServices = new Mock<IAppointmentService>();
-            mockAppointmentServices.Setup(x => x.GetListAppoinmentsPaging(request)).ReturnsAsync(expected);
+            mockAppointmentServices.Setup(x => x.GetListAppoinmentsPagingAsync(request)).ReturnsAsync(expected);
             var query = new GetAppointmentPagingQuery
             {
                 pagingRequest = request
@@ -140,16 +164,10 @@ namespace PatientCheckIn.Tests.Feature.Appointment
             Assert.NotNull(actual);
             Assert.Equal(expected.TotalCount, actual.TotalCount);
             Assert.Equal(expected.Appointments.Count, actual.AppointmentViewModels.Count);
-            for (int i = 0; i < expected.Appointments.Count; i++)
-            {
-                Assert.Equal(expected.Appointments[i].AppointmentId, actual.AppointmentViewModels[i].AppointmentId);
-                Assert.Equal(expected.Appointments[i].CheckInDate.ToString("dd-MM-yyyy"), actual.AppointmentViewModels[i].CheckInDate);
-                Assert.Equal(expected.Appointments[i].Patient.DoB.ToString("dd-MM-yyyy"), actual.AppointmentViewModels[i].DoB);
-                Assert.Equal(expected.Appointments[i].Patient.FullName, actual.AppointmentViewModels[i].FullName);
-                Assert.Equal(expected.Appointments[i].Patient.PatientIdentifier, actual.AppointmentViewModels[i].PatientIdentifier);
-                Assert.Equal(expected.Appointments[i].Status, actual.AppointmentViewModels[i].Status);
-                Assert.Equal(expected.Appointments[i].Patient.AvatarLink, actual.AppointmentViewModels[i].AvatarLink);
-            }
+            Assert.True(expected.Appointments.All(x => actual.AppointmentViewModels.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate.ToString("dd-MM-yyyy")== y.CheckInDate 
+                                                                                          && x.Patient.DoB.ToString("dd-MM-yyyy") == y.DoB && x.Patient.FullName == y.FullName 
+                                                                                          && x.Patient.PatientIdentifier == y.PatientIdentifier 
+                                                                                          && x.Status == y.Status && x.Patient.AvatarLink == y.AvatarLink)));
         }
     }
 }

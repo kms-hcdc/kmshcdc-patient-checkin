@@ -25,7 +25,7 @@ namespace PatientChecking.Feature.Appointment.Queries
 
         public async Task<AppointmentListViewModel> Handle(GetAppointmentPagingQuery request, CancellationToken cancellationToken)
         {
-            var pagedResult = await _appointmentService.GetListAppoinmentsPaging(request.pagingRequest);
+            var pagedResult = await _appointmentService.GetListAppoinmentsPagingAsync(request.pagingRequest);
             var appointmentViewModels = new List<AppointmentViewModel>();
 
             foreach (ServiceModels.Appointment appointment in pagedResult.Appointments)

@@ -19,12 +19,12 @@ namespace PatientChecking.Services.Appointment
             _patientCheckInContext = patientCheckInContext;
         }
 
-        public async Task<PatientCheckIn.DataAccess.Models.Appointment> GetAppointmentById(int appointmentId)
+        public async Task<PatientCheckIn.DataAccess.Models.Appointment> GetAppointmentByIdAsync(int appointmentId)
         {
             return await _patientCheckInContext.Appointments.FirstOrDefaultAsync(x => x.AppointmentId == appointmentId);
         }
 
-        public async Task<AppointmentDashboard> GetAppointmentSummary()
+        public async Task<AppointmentDashboard> GetAppointmentSummaryAsync()
         {
             var numberOfAppointments = await _patientCheckInContext.Appointments.ToListAsync();
             var numberOfAppointmentsInMonth = await _patientCheckInContext.Appointments.Where(x => x.CheckInDate.Date.Year == DateTime.Now.Year && x.CheckInDate.Date.Month == DateTime.Now.Month).ToListAsync();
@@ -41,7 +41,7 @@ namespace PatientChecking.Services.Appointment
             };
         }
 
-        public async Task<AppointmentList> GetListAppoinmentsPaging(PagingRequest request)
+        public async Task<AppointmentList> GetListAppoinmentsPagingAsync(PagingRequest request)
         {
             var query = from appointment in _patientCheckInContext.Appointments
                         join patient in _patientCheckInContext.Patients on appointment.Patient.PatientId equals patient.PatientId
@@ -92,7 +92,7 @@ namespace PatientChecking.Services.Appointment
             return appointmentList;
         }
 
-        public async Task<int> UpdateAppointment(PatientCheckIn.DataAccess.Models.Appointment appointment)
+        public async Task<int> UpdateAppointmentAsync(PatientCheckIn.DataAccess.Models.Appointment appointment)
         {
             if(appointment == null)
             {

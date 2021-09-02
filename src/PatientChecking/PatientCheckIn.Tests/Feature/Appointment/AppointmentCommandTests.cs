@@ -27,14 +27,8 @@ namespace PatientCheckIn.Tests.Feature.Appointment
             return appointment;
         }
 
-        [Fact]
-        public async void UpdateAppointmentCommand_Ok()
+        private DataAccess.Models.Appointment AppointmentDataAccess()
         {
-            //Arange
-            var command = new UpdateAppointmentCommand
-            {
-                appointmentDetailViewModel = AppointmentDataTest()
-            };
             var appointment = new DataAccess.Models.Appointment
             {
                 AppointmentId = 1,
@@ -43,9 +37,21 @@ namespace PatientCheckIn.Tests.Feature.Appointment
                 Status = "Closed",
                 PatientId = 1,
             };
+            return appointment;
+        }
+
+        [Fact]
+        public async Task UpdateAppointmentCommand_ExistAppointment_ReturnNumberOfChangedLine()
+        {
+            //Arange
+            var command = new UpdateAppointmentCommand
+            {
+                appointmentDetailViewModel = AppointmentDataTest()
+            };
+            var appointment = AppointmentDataAccess();
             var appointmentServices = new Mock<IAppointmentService>();
-            appointmentServices.Setup(x => x.GetAppointmentById(command.appointmentDetailViewModel.AppointmentId)).ReturnsAsync(appointment);
-            appointmentServices.Setup(x => x.UpdateAppointment(appointment)).ReturnsAsync(1);
+            appointmentServices.Setup(x => x.GetAppointmentByIdAsync(command.appointmentDetailViewModel.AppointmentId)).ReturnsAsync(appointment);
+            appointmentServices.Setup(x => x.UpdateAppointmentAsync(appointment)).ReturnsAsync(1);
             var handler = new UpdateAppointmentCommandHandler(appointmentServices.Object);
             var cts = new CancellationToken();
 
@@ -59,7 +65,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
         }
 
         [Fact]
-        public async void UpdateAppointmentCommand_NotFoundAppointment()
+        public async Task UpdateAppointmentCommand_NotFoundAppointment_ReturnNumberOfChangedLine()
         {
             //Arange
             var command = new UpdateAppointmentCommand
@@ -67,7 +73,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
                 appointmentDetailViewModel = AppointmentDataTest()
             };
             var appointmentServices = new Mock<IAppointmentService>();
-            appointmentServices.Setup(x => x.GetAppointmentById(-1)).ReturnsAsync((DataAccess.Models.Appointment)null);
+            appointmentServices.Setup(x => x.GetAppointmentByIdAsync(-1)).ReturnsAsync((DataAccess.Models.Appointment)null);
             var handler = new UpdateAppointmentCommandHandler(appointmentServices.Object);
             var cts = new CancellationToken();
 
@@ -81,7 +87,7 @@ namespace PatientCheckIn.Tests.Feature.Appointment
         }
 
         [Fact]
-        public async void UpdateAppointmentCommand_NotOk()
+        public async Task UpdateAppointmentCommand_InvalidCheckInDate_ReturnNumberOfChangedLine()
         {
             //Arange
             var command = new UpdateAppointmentCommand
@@ -90,16 +96,9 @@ namespace PatientCheckIn.Tests.Feature.Appointment
             };
             command.appointmentDetailViewModel.CheckInDate = "2021123-08-25"; //Invalid Date
 
-            var appointment = new DataAccess.Models.Appointment
-            {
-                AppointmentId = 1,
-                MedicalConcerns = "Lung",
-                CheckInDate = new DateTime(2021, 08, 25),
-                Status = "Closed",
-                PatientId = 1,
-            };
+            var appointment = AppointmentDataAccess();
             var appointmentServices = new Mock<IAppointmentService>();
-            appointmentServices.Setup(x => x.GetAppointmentById(command.appointmentDetailViewModel.AppointmentId)).ReturnsAsync(appointment);
+            appointmentServices.Setup(x => x.GetAppointmentByIdAsync(command.appointmentDetailViewModel.AppointmentId)).ReturnsAsync(appointment);
             var handler = new UpdateAppointmentCommandHandler(appointmentServices.Object);
             var cts = new CancellationToken();
 

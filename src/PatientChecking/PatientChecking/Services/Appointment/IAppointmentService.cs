@@ -9,9 +9,9 @@ namespace PatientChecking.Services.Appointment
 {
     public interface IAppointmentService
     {
-        Task<AppointmentDashboard> GetAppointmentSummary();
-        Task<AppointmentList> GetListAppoinmentsPaging(PagingRequest request);
-        Task <int> UpdateAppointment(PatientCheckIn.DataAccess.Models.Appointment appointment);
-        Task<PatientCheckIn.DataAccess.Models.Appointment> GetAppointmentById(int appointmentId);
+        Task<AppointmentDashboard> GetAppointmentSummaryAsync();
+        Task<AppointmentList> GetListAppoinmentsPagingAsync(PagingRequest request);
+        Task<int> UpdateAppointmentAsync(PatientCheckIn.DataAccess.Models.Appointment appointment);
+        Task<PatientCheckIn.DataAccess.Models.Appointment> GetAppointmentByIdAsync(int appointmentId);
     }
 }

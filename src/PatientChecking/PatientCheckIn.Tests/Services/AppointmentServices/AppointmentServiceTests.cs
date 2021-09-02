@@ -86,84 +86,9 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
             return patients;
         }
 
-        private PagingRequest PagingRequestData(int index, int pageSize, int optionSort)
+        private AppointmentList GetDataAppointmentExpected(List<DataAccess.Models.Patient> patients,int sortOption)
         {
-            var request = new PagingRequest
-            {
-                PageIndex = index,
-                PageSize = pageSize,
-                SortSelection = optionSort,
-            };
-            return request;
-        }
-
-        [Fact]
-        public async void GetAppointmentSummary()
-        {
-            //Arrange
-            var patients = PatientDataTest();
-            var appointments = AppointmentDataTest(patients);
-            var context = CreateMockContext(appointments);
-            var expected = new AppointmentDashboard
-            {
-                NumOfAppointments = 4,
-                NumOfAppointmentsInMonth = context.Appointments.Where(x => x.CheckInDate.Date.Year == DateTime.Now.Year && x.CheckInDate.Date.Month == DateTime.Now.Month).Count(),
-                NumOfAppointmentsInToday = context.Appointments.Where(x => x.CheckInDate.Date == DateTime.Today && x.Status == AppointmentStatus.CheckIn.ToString()).Count(),
-                NumOfPatientsInMonth = 4,
-            };
-
-            //Act
-            var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.GetAppointmentSummary();
-
-            //Assert
-            Assert.NotNull(actual);
-            Assert.Equal(expected.NumOfPatientsInMonth, actual.NumOfPatientsInMonth);
-            Assert.Equal(expected.NumOfAppointmentsInToday, actual.NumOfAppointmentsInToday);
-            Assert.Equal(expected.NumOfAppointmentsInMonth, actual.NumOfAppointmentsInMonth);
-            Assert.Equal(expected.NumOfAppointments, actual.NumOfAppointments);
-        }
-
-        [Fact]
-        public async void GetAppointmentById()
-        {
-            //Arrange
-            var patients = PatientDataTest();
-            var appointments = AppointmentDataTest(patients);
-            var context = CreateMockContext(appointments);
-
-            var expected = new PatientChecking.ServiceModels.Appointment
-            {
-                AppointmentId = appointments[2].AppointmentId,
-                CheckInDate = appointments[2].CheckInDate,
-                MedicalConcerns = appointments[2].MedicalConcerns,
-                Status = appointments[2].Status,
-                PatientId = appointments[2].PatientId,
-            };
-
-            //Act
-            var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.GetAppointmentById(3);
-
-            //Assert
-            Assert.NotNull(actual);
-            Assert.Equal(expected.AppointmentId, actual.AppointmentId);
-            Assert.Equal(expected.CheckInDate, actual.CheckInDate);
-            Assert.Equal(expected.MedicalConcerns, actual.MedicalConcerns);
-            Assert.Equal(expected.Status, actual.Status);
-            Assert.Equal(expected.PatientId, actual.PatientId);
-        }
-
-        [Fact]
-        public async void GetListAppoinmentsPaging_SortByName()
-        {
-            //Arrange
-            var patients = PatientDataTest();
-            var appointments = AppointmentDataTest(patients);
-            var context = CreateMockContext(appointments);
-            var pagingRequest = PagingRequestData(1,2,0);
-
-            var appoinmentListServiceModel = new List<PatientChecking.ServiceModels.Appointment>
+            var appoinmentListServiceModelByName = new List<PatientChecking.ServiceModels.Appointment>
             {
                 new PatientChecking.ServiceModels.Appointment
                 {
@@ -177,50 +102,16 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
 
                 new PatientChecking.ServiceModels.Appointment
                 {
-                    AppointmentId = 1, 
-                    MedicalConcerns = "Head", 
-                    CheckInDate = new DateTime(2021, 08, 26), 
-                    Status = "CheckIn", 
-                    PatientId = patients[0].PatientId, 
+                    AppointmentId = 1,
+                    MedicalConcerns = "Head",
+                    CheckInDate = new DateTime(2021, 08, 26),
+                    Status = "CheckIn",
+                    PatientId = patients[0].PatientId,
                     Patient =  new PatientChecking.ServiceModels.Patient{ AvatarLink = patients[0].AvatarLink, DoB = patients[0].DoB, FullName = patients[0].FullName, PatientIdentifier = patients[0].PatientIdentifier }
                 }
             };
 
-            var expected = new AppointmentList
-            {
-                Appointments = appoinmentListServiceModel,
-                TotalCount = 4,
-            };
-
-            //Act
-            var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.GetListAppoinmentsPaging(pagingRequest);
-
-            //Assert
-            Assert.NotNull(actual);
-            Assert.Equal(expected.Appointments.Count, actual.Appointments.Count);
-            Assert.Equal(expected.TotalCount, actual.TotalCount);
-            for(int i = 0; i < expected.Appointments.Count; i++)
-            {
-                Assert.Equal(expected.Appointments[i].AppointmentId, actual.Appointments[i].AppointmentId);
-                Assert.Equal(expected.Appointments[i].CheckInDate, actual.Appointments[i].CheckInDate);
-                Assert.Equal(expected.Appointments[i].Status, actual.Appointments[i].Status);
-                Assert.Equal(expected.Appointments[i].Patient.AvatarLink, actual.Appointments[i].Patient.AvatarLink);
-                Assert.Equal(expected.Appointments[i].Patient.DoB, actual.Appointments[i].Patient.DoB);
-                Assert.Equal(expected.Appointments[i].Patient.FullName, actual.Appointments[i].Patient.FullName);
-                Assert.Equal(expected.Appointments[i].Patient.PatientIdentifier, actual.Appointments[i].Patient.PatientIdentifier);
-            }
-        }
-
-        [Fact]
-        public async void GetListAppoinmentsPaging_SortByID()
-        {
-            //Arrange
-            var patients = PatientDataTest();
-            var appointments = AppointmentDataTest(patients);
-            var context = CreateMockContext(appointments);
-            var pagingRequest = PagingRequestData(1, 2, 1);
-            var appoinmentListServiceModel = new List<PatientChecking.ServiceModels.Appointment>
+            var appoinmentListServiceModelByID = new List<PatientChecking.ServiceModels.Appointment>
             {
                 new PatientChecking.ServiceModels.Appointment
                 {
@@ -243,41 +134,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
                 },
             };
 
-            var expected = new AppointmentList
-            {
-                Appointments = appoinmentListServiceModel,
-                TotalCount = 4,
-            };
-
-            //Act
-            var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.GetListAppoinmentsPaging(pagingRequest);
-
-            //Assert
-            Assert.NotNull(actual);
-            Assert.Equal(expected.Appointments.Count, actual.Appointments.Count);
-            Assert.Equal(expected.TotalCount, actual.TotalCount);
-            for (int i = 0; i < expected.Appointments.Count; i++)
-            {
-                Assert.Equal(expected.Appointments[i].AppointmentId, actual.Appointments[i].AppointmentId);
-                Assert.Equal(expected.Appointments[i].CheckInDate, actual.Appointments[i].CheckInDate);
-                Assert.Equal(expected.Appointments[i].Status, actual.Appointments[i].Status);
-                Assert.Equal(expected.Appointments[i].Patient.AvatarLink, actual.Appointments[i].Patient.AvatarLink);
-                Assert.Equal(expected.Appointments[i].Patient.DoB, actual.Appointments[i].Patient.DoB);
-                Assert.Equal(expected.Appointments[i].Patient.FullName, actual.Appointments[i].Patient.FullName);
-                Assert.Equal(expected.Appointments[i].Patient.PatientIdentifier, actual.Appointments[i].Patient.PatientIdentifier);
-            }
-        }
-
-        [Fact]
-        public async void GetListAppoinmentsPaging_SortByDoB()
-        {
-            //Arrange
-            var patients = PatientDataTest();
-            var appointments = AppointmentDataTest(patients);
-            var context = CreateMockContext(appointments);
-            var pagingRequest = PagingRequestData(1, 2, 2);
-            var appoinmentListServiceModel = new List<PatientChecking.ServiceModels.Appointment>
+            var appoinmentListServiceModelByDoB = new List<PatientChecking.ServiceModels.Appointment>
             {
                 new PatientChecking.ServiceModels.Appointment
                 {
@@ -299,41 +156,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
                 }
             };
 
-            var expected = new AppointmentList
-            {
-                Appointments = appoinmentListServiceModel,
-                TotalCount = 4,
-            };
-
-            //Act
-            var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.GetListAppoinmentsPaging(pagingRequest);
-
-            //Assert
-            Assert.NotNull(actual);
-            Assert.Equal(expected.Appointments.Count, actual.Appointments.Count);
-            Assert.Equal(expected.TotalCount, actual.TotalCount);
-            for (int i = 0; i < expected.Appointments.Count; i++)
-            {
-                Assert.Equal(expected.Appointments[i].AppointmentId, actual.Appointments[i].AppointmentId);
-                Assert.Equal(expected.Appointments[i].CheckInDate, actual.Appointments[i].CheckInDate);
-                Assert.Equal(expected.Appointments[i].Status, actual.Appointments[i].Status);
-                Assert.Equal(expected.Appointments[i].Patient.AvatarLink, actual.Appointments[i].Patient.AvatarLink);
-                Assert.Equal(expected.Appointments[i].Patient.DoB, actual.Appointments[i].Patient.DoB);
-                Assert.Equal(expected.Appointments[i].Patient.FullName, actual.Appointments[i].Patient.FullName);
-                Assert.Equal(expected.Appointments[i].Patient.PatientIdentifier, actual.Appointments[i].Patient.PatientIdentifier);
-            }
-        }
-
-        [Fact]
-        public async void GetListAppoinmentsPaging_SortByCheckInDate()
-        {
-            //Arrange
-            var patients = PatientDataTest();
-            var appointments = AppointmentDataTest(patients);
-            var context = CreateMockContext(appointments);
-            var pagingRequest = PagingRequestData(1, 2, 3);
-            var appoinmentListServiceModel = new List<PatientChecking.ServiceModels.Appointment>
+            var appoinmentListServiceModelByCheckInDate = new List<PatientChecking.ServiceModels.Appointment>
             {
                 new PatientChecking.ServiceModels.Appointment
                 {
@@ -356,41 +179,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
                 }
             };
 
-            var expected = new AppointmentList
-            {
-                Appointments = appoinmentListServiceModel,
-                TotalCount = 4,
-            };
-
-            //Act
-            var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.GetListAppoinmentsPaging(pagingRequest);
-
-            //Assert
-            Assert.NotNull(actual);
-            Assert.Equal(expected.Appointments.Count, actual.Appointments.Count);
-            Assert.Equal(expected.TotalCount, actual.TotalCount);
-            for (int i = 0; i < expected.Appointments.Count; i++)
-            {
-                Assert.Equal(expected.Appointments[i].AppointmentId, actual.Appointments[i].AppointmentId);
-                Assert.Equal(expected.Appointments[i].CheckInDate, actual.Appointments[i].CheckInDate);
-                Assert.Equal(expected.Appointments[i].Status, actual.Appointments[i].Status);
-                Assert.Equal(expected.Appointments[i].Patient.AvatarLink, actual.Appointments[i].Patient.AvatarLink);
-                Assert.Equal(expected.Appointments[i].Patient.DoB, actual.Appointments[i].Patient.DoB);
-                Assert.Equal(expected.Appointments[i].Patient.FullName, actual.Appointments[i].Patient.FullName);
-                Assert.Equal(expected.Appointments[i].Patient.PatientIdentifier, actual.Appointments[i].Patient.PatientIdentifier);
-            }
-        }
-
-        [Fact]
-        public async void GetListAppoinmentsPaging_SortByStatus()
-        {
-            //Arrange
-            var patients = PatientDataTest();
-            var appointments = AppointmentDataTest(patients);
-            var context = CreateMockContext(appointments);
-            var pagingRequest = PagingRequestData(1, 2, 4);
-            var appoinmentListServiceModel = new List<PatientChecking.ServiceModels.Appointment>
+            var appoinmentListServiceModelStatus = new List<PatientChecking.ServiceModels.Appointment>
             {
                 new PatientChecking.ServiceModels.Appointment
                 {
@@ -413,34 +202,214 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
                 }
             };
 
-            var expected = new AppointmentList
+            var expectedData = new AppointmentList
             {
-                Appointments = appoinmentListServiceModel,
-                TotalCount = 4,
+                Appointments = sortOption == 0 ? appoinmentListServiceModelByName : sortOption == 1 ? appoinmentListServiceModelByID : sortOption == 2 ? appoinmentListServiceModelByDoB : sortOption == 3 ? appoinmentListServiceModelByCheckInDate : appoinmentListServiceModelStatus,
+                TotalCount = 4
+            };
+
+            return expectedData;
+        }
+
+        private PagingRequest PagingRequestData(int index, int pageSize, int optionSort)
+        {
+            var request = new PagingRequest
+            {
+                PageIndex = index,
+                PageSize = pageSize,
+                SortSelection = optionSort,
+            };
+            return request;
+        }
+
+        [Fact]
+        public async Task GetAppointmentSummary_ReturnsAppointmentDashboard()
+        {
+            //Arrange
+            var patients = PatientDataTest();
+            var appointments = AppointmentDataTest(patients);
+            var context = CreateMockContext(appointments);
+            var expected = new AppointmentDashboard
+            {
+                NumOfAppointments = 4,
+                NumOfAppointmentsInMonth = context.Appointments.Where(x => x.CheckInDate.Date.Year == DateTime.Now.Year && x.CheckInDate.Date.Month == DateTime.Now.Month).Count(),
+                NumOfAppointmentsInToday = context.Appointments.Where(x => x.CheckInDate.Date == DateTime.Today && x.Status == AppointmentStatus.CheckIn.ToString()).Count(),
+                NumOfPatientsInMonth = 0,
             };
 
             //Act
             var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.GetListAppoinmentsPaging(pagingRequest);
+            var actual = await apointmentService.GetAppointmentSummaryAsync();
+
+            //Assert
+            Assert.NotNull(actual);
+            Assert.Equal(expected.NumOfPatientsInMonth, actual.NumOfPatientsInMonth);
+            Assert.Equal(expected.NumOfAppointmentsInToday, actual.NumOfAppointmentsInToday);
+            Assert.Equal(expected.NumOfAppointmentsInMonth, actual.NumOfAppointmentsInMonth);
+            Assert.Equal(expected.NumOfAppointments, actual.NumOfAppointments);
+        }
+
+        [Fact]
+        public async Task GetAppointmentById_ExistAppoinment_ReturnAppointment()
+        {
+            //Arrange
+            var patients = PatientDataTest();
+            var appointments = AppointmentDataTest(patients);
+            var context = CreateMockContext(appointments);
+
+            var expected = new PatientChecking.ServiceModels.Appointment
+            {
+                AppointmentId = appointments[2].AppointmentId,
+                CheckInDate = appointments[2].CheckInDate,
+                MedicalConcerns = appointments[2].MedicalConcerns,
+                Status = appointments[2].Status,
+                PatientId = appointments[2].PatientId,
+            };
+
+            //Act
+            var apointmentService = new AppointmentService(context);
+            var actual = await apointmentService.GetAppointmentByIdAsync(3);
+
+            //Assert
+            Assert.NotNull(actual);
+            Assert.Equal(expected.AppointmentId, actual.AppointmentId);
+            Assert.Equal(expected.CheckInDate, actual.CheckInDate);
+            Assert.Equal(expected.MedicalConcerns, actual.MedicalConcerns);
+            Assert.Equal(expected.Status, actual.Status);
+            Assert.Equal(expected.PatientId, actual.PatientId);
+        }
+
+        [Fact]
+        public async Task GetListAppoinmentsPaging_SortByName_ReturnsAppointmentList()
+        {
+            //Arrange
+            var patients = PatientDataTest();
+            var appointments = AppointmentDataTest(patients);
+            var context = CreateMockContext(appointments);
+            var pagingRequest = PagingRequestData(1,2,0);
+
+            var expected = GetDataAppointmentExpected(patients, pagingRequest.SortSelection);
+
+            //Act
+            var apointmentService = new AppointmentService(context);
+            var actual = await apointmentService.GetListAppoinmentsPagingAsync(pagingRequest);
 
             //Assert
             Assert.NotNull(actual);
             Assert.Equal(expected.Appointments.Count, actual.Appointments.Count);
             Assert.Equal(expected.TotalCount, actual.TotalCount);
-            for (int i = 0; i < expected.Appointments.Count; i++)
-            {
-                Assert.Equal(expected.Appointments[i].AppointmentId, actual.Appointments[i].AppointmentId);
-                Assert.Equal(expected.Appointments[i].CheckInDate, actual.Appointments[i].CheckInDate);
-                Assert.Equal(expected.Appointments[i].Status, actual.Appointments[i].Status);
-                Assert.Equal(expected.Appointments[i].Patient.AvatarLink, actual.Appointments[i].Patient.AvatarLink);
-                Assert.Equal(expected.Appointments[i].Patient.DoB, actual.Appointments[i].Patient.DoB);
-                Assert.Equal(expected.Appointments[i].Patient.FullName, actual.Appointments[i].Patient.FullName);
-                Assert.Equal(expected.Appointments[i].Patient.PatientIdentifier, actual.Appointments[i].Patient.PatientIdentifier);
-            }
+            Assert.True(expected.Appointments.All(x => actual.Appointments.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate == y.CheckInDate
+                                                                                          && x.Patient.DoB == y.Patient.DoB && x.Patient.FullName == y.Patient.FullName
+                                                                                          && x.Patient.PatientIdentifier == y.Patient.PatientIdentifier
+                                                                                          && x.Status == y.Status && x.Patient.AvatarLink == y.Patient.AvatarLink)));
         }
 
         [Fact]
-        public async void UpdateAppointment_Ok()
+        public async Task GetListAppoinmentsPaging_SortByID_ReturnsAppointmentList()
+        {
+            //Arrange
+            var patients = PatientDataTest();
+            var appointments = AppointmentDataTest(patients);
+            var context = CreateMockContext(appointments);
+            var pagingRequest = PagingRequestData(1, 2, 1);
+            
+
+            var expected = GetDataAppointmentExpected(patients, pagingRequest.SortSelection);
+
+            //Act
+            var apointmentService = new AppointmentService(context);
+            var actual = await apointmentService.GetListAppoinmentsPagingAsync(pagingRequest);
+
+            //Assert
+            Assert.NotNull(actual);
+            Assert.Equal(expected.Appointments.Count, actual.Appointments.Count);
+            Assert.Equal(expected.TotalCount, actual.TotalCount);
+            Assert.True(expected.Appointments.All(x => actual.Appointments.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate == y.CheckInDate
+                                                                                          && x.Patient.DoB == y.Patient.DoB && x.Patient.FullName == y.Patient.FullName
+                                                                                          && x.Patient.PatientIdentifier == y.Patient.PatientIdentifier
+                                                                                          && x.Status == y.Status && x.Patient.AvatarLink == y.Patient.AvatarLink)));
+        }
+
+        [Fact]
+        public async Task GetListAppoinmentsPaging_SortByDoB_ReturnsAppointmentList()
+        {
+            //Arrange
+            var patients = PatientDataTest();
+            var appointments = AppointmentDataTest(patients);
+            var context = CreateMockContext(appointments);
+            var pagingRequest = PagingRequestData(1, 2, 2);
+
+
+            var expected = GetDataAppointmentExpected(patients, pagingRequest.SortSelection);
+
+            //Act
+            var apointmentService = new AppointmentService(context);
+            var actual = await apointmentService.GetListAppoinmentsPagingAsync(pagingRequest);
+
+            //Assert
+            Assert.NotNull(actual);
+            Assert.Equal(expected.Appointments.Count, actual.Appointments.Count);
+            Assert.Equal(expected.TotalCount, actual.TotalCount);
+            Assert.True(expected.Appointments.All(x => actual.Appointments.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate == y.CheckInDate
+                                                                                          && x.Patient.DoB == y.Patient.DoB && x.Patient.FullName == y.Patient.FullName
+                                                                                          && x.Patient.PatientIdentifier == y.Patient.PatientIdentifier
+                                                                                          && x.Status == y.Status && x.Patient.AvatarLink == y.Patient.AvatarLink)));
+        }
+
+        [Fact]
+        public async Task GetListAppoinmentsPaging_SortByCheckInDate_ReturnsAppointmentList()
+        {
+            //Arrange
+            var patients = PatientDataTest();
+            var appointments = AppointmentDataTest(patients);
+            var context = CreateMockContext(appointments);
+            var pagingRequest = PagingRequestData(1, 2, 3);
+
+
+            var expected = GetDataAppointmentExpected(patients, pagingRequest.SortSelection);
+
+            //Act
+            var apointmentService = new AppointmentService(context);
+            var actual = await apointmentService.GetListAppoinmentsPagingAsync(pagingRequest);
+
+            //Assert
+            Assert.NotNull(actual);
+            Assert.Equal(expected.Appointments.Count, actual.Appointments.Count);
+            Assert.Equal(expected.TotalCount, actual.TotalCount);
+            Assert.True(expected.Appointments.All(x => actual.Appointments.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate == y.CheckInDate
+                                                                                          && x.Patient.DoB == y.Patient.DoB && x.Patient.FullName == y.Patient.FullName
+                                                                                          && x.Patient.PatientIdentifier == y.Patient.PatientIdentifier
+                                                                                          && x.Status == y.Status && x.Patient.AvatarLink == y.Patient.AvatarLink)));
+        }
+
+        [Fact]
+        public async Task GetListAppoinmentsPaging_SortByStatus_ReturnsAppointmentList()
+        {
+            //Arrange
+            var patients = PatientDataTest();
+            var appointments = AppointmentDataTest(patients);
+            var context = CreateMockContext(appointments);
+            var pagingRequest = PagingRequestData(1, 2, 4);
+
+
+            var expected = GetDataAppointmentExpected(patients, pagingRequest.SortSelection);
+
+            //Act
+            var apointmentService = new AppointmentService(context);
+            var actual = await apointmentService.GetListAppoinmentsPagingAsync(pagingRequest);
+
+            //Assert
+            Assert.NotNull(actual);
+            Assert.Equal(expected.Appointments.Count, actual.Appointments.Count);
+            Assert.Equal(expected.TotalCount, actual.TotalCount);
+            Assert.True(expected.Appointments.All(x => actual.Appointments.Any(y => x.AppointmentId == y.AppointmentId && x.CheckInDate == y.CheckInDate
+                                                                                          && x.Patient.DoB == y.Patient.DoB && x.Patient.FullName == y.Patient.FullName
+                                                                                          && x.Patient.PatientIdentifier == y.Patient.PatientIdentifier
+                                                                                          && x.Status == y.Status && x.Patient.AvatarLink == y.Patient.AvatarLink)));
+        }
+
+        [Fact]
+        public async Task UpdateAppointment_ExistAppointment_ReturnsNumberOfChangedLine()
         {
             //Arrange
             var patients = PatientDataTest();
@@ -453,7 +422,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
 
             //Act
             var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.UpdateAppointment(modifiedAppointment);
+            var actual = await apointmentService.UpdateAppointmentAsync(modifiedAppointment);
 
             //Assert
             Assert.True(actual != -1);
@@ -461,7 +430,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
         }
 
         [Fact]
-        public async void UpdateAppointment_ParamNull()
+        public async Task UpdateAppointment_ParamNull_ReturnsNumberOfChangedLine()
         {
             //Arrange
             var patients = PatientDataTest();
@@ -472,7 +441,7 @@ namespace PatientCheckIn.Tests.Services.AppointmentServices
 
             //Act
             var apointmentService = new AppointmentService(context);
-            var actual = await apointmentService.UpdateAppointment(null);
+            var actual = await apointmentService.UpdateAppointmentAsync(null);
 
             //Assert
             Assert.True(actual == -1);

@@ -24,16 +24,19 @@ namespace PatientChecking.Feature.Appointment.Queries
 
         public async Task<AppointmentDetailViewModel> Handle(GetAppointmentByIdQuery request, CancellationToken cancellationToken)
         {
-            var appointment = await _appointmentService.GetAppointmentById(request.Id);
-
-            return new AppointmentDetailViewModel
+            var appointment = await _appointmentService.GetAppointmentByIdAsync(request.Id);
+            if (appointment != null) 
             {
-                AppointmentId = appointment.AppointmentId,
-                CheckInDate = appointment.CheckInDate.ToString("yyyy-MM-dd"),
-                MedicalConcerns = appointment.MedicalConcerns,
-                Status = appointment.Status,
-                PatientId = appointment.PatientId
-            };
+                return new AppointmentDetailViewModel
+                {
+                    AppointmentId = appointment.AppointmentId,
+                    CheckInDate = appointment.CheckInDate.ToString("yyyy-MM-dd"),
+                    MedicalConcerns = appointment.MedicalConcerns,
+                    Status = appointment.Status,
+                    PatientId = appointment.PatientId
+                };
+            }
+            return null; 
         }
     }
 }

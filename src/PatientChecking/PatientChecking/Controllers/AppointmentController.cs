@@ -56,7 +56,18 @@ namespace PatientChecking.Controllers
 
         public async Task<IActionResult> Detail(int appointmentId)
         {
-            return View(await _mediator.Send(new GetAppointmentByIdQuery() { Id = appointmentId }));
+            var result = await _mediator.Send(new GetAppointmentByIdQuery() { Id = appointmentId });
+            if(result != null){
+                return View(result);
+            }
+            var message = new ViewMessage
+            {
+                MsgType = MessageType.Error,
+                MsgText = "Appointment Not Found!",
+                MsgTitle = "Not Found"
+            };
+            TempData["Message"] = JsonConvert.SerializeObject(message);
+            return RedirectToAction("Index", new { option = 1, pageSize = 10, pageIndex = 1});
         }
 
         public async Task<IActionResult> Update(AppointmentDetailViewModel appointmentDetailViewModel)

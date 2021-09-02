@@ -16,10 +16,9 @@ namespace PatientCheckIn.Tests.Feature.Dashboard
 {
     public class DashboardQueryTests
     {
-        [Fact]
-        public async void GetDashBoardDataQuery()
+
+        private AppointmentDashboard AppointmentDashboardData()
         {
-            //Arange
             var data = new AppointmentDashboard
             {
                 NumOfAppointments = 6,
@@ -27,9 +26,16 @@ namespace PatientCheckIn.Tests.Feature.Dashboard
                 NumOfAppointmentsInToday = 1,
                 NumOfPatientsInMonth = 5,
             };
+            return data;
+        }
+        [Fact]
+        public async Task GetDashBoardDataQuery()
+        {
+            //Arange
+            var data = AppointmentDashboardData();
             var appointmentServices = new Mock<IAppointmentService>();
             var patientServices = new Mock<IPatientService>();
-            appointmentServices.Setup(x => x.GetAppointmentSummary()).ReturnsAsync(data);
+            appointmentServices.Setup(x => x.GetAppointmentSummaryAsync()).ReturnsAsync(data);
             patientServices.Setup(x => x.GetPatientsSummaryAsync()).ReturnsAsync(5);
             var request = new GetDashBoardDataQuery();
             var handler = new GetDashBoardDataHandler(appointmentServices.Object, patientServices.Object);
@@ -37,11 +43,11 @@ namespace PatientCheckIn.Tests.Feature.Dashboard
 
             var expected = new DashboardViewModel
             {
-                NumOfAppointments = 6,
-                NumOfAppointmentsInMonth = 5,
-                NumOfAppointmentsInToday = 1,
+                NumOfAppointments = data.NumOfAppointments,
+                NumOfAppointmentsInMonth = data.NumOfAppointmentsInMonth,
+                NumOfAppointmentsInToday = data.NumOfAppointmentsInToday,
                 NumOfPatients = 5,
-                NumOfPatientsInMonth = 5,
+                NumOfPatientsInMonth = data.NumOfPatientsInMonth,
             };
 
             //Act
